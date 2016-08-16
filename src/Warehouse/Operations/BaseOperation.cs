@@ -7,17 +7,24 @@ namespace Warehouse.Operations
     {
         public event EventHandler<ValidationResult> OnValidationFailed;
 
-        public IOperationDocument Perform()
+        public IOperationResult Perform()
         {
+            var operationResult = new OperationResult();
             var result = Validate();
             if(result.IsValid)
-                return PerfromValidatedOperation();
+            {
+                operationResult.OperationDocument = PerformValidatedOperation();
+                operationResult.Status = ResultStatus.OK;
+            }
 
             OnValidationFailed.Invoke(this, result);
-            throw new NotImplementedException(); //TODO
+            
+            operationResult.Status = ResultStatus.Error;
+
+            return operationResult;
         }
 
-        protected abstract IOperationDocument PerfromValidatedOperation();
+        protected abstract IOperationDocument PerformValidatedOperation();
 
         protected abstract ValidationResult Validate();
     }
