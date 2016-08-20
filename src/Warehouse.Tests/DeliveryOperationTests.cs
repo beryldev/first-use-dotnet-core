@@ -103,7 +103,46 @@ namespace Warehouse.Tests
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void PerformReturnResultWithErrorStatusWhenBaseDocumentIsEmpty()
+        {
+            var operation = new DeliveryOperation();
+            var order = new Order();
+            operation.SetBaseDocument(order);
 
-    
+            var result = operation.Perform();
+
+            Assert.AreEqual(DeliveryOperationResult.ResultStatus.Error, result.Status);
+        }
+
+        [Test]
+        public void PerformReturnResultWithErrorMessageWhenBaseDocumentIsEmpty()
+        {
+            var operation = new DeliveryOperation();
+            var order = new Order();
+            operation.SetBaseDocument(order);
+
+            var result = operation.Perform();
+
+            CollectionAssert.Contains(result.ErrorMessages, "Base document is empty");
+        }
+
+        [Test]
+        public void CanAllocateItemFromBaseDocument()
+        {
+            var operation = new DeliveryOperation();
+            var order = new Order();
+            order.Lines.Add(new OrderLine
+            {
+                ProductName = "Some product",
+                ProductCode = "SPROD",
+                EAN = "1234567890",
+                SKU = "P12345",
+                Quantity = 5,
+                Remarks = ""
+            });
+
+            
+        }
     }
 }

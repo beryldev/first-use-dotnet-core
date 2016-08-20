@@ -11,6 +11,6 @@ namespace Warehouse.Documents
 
         public virtual DateTime IssueDate { get; set; }
 
-        public virtual List<DocumentLine> Lines { get; set; }
+        public virtual List<DocumentLine> Lines { get; set; } = new List<DocumentLine>();
     }
 }

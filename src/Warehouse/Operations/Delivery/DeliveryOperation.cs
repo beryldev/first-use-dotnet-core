@@ -36,8 +36,16 @@ namespace Warehouse.Operations.Delivery
         {
             if(baseDocument == null)
                 throw new InvalidOperationException("Can't perform operation without base document");
-                
-            return new DeliveryOperationResult();
+
+            var result = new DeliveryOperationResult();
+
+            if(baseDocument.Lines.Count == 0)
+            {
+                result.Status = DeliveryOperationResult.ResultStatus.Error;
+                result.ErrorMessages.Add("Base document is empty");
+            }
+            
+            return result;
         }
 
         public void SetBaseDocument(Order order)
@@ -49,5 +57,6 @@ namespace Warehouse.Operations.Delivery
         {
             baseDocument = delivery;
         }
+        
     }
 }
