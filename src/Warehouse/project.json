@@ -13,5 +13,12 @@
 
   "tooling": {
     "defaultNamespace": "Warehouse"
+  },
+
+  "runtimes": {
+     "centos.7-x64": {
+            "#import": [ "centos.7", "centos-x64", "rhel.7-x64" ]
+      }
   }
+  
 }

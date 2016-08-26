@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Warehouse.Documents;
 using Warehouse.Orders;
 using Warehouse.Validation;
@@ -7,6 +9,10 @@ namespace Warehouse.Operations.Delivery
 {
     public class DeliveryOperation
     {
+        List<Allocation> pendingAllocations = new List<Allocation>();
+        
+        public List<Allocation> PendingAllocations { get { return pendingAllocations.ToList();} }
+
         public Document BaseDocument 
         { 
            get { return baseDocument; }
@@ -56,6 +62,28 @@ namespace Warehouse.Operations.Delivery
         public void SetBaseDocument(DeliveryDocument delivery)
         {
             baseDocument = delivery;
+        }
+
+        public void AllocateItem(OrderLine item, decimal quantity, string location)
+        {
+            if(String.IsNullOrWhiteSpace(location))
+                throw new InvalidOperationException("Wrong location address (empty)");
+
+            if(quantity <= 0)
+                return;
+
+            var allocation = new Allocation
+            {
+                ProductName = item.ProductName,
+                ProductCode = item.ProductCode,
+                SKU = item.SKU,
+                EAN = item.EAN,
+                Quantity = quantity,
+                Location = location
+            };
+
+            
+            pendingAllocations.Add(allocation);
         }
         
     }

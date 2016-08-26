@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Warehouse.Documents;
 using Warehouse.Operations.Delivery;
@@ -131,6 +132,48 @@ namespace Warehouse.Tests
         public void CanAllocateItemFromBaseDocument()
         {
             var operation = new DeliveryOperation();
+            var order = PrepareOrder();
+
+            var location = "I-100-10";
+            var quantity = 5;
+            operation.AllocateItem(order.Lines.First(), quantity, location);
+            var allocation = operation.PendingAllocations.First();
+
+            Assert.AreEqual(allocation.ProductName, order.Lines.First().ProductName);
+            Assert.AreEqual(allocation.Quantity, quantity);
+            Assert.AreEqual(allocation.Location, location);
+        }
+
+        [Test]
+        public void WhenTryAllocateZeroQuantityThenNoEffect()
+        {
+            var operation = new DeliveryOperation();
+            var order = PrepareOrder();
+
+            var location = "I-100-10";
+            var quantity = 0;
+            operation.AllocateItem(order.Lines.First(), quantity, location);
+
+            CollectionAssert.IsEmpty(operation.PendingAllocations);
+        }
+
+        [Test]
+        public void ThrowsExceptionWhenTryAllocateToEmptyLocationAddress()
+        {
+            var operation = new DeliveryOperation();
+            var order = PrepareOrder();
+
+            var location = String.Empty;
+            var quantity = 1;
+
+            Assert.Throws<InvalidOperationException>(()=>
+            {
+                operation.AllocateItem(order.Lines.First(), quantity, location);
+            });
+        }
+
+        protected Order PrepareOrder()
+        {
             var order = new Order();
             order.Lines.Add(new OrderLine
             {
@@ -142,7 +185,7 @@ namespace Warehouse.Tests
                 Remarks = ""
             });
 
-            
+            return order;
         }
     }
 }
