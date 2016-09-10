@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Warehouse.Documents
 {
@@ -6,7 +7,7 @@ namespace Warehouse.Documents
     {
         public virtual string ProductName { get; set; }
 
-        public virtual string ProductCode { get; set; }
+        public virtual string ProductCode { get; set; } = String.Empty;
 
         public virtual string EAN { get; set; }
 

@@ -136,7 +136,7 @@ namespace Warehouse.Tests
 
             var location = "I-100-10";
             var quantity = 5;
-            operation.AllocateItem(order.Lines.First(), quantity, location);
+            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
             var allocation = operation.PendingAllocations.First();
 
             Assert.AreEqual(allocation.ProductName, order.Lines.First().ProductName);
@@ -152,7 +152,7 @@ namespace Warehouse.Tests
 
             var location = "I-100-10";
             var quantity = 0;
-            operation.AllocateItem(order.Lines.First(), quantity, location);
+            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
 
             CollectionAssert.IsEmpty(operation.PendingAllocations);
         }
@@ -168,8 +168,40 @@ namespace Warehouse.Tests
 
             Assert.Throws<InvalidOperationException>(()=>
             {
-                operation.AllocateItem(order.Lines.First(), quantity, location);
+                operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
             });
+        }
+
+        [Test]
+        public void ThrowsExceptionWhenTryAllocateMoreThanOnDocument()
+        {
+            var operation = new DeliveryOperation();
+            var order = PrepareOrder();
+            operation.SetBaseDocument(order);
+
+            var location = "LOC-001-01";
+            var quantity = 3;
+
+    
+            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+
+            Assert.Throws<InvalidOperationException>(()=>
+            {
+                operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+            });
+        }
+
+        [Test]
+        public void CantPerformOperationWhenExistsNonAllocatedItems()
+        {
+            var operation = new DeliveryOperation();
+            var order = PrepareOrder();
+            operation.BaseOrder = order;
+
+            var result = operation.Perform();
+
+            Assert.AreEqual(DeliveryOperationResult.ResultStatus.Error, result.Status);
+            CollectionAssert.Contains(result.ErrorMessages, "Exists non allocated items");
         }
 
         protected Order PrepareOrder()

@@ -5,7 +5,7 @@ namespace Warehouse.Operations.Delivery
 {
     public class DeliveryOperationResult
     {
-        public ResultStatus Status { get; set; } = ResultStatus.Error;
+        public ResultStatus Status { get; set; } = ResultStatus.Ok;
 
         public List<string> ErrorMessages { get; set; } = new List<string>();
 

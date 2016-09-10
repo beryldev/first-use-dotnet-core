@@ -50,6 +50,13 @@ namespace Warehouse.Operations.Delivery
                 result.Status = DeliveryOperationResult.ResultStatus.Error;
                 result.ErrorMessages.Add("Base document is empty");
             }
+
+            if(!CheckAllocations())
+            {
+                result.Status = DeliveryOperationResult.ResultStatus.Error;
+                result.ErrorMessages.Add("Exists non allocated items");
+            }
+            
             
             return result;
         }
@@ -72,6 +79,20 @@ namespace Warehouse.Operations.Delivery
             if(quantity <= 0)
                 return;
 
+            if(baseDocument !=null)
+            {
+                var onDocument = baseDocument.Lines
+                    .Where(l=>l.ProductCode.Equals(item.ProductCode))
+                    .Sum(l=>l.Quantity);
+
+                var allocated = pendingAllocations
+                    .Where(a=>a.ProductCode.Equals(item.ProductCode))
+                    .Sum(a=>a.Quantity);
+                    
+                if(allocated + quantity > onDocument)
+                    throw new InvalidOperationException("Can't allocate more than on document");
+            }
+           
             var allocation = new Allocation
             {
                 ProductName = item.ProductName,
@@ -81,10 +102,16 @@ namespace Warehouse.Operations.Delivery
                 Quantity = quantity,
                 Location = location
             };
-
-            
+     
             pendingAllocations.Add(allocation);
         }
         
+        protected bool CheckAllocations()
+        {
+            var toAllocate = baseDocument.Lines.Sum(item=>item.Quantity);
+            var allocated = pendingAllocations.Sum(item=>item.Quantity);
+
+            return toAllocate == allocated;
+        }
     }
 }
