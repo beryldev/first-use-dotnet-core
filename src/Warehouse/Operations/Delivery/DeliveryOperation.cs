@@ -7,6 +7,7 @@ using Warehouse.Validation;
 
 namespace Warehouse.Operations.Delivery
 {
+
     public class DeliveryOperation
     {
         List<Allocation> pendingAllocations = new List<Allocation>();
@@ -38,6 +39,13 @@ namespace Warehouse.Operations.Delivery
 
         Document baseDocument;
         
+        IAllocationService allocService;
+
+        public DeliveryOperation(IAllocationService allocService)
+        {
+            this.allocService = allocService;
+        }
+
         public DeliveryOperationResult Perform()
         {
             if(baseDocument == null)
@@ -57,7 +65,12 @@ namespace Warehouse.Operations.Delivery
                 result.ErrorMessages.Add("Exists non allocated items");
             }
             
-            
+            if(result.Status == DeliveryOperationResult.ResultStatus.Ok)
+            {
+                foreach(var allocation in pendingAllocations)
+                    allocService.RegisterAllocation(allocation);
+            }                  
+
             return result;
         }
 
@@ -88,7 +101,7 @@ namespace Warehouse.Operations.Delivery
                 var allocated = pendingAllocations
                     .Where(a=>a.ProductCode.Equals(item.ProductCode))
                     .Sum(a=>a.Quantity);
-                    
+
                 if(allocated + quantity > onDocument)
                     throw new InvalidOperationException("Can't allocate more than on document");
             }
