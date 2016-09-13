@@ -151,7 +151,7 @@ namespace Warehouse.Tests
             operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
             var allocation = operation.PendingAllocations.First();
 
-            Assert.AreEqual(allocation.ProductName, order.Lines.First().ProductName);
+            Assert.AreEqual(allocation.ProductCode, order.Lines.First().ProductCode);
             Assert.AreEqual(allocation.Quantity, quantity);
             Assert.AreEqual(allocation.Location, location);
         }

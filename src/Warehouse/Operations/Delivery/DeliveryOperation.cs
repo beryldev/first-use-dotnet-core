@@ -108,12 +108,9 @@ namespace Warehouse.Operations.Delivery
            
             var allocation = new Allocation
             {
-                ProductName = item.ProductName,
                 ProductCode = item.ProductCode,
-                SKU = item.SKU,
-                EAN = item.EAN,
-                Quantity = quantity,
-                Location = location
+                Location = location,
+                Quantity = quantity
             };
      
             pendingAllocations.Add(allocation);
