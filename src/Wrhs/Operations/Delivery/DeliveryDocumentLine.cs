@@ -1,7 +1,7 @@
 
-using Warehouse.Documents;
+using Wrhs.Documents;
 
-namespace Warehouse.Operations.Delivery
+namespace Wrhs.Operations.Delivery
 {
     public class DeliveryDocumentLine : DocumentLine
     {

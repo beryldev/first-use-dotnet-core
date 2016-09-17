@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Warehouse.Operations.Delivery
+namespace Wrhs.Operations
 {
-    public class DeliveryOperationResult
+    public class OperationResult
     {
         public ResultStatus Status { get; set; } = ResultStatus.Ok;
 

@@ -1,12 +1,11 @@
 using System;
-using Warehouse.Documents;
 
-namespace Warehouse.Operations
+namespace Wrhs
 {
-    public class Allocation
+    public class Stock
     {
         public string ProductCode { get; set; }
-        
+
         public string Location { get; set; }
 
         public decimal Quantity { get; set; }

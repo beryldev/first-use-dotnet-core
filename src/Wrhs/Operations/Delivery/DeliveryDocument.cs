@@ -1,8 +1,8 @@
 
 using System.Collections.Generic;
-using Warehouse.Documents;
+using Wrhs.Documents;
 
-namespace Warehouse.Operations.Delivery
+namespace Wrhs.Operations.Delivery
 {
     public class DeliveryDocument : Document
     {

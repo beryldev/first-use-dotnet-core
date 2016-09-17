@@ -1,12 +1,21 @@
 using System;
 
-namespace Warehouse.Operations
+namespace Wrhs.Operations
 {
     public class AllocationService : IAllocationService
     {
+        IRepository<Allocation> repo;
+
+        public AllocationService(IRepository<Allocation> repo)
+        {
+            this.repo = repo;
+        }
+
         public void RegisterAllocation(Allocation allocation)
         {
            Validate(allocation);
+
+           repo.Save(allocation);
         }
 
         protected void Validate(Allocation allocation)

@@ -2,12 +2,11 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using Moq;
-using Warehouse.Documents;
-using Warehouse.Operations.Delivery;
-using Warehouse.Orders;
-using Warehouse.Operations;
+using Wrhs.Operations;
+using Wrhs.Operations.Delivery;
+using Wrhs.Orders;
 
-namespace Warehouse.Tests
+namespace Wrhs.Tests
 {
     [TestFixture]
     public class DeliveryOperationTests
@@ -123,7 +122,7 @@ namespace Warehouse.Tests
 
             var result = operation.Perform();
 
-            Assert.AreEqual(DeliveryOperationResult.ResultStatus.Error, result.Status);
+            Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
         }
 
         [Test]
@@ -216,7 +215,7 @@ namespace Warehouse.Tests
 
             var result = operation.Perform();
 
-            Assert.AreEqual(DeliveryOperationResult.ResultStatus.Error, result.Status);
+            Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
             CollectionAssert.Contains(result.ErrorMessages, "Exists non allocated items");
         }
 

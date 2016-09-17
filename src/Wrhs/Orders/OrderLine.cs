@@ -1,7 +1,7 @@
 using System;
-using Warehouse.Documents;
+using Wrhs.Documents;
 
-namespace Warehouse.Orders
+namespace Wrhs.Orders
 {
     public class OrderLine : DocumentLine
     {

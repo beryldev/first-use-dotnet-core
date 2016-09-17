@@ -12,7 +12,7 @@
   },
 
   "tooling": {
-    "defaultNamespace": "Warehouse"
+    "defaultNamespace": "Wrhs"
   },
 
   "runtimes": {

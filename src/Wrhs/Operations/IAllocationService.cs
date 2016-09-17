@@ -1,6 +1,6 @@
 using System;
 
-namespace Warehouse.Operations
+namespace Wrhs.Operations
 {
     public interface IAllocationService
     {

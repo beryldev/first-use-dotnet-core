@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Warehouse.Validation
+namespace Wrhs.Validation
 {
     
     public class ValidationResult

@@ -1,5 +1,5 @@
 
-namespace Warehouse.Validation
+namespace Wrhs.Validation
 {
     public class ValidationMessage
     {

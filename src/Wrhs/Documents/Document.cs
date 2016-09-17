@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Warehouse.Documents
+namespace Wrhs.Documents
 {
     public abstract class Document
     {

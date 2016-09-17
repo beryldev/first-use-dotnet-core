@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Warehouse.Documents;
-using Warehouse.Orders;
-using Warehouse.Validation;
+using Wrhs.Documents;
+using Wrhs.Orders;
+using Wrhs.Operations;
 
-namespace Warehouse.Operations.Delivery
+namespace Wrhs.Operations.Delivery
 {
 
     public class DeliveryOperation
@@ -46,26 +46,26 @@ namespace Warehouse.Operations.Delivery
             this.allocService = allocService;
         }
 
-        public DeliveryOperationResult Perform()
+        public OperationResult Perform()
         {
             if(baseDocument == null)
                 throw new InvalidOperationException("Can't perform operation without base document");
 
-            var result = new DeliveryOperationResult();
+            var result = new OperationResult();
 
             if(baseDocument.Lines.Count == 0)
             {
-                result.Status = DeliveryOperationResult.ResultStatus.Error;
+                result.Status = OperationResult.ResultStatus.Error;
                 result.ErrorMessages.Add("Base document is empty");
             }
 
             if(!CheckAllocations())
             {
-                result.Status = DeliveryOperationResult.ResultStatus.Error;
+                result.Status = OperationResult.ResultStatus.Error;
                 result.ErrorMessages.Add("Exists non allocated items");
             }
             
-            if(result.Status == DeliveryOperationResult.ResultStatus.Ok)
+            if(result.Status == OperationResult.ResultStatus.Ok)
             {
                 foreach(var allocation in pendingAllocations)
                     allocService.RegisterAllocation(allocation);
