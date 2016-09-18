@@ -22,7 +22,22 @@ namespace Wrhs
 
         public List<Stock> CalculateStocks()
         {
-            return allocRepo.Get()
+            var items =  allocRepo.Get();
+
+            return Calculate(items);
+        }
+
+        public List<Stock> CalculateStocks(string productCode)
+        {
+            var items = allocRepo.Get()
+                .Where(m=>m.ProductCode.Equals(productCode));
+
+            return Calculate(items);  
+        }
+
+        protected List<Stock> Calculate(IEnumerable<Allocation> items)
+        {
+            return items
                 .GroupBy(m=> new { m.Location, m.ProductCode })
                 .Select(item => new Stock()
                 {
@@ -30,11 +45,6 @@ namespace Wrhs
                     Location = item.First().Location,
                     Quantity = item.Sum(i=>i.Quantity)
                 }).ToList();
-        }
-
-        public List<Stock> CalculateStocks(string productCode)
-        {
-            return new List<Stock>();
         }
     }
 }

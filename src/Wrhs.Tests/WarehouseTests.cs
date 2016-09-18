@@ -29,15 +29,23 @@ namespace Wrhs.Tests
             Assert.AreEqual(total, stocks.Sum(item=>item.Quantity));
         }
 
-        public void CalculateStocksByProductCode()
+        [Test]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(10)]
+        [TestCase(99)]
+        public void CalculateStocksByProductCode(int total)
         {
-            var warehouse = PrepareWarehouse(SetupAllocationRepository());
+            var items = PrepareAllocations(total);
+            items.Add(new Allocation{ProductCode="SPROD", Quantity=5, Location="LOC-001-01"});
+            var warehouse = PrepareWarehouse(SetupAllocationRepository(items));
+
             var stocks = warehouse.CalculateStocks("SPROD");
 
-            Assert.AreEqual(0, stocks.Sum(item=>item.Quantity));
+            Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
         }
 
-        //[Test]
+        [Test]
         public void ProcessDeliveryOperationChangesStocks()
         {
             var allocRepo = SetupAllocationRepository();
