@@ -48,10 +48,9 @@ namespace Wrhs.Tests
         {
             var items = PrepareAllocations(0);
             var allocRepo = SetupAllocationRepository(items);
-            
             var operation = PrepareDeliveryOperation(allocRepo);
             var warehouse = PrepareWarehouse(allocRepo);
-
+            
             var stocksBefore = warehouse.CalculateStocks("SPROD");
             Assert.AreEqual(0, stocksBefore.Sum(item=>item.Quantity));
 
