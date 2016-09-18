@@ -12,8 +12,6 @@ namespace Wrhs.Tests
     [TestFixture]
     public class WarehouseTests
     {
-
-
         [Test]
         [TestCase(0)]
         [TestCase(1)]
@@ -48,7 +46,8 @@ namespace Wrhs.Tests
         [Test]
         public void ProcessDeliveryOperationChangesStocks()
         {
-            var allocRepo = SetupAllocationRepository();
+            var items = PrepareAllocations(0);
+            var allocRepo = SetupAllocationRepository(items);
             
             var operation = PrepareDeliveryOperation(allocRepo);
             var warehouse = PrepareWarehouse(allocRepo);
@@ -87,8 +86,9 @@ namespace Wrhs.Tests
                     items.Add(allocation);
                 });
 
+
             mock.Setup(m=>m.Get())
-                .Returns(items.ToList());
+                .Returns(items);
 
             return mock.Object;
         }
