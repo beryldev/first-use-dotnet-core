@@ -10,14 +10,20 @@ namespace Wrhs
     {
         IRepository<Allocation> allocRepo;
 
-        public Warehouse(IRepository<Allocation> allocRepo)
+        IStockCache cache;
+
+        public Warehouse(IRepository<Allocation> allocRepo, IStockCache cache)
         {
             this.allocRepo = allocRepo;
+
+            this.cache = cache;
         }
         
         public void ProcessOperation(DeliveryOperation operation)
         {
             operation.Perform();
+
+            cache.Refresh(this);
         }
 
         public List<Stock> CalculateStocks()
@@ -33,6 +39,11 @@ namespace Wrhs
                 .Where(m=>m.ProductCode.Equals(productCode));
 
             return Calculate(items);  
+        }
+
+        public List<Stock> ReadStocks()
+        {
+            return cache.Read().ToList();
         }
 
         protected List<Stock> Calculate(IEnumerable<Allocation> items)

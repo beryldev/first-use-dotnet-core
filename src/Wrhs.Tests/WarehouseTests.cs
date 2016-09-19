@@ -60,6 +60,42 @@ namespace Wrhs.Tests
             Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
         }
 
+        [Test]
+        public void ReadStocksReturnsStocksList()
+        {
+            var allocRepo = SetupAllocationRepository();
+            var warehouse = PrepareWarehouse(allocRepo);
+
+            var stocks = warehouse.ReadStocks();
+
+            Assert.AreEqual(0, stocks.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        public void ReadStocksReadCachedStocks()
+        {
+            var allocRepo = SetupAllocationRepository();
+            var stockCacheMock = new Mock<IStockCache>();
+            var warehouse = PrepareWarehouse(allocRepo, stockCacheMock.Object);
+
+            warehouse.ReadStocks();
+
+            stockCacheMock.Verify(m=>m.Read(), Times.Once());
+        }
+
+        [Test]
+        public void AfterProcessDeliveryOperationRefreshStockCache()
+        {
+            var stockCacheMock = new Mock<IStockCache>();
+            var allocRepo = SetupAllocationRepository();
+            var operation = PrepareDeliveryOperation(allocRepo);
+            var warehouse = PrepareWarehouse(allocRepo, stockCacheMock.Object);
+
+            warehouse.ProcessOperation(operation);
+
+            stockCacheMock.Verify(m=>m.Refresh(warehouse), Times.Once());
+        }
+
         protected IRepository<Allocation> SetupAllocationRepository()
         {
             return SetupAllocationRepository(new List<Allocation>());
@@ -94,7 +130,14 @@ namespace Wrhs.Tests
 
         protected Warehouse PrepareWarehouse(IRepository<Allocation> allocRepo)
         {
-            return new Warehouse(allocRepo);
+            var stockCacheMock = new Mock<IStockCache>();
+            stockCacheMock.Setup(m=>m.Read()).Returns(new List<Stock>());
+            return PrepareWarehouse(allocRepo, stockCacheMock.Object);
+        }
+
+        protected Warehouse PrepareWarehouse(IRepository<Allocation> allocRepo, IStockCache cache)
+        {
+            return new Warehouse(allocRepo, cache);
         }
 
         protected Order PrepareOrder()
