@@ -21,7 +21,6 @@ namespace Wrhs
 
         public void ProcessOperation(DeliveryOperation operation)
         {
-            
             operation.Perform(allocService);
 
             cache.Refresh(this);
