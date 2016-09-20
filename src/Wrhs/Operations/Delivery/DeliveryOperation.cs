@@ -37,15 +37,8 @@ namespace Wrhs.Operations.Delivery
         }
 
         Document baseDocument;
-        
-        IAllocationService allocService;
 
-        public DeliveryOperation(IAllocationService allocService)
-        {
-            this.allocService = allocService;
-        }
-
-        public OperationResult Perform()
+        public OperationResult Perform(IAllocationService allocService)
         {
             if(baseDocument == null)
                 throw new InvalidOperationException("Can't perform operation without base document");

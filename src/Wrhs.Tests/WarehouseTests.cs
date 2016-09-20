@@ -20,7 +20,7 @@ namespace Wrhs.Tests
         public void WarehouseCalculateStocks(int total)
         {
             var items = PrepareAllocations(total);
-            var warehouse = PrepareWarehouse(SetupAllocationRepository(items));
+            var warehouse = PrepareWarehouse(PrepareAllocService(SetupAllocationRepository(items)));
 
             var stocks = warehouse.CalculateStocks();
 
@@ -36,7 +36,7 @@ namespace Wrhs.Tests
         {
             var items = PrepareAllocations(total);
             items.Add(new Allocation{ProductCode="SPROD", Quantity=5, Location="LOC-001-01"});
-            var warehouse = PrepareWarehouse(SetupAllocationRepository(items));
+            var warehouse = PrepareWarehouse(PrepareAllocService(SetupAllocationRepository(items)));
 
             var stocks = warehouse.CalculateStocks("SPROD");
 
@@ -47,9 +47,9 @@ namespace Wrhs.Tests
         public void ProcessDeliveryOperationChangesStocks()
         {
             var items = PrepareAllocations(0);
-            var allocRepo = SetupAllocationRepository(items);
-            var operation = PrepareDeliveryOperation(allocRepo);
-            var warehouse = PrepareWarehouse(allocRepo);
+            var allocService = PrepareAllocService(SetupAllocationRepository(items));
+            var operation = PrepareDeliveryOperation();
+            var warehouse = PrepareWarehouse(allocService);
             
             var stocksBefore = warehouse.CalculateStocks("SPROD");
             Assert.AreEqual(0, stocksBefore.Sum(item=>item.Quantity));
@@ -63,8 +63,8 @@ namespace Wrhs.Tests
         [Test]
         public void ReadStocksReturnsStocksList()
         {
-            var allocRepo = SetupAllocationRepository();
-            var warehouse = PrepareWarehouse(allocRepo);
+            var allocService = PrepareAllocService(SetupAllocationRepository());
+            var warehouse = PrepareWarehouse(allocService);
 
             var stocks = warehouse.ReadStocks();
 
@@ -74,9 +74,9 @@ namespace Wrhs.Tests
         [Test]
         public void ReadStocksFromCachedStocks()
         {
-            var allocRepo = SetupAllocationRepository();
+            var allocService = PrepareAllocService(SetupAllocationRepository());
             var stockCacheMock = new Mock<IStockCache>();
-            var warehouse = PrepareWarehouse(allocRepo, stockCacheMock.Object);
+            var warehouse = PrepareWarehouse(allocService, stockCacheMock.Object);
 
             warehouse.ReadStocks();
 
@@ -88,7 +88,7 @@ namespace Wrhs.Tests
         [TestCase("PROD2", 1, 1)]
         public void ReadStocksByProductCode(string productCode, int count, decimal quantity)
         {
-            var allocRepo = SetupAllocationRepository();
+            var allocService = PrepareAllocService(SetupAllocationRepository());
             var cache = new Mock<IStockCache>();
             cache.Setup(m=>m.Read())
                 .Returns(new List<Stock>{
@@ -97,7 +97,7 @@ namespace Wrhs.Tests
                     new Stock{ProductCode = "PROD2", Quantity = 1}
                 });
 
-            var warehouse = PrepareWarehouse(allocRepo, cache.Object);
+            var warehouse = PrepareWarehouse(allocService, cache.Object);
 
             var stocks = warehouse.ReadStocksByProductCode(productCode);
 
@@ -110,7 +110,7 @@ namespace Wrhs.Tests
         [TestCase("LOC-001-02", 1, 1)]
         public void ReadStocksByLocation(string location, int count, decimal quantity)
         {
-            var allocRepo = SetupAllocationRepository();
+            var allocService = PrepareAllocService(SetupAllocationRepository());
             var cache = new Mock<IStockCache>();
             cache.Setup(m=>m.Read())
                 .Returns(new List<Stock>{
@@ -119,7 +119,7 @@ namespace Wrhs.Tests
                     new Stock{Location = "LOC-001-02", Quantity = 1}
                 });
 
-            var warehouse = PrepareWarehouse(allocRepo, cache.Object);
+            var warehouse = PrepareWarehouse(allocService, cache.Object);
 
             var stocks = warehouse.ReadStocksByLocation(location);
 
@@ -143,15 +143,31 @@ namespace Wrhs.Tests
                         cache.Add(s);
                 });    
                 
-            var allocRepo = SetupAllocationRepository();
-            var operation = PrepareDeliveryOperation(allocRepo);
-            var warehouse = PrepareWarehouse(allocRepo, stockCacheMock.Object);
+            var allocService = PrepareAllocService(SetupAllocationRepository());
+            var operation = PrepareDeliveryOperation();
+            var warehouse = PrepareWarehouse(allocService, stockCacheMock.Object);
 
             warehouse.ProcessOperation(operation);
 
             stockCacheMock.Verify(m=>m.Refresh(warehouse), Times.Once());
             Assert.AreEqual(warehouse.CalculateStocks().Count, warehouse.ReadStocks().Count);
             CollectionAssert.AreEquivalent(warehouse.CalculateStocks(), warehouse.ReadStocks());
+        }
+        
+        protected IAllocationService PrepareAllocService(IRepository<Allocation> allocRepo)
+        {
+            var mock = new Mock<IAllocationService>();
+            
+            mock.Setup(m=>m.RegisterAllocation(It.IsAny<Allocation>()))
+                .Callback((Allocation allocation)=>{
+                    allocRepo.Save(allocation);
+                });
+                
+            mock.Setup(m=>m.GetAllocations())
+                .Returns(allocRepo.Get());
+                
+            
+            return mock.Object;
         }
 
         protected IRepository<Allocation> SetupAllocationRepository()
@@ -186,16 +202,16 @@ namespace Wrhs.Tests
             return mock.Object;
         }
 
-        protected Warehouse PrepareWarehouse(IRepository<Allocation> allocRepo)
+        protected Warehouse PrepareWarehouse(IAllocationService allocService)
         {
             var stockCacheMock = new Mock<IStockCache>();
             stockCacheMock.Setup(m=>m.Read()).Returns(new List<Stock>());
-            return PrepareWarehouse(allocRepo, stockCacheMock.Object);
+            return PrepareWarehouse(allocService, stockCacheMock.Object);
         }
 
-        protected Warehouse PrepareWarehouse(IRepository<Allocation> allocRepo, IStockCache cache)
+        protected Warehouse PrepareWarehouse(IAllocationService allocService, IStockCache cache)
         {
-            return new Warehouse(allocRepo, cache);
+            return new Warehouse(allocService, cache);
         }
 
         protected Order PrepareOrder()
@@ -214,15 +230,9 @@ namespace Wrhs.Tests
             return order;
         }
 
-        protected DeliveryOperation PrepareDeliveryOperation(IRepository<Allocation> allocRepo)
+        protected DeliveryOperation PrepareDeliveryOperation()
         {
-            var allocSrvMock = new Mock<IAllocationService>();
-            allocSrvMock.Setup(m=>m.RegisterAllocation(It.IsAny<Allocation>()))
-                .Callback((Allocation allocation)=>{
-                    allocRepo.Save(allocation);
-                });
-
-            var operation = new DeliveryOperation(allocSrvMock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
             operation.SetBaseDocument(order);
             operation.AllocateItem((OrderLine)order.Lines[0], 5, "LOC-001-01");

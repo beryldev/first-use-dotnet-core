@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Wrhs.Operations
 {
@@ -16,6 +17,11 @@ namespace Wrhs.Operations
            Validate(allocation);
 
            repo.Save(allocation);
+        }
+        
+        public IEnumerable<Allocation> GetAllocations()
+        {
+            return repo.Get();
         }
 
         protected void Validate(Allocation allocation)

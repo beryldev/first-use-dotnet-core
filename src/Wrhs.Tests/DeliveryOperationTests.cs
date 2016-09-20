@@ -15,8 +15,7 @@ namespace Wrhs.Tests
         public void OperationCanBasedOnOrder()
         {
             var order = new Order();
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
 
             operation.SetBaseDocument(order);
 
@@ -27,8 +26,7 @@ namespace Wrhs.Tests
         public void OperationCanBasedOnDeliveryDocument()
         {
             var document = new DeliveryDocument();
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
 
             operation.SetBaseDocument(document);
 
@@ -39,8 +37,7 @@ namespace Wrhs.Tests
         public void CanAcccessDirectlyToBaseOrder()
         {
             var document = new Order();
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             operation.BaseOrder = document;
 
             Assert.AreEqual(document, operation.BaseDocument);
@@ -50,8 +47,7 @@ namespace Wrhs.Tests
         public void CanAccessDirectlyToBaseDeliveryDocument()
         {
             var document = new DeliveryDocument();
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
 
             operation.BaseDeliveryDocument = document;
 
@@ -61,8 +57,7 @@ namespace Wrhs.Tests
         [Test]
         public void BaseDocumentIsAlwaysLastSetDocumentOrderThenDeliveryDoc()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = new Order();
             var deliveryDoc = new DeliveryDocument();
 
@@ -76,8 +71,7 @@ namespace Wrhs.Tests
         [Test]
         public void BaseDocumentIsAlwaysLastSetDocumentDeliveryDocThenOrder()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = new Order();
             var deliveryDoc = new DeliveryDocument();
 
@@ -91,11 +85,11 @@ namespace Wrhs.Tests
         public void ThrowsExceptionWhenPerformOperationWithoutBaseDocument()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
 
             Assert.Throws<InvalidOperationException>(()=>
             {
-               operation.Perform(); 
+               operation.Perform(mock.Object); 
             });
         }
 
@@ -103,11 +97,11 @@ namespace Wrhs.Tests
         public void PerformOperationReturnOperationResult()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = new Order();
             operation.SetBaseDocument(order);
             
-            var result = operation.Perform();
+            var result = operation.Perform(mock.Object);
 
             Assert.IsNotNull(result);
         }
@@ -116,11 +110,11 @@ namespace Wrhs.Tests
         public void PerformReturnResultWithErrorStatusWhenBaseDocumentIsEmpty()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = new Order();
             operation.SetBaseDocument(order);
 
-            var result = operation.Perform();
+            var result = operation.Perform(mock.Object);
 
             Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
         }
@@ -129,11 +123,11 @@ namespace Wrhs.Tests
         public void PerformReturnResultWithErrorMessageWhenBaseDocumentIsEmpty()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = new Order();
             operation.SetBaseDocument(order);
 
-            var result = operation.Perform();
+            var result = operation.Perform(mock.Object);
 
             CollectionAssert.Contains(result.ErrorMessages, "Base document is empty");
         }
@@ -141,8 +135,7 @@ namespace Wrhs.Tests
         [Test]
         public void CanAllocateItemFromBaseDocument()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
 
             var location = "I-100-10";
@@ -158,8 +151,7 @@ namespace Wrhs.Tests
         [Test]
         public void WhenTryAllocateZeroQuantityThenNoEffect()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
 
             var location = "I-100-10";
@@ -172,8 +164,7 @@ namespace Wrhs.Tests
         [Test]
         public void ThrowsExceptionWhenTryAllocateToEmptyLocationAddress()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
 
             var location = String.Empty;
@@ -188,8 +179,7 @@ namespace Wrhs.Tests
         [Test]
         public void ThrowsExceptionWhenTryAllocateMoreThanOnDocument()
         {
-            var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
             operation.SetBaseDocument(order);
 
@@ -209,11 +199,11 @@ namespace Wrhs.Tests
         public void CantPerformOperationWhenExistsNonAllocatedItems()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             var order = PrepareOrder();
             operation.BaseOrder = order;
 
-            var result = operation.Perform();
+            var result = operation.Perform(mock.Object);
 
             Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
             CollectionAssert.Contains(result.ErrorMessages, "Exists non allocated items");
@@ -223,11 +213,11 @@ namespace Wrhs.Tests
         public void RegisterAllocationOnSuccessPerform()
         {
             var mock = new Mock<IAllocationService>();
-            var operation = new DeliveryOperation(mock.Object);
+            var operation = new DeliveryOperation();
             operation.SetBaseDocument(PrepareOrder());
             operation.AllocateItem((OrderLine)operation.BaseDocument.Lines.First(), 5, "LOC-001-01");
 
-            operation.Perform();
+            operation.Perform(mock.Object);
 
             mock.Verify(m=>m.RegisterAllocation(It.IsAny<Allocation>()), Times.Once());
         }
