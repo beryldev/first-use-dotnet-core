@@ -130,7 +130,19 @@ namespace Wrhs.Tests
         [Test]
         public void AfterProcessDeliveryOperationRefreshStockCache()
         {
+            var cache = new List<Stock>();
             var stockCacheMock = new Mock<IStockCache>();
+            
+            stockCacheMock.Setup(m=>m.Read())
+                .Returns(cache);
+               
+            stockCacheMock.Setup(m=>m.Refresh(It.IsAny<Warehouse>()))
+                .Callback((Warehouse w)=>{
+                    cache.Clear();
+                    foreach(var s in w.CalculateStocks())
+                        cache.Add(s);
+                });    
+                
             var allocRepo = SetupAllocationRepository();
             var operation = PrepareDeliveryOperation(allocRepo);
             var warehouse = PrepareWarehouse(allocRepo, stockCacheMock.Object);
@@ -138,6 +150,8 @@ namespace Wrhs.Tests
             warehouse.ProcessOperation(operation);
 
             stockCacheMock.Verify(m=>m.Refresh(warehouse), Times.Once());
+            Assert.AreEqual(warehouse.CalculateStocks().Count, warehouse.ReadStocks().Count);
+            CollectionAssert.AreEquivalent(warehouse.CalculateStocks(), warehouse.ReadStocks());
         }
 
         protected IRepository<Allocation> SetupAllocationRepository()
