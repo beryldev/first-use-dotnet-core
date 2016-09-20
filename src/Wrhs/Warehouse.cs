@@ -46,6 +46,20 @@ namespace Wrhs
             return cache.Read().ToList();
         }
 
+        public List<Stock> ReadStocksByProductCode(string productCode)
+        {
+            return cache.Read()
+                .Where(item=>item.ProductCode.Equals(productCode))
+                .ToList();
+        }
+
+        public List<Stock> ReadStocksByLocation(string location)
+        {
+            return cache.Read()
+                .Where(item=>item.Location.Equals(location))
+                .ToList();
+        }
+
         protected List<Stock> Calculate(IEnumerable<Allocation> items)
         {
             return items

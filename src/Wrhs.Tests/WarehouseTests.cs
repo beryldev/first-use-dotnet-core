@@ -72,7 +72,7 @@ namespace Wrhs.Tests
         }
 
         [Test]
-        public void ReadStocksReadCachedStocks()
+        public void ReadStocksFromCachedStocks()
         {
             var allocRepo = SetupAllocationRepository();
             var stockCacheMock = new Mock<IStockCache>();
@@ -81,6 +81,50 @@ namespace Wrhs.Tests
             warehouse.ReadStocks();
 
             stockCacheMock.Verify(m=>m.Read(), Times.Once());
+        }
+
+        [Test]
+        [TestCase("PROD1", 2, 7)]
+        [TestCase("PROD2", 1, 1)]
+        public void ReadStocksByProductCode(string productCode, int count, decimal quantity)
+        {
+            var allocRepo = SetupAllocationRepository();
+            var cache = new Mock<IStockCache>();
+            cache.Setup(m=>m.Read())
+                .Returns(new List<Stock>{
+                    new Stock{ProductCode = "PROD1", Quantity = 4},
+                    new Stock{ProductCode = "PROD1", Quantity = 3},
+                    new Stock{ProductCode = "PROD2", Quantity = 1}
+                });
+
+            var warehouse = PrepareWarehouse(allocRepo, cache.Object);
+
+            var stocks = warehouse.ReadStocksByProductCode(productCode);
+
+            Assert.AreEqual(count, stocks.Count);
+            Assert.AreEqual(quantity, stocks.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        [TestCase("LOC-001-01", 2, 7)]
+        [TestCase("LOC-001-02", 1, 1)]
+        public void ReadStocksByLocation(string location, int count, decimal quantity)
+        {
+            var allocRepo = SetupAllocationRepository();
+            var cache = new Mock<IStockCache>();
+            cache.Setup(m=>m.Read())
+                .Returns(new List<Stock>{
+                    new Stock{Location = "LOC-001-01", Quantity = 4},
+                    new Stock{Location = "LOC-001-01", Quantity = 3},
+                    new Stock{Location = "LOC-001-02", Quantity = 1}
+                });
+
+            var warehouse = PrepareWarehouse(allocRepo, cache.Object);
+
+            var stocks = warehouse.ReadStocksByLocation(location);
+
+            Assert.AreEqual(count, stocks.Count);
+            Assert.AreEqual(quantity, stocks.Sum(item=>item.Quantity));
         }
 
         [Test]
