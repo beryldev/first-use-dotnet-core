@@ -26,9 +26,11 @@ namespace Wrhs.Operations.Relocation
             baseDocument = doc;
         }
 
-        public OperationResult Preform(IAllocationService allocService)
+        public OperationResult Perform(IAllocationService allocService)
         {
             return null;
         }
+
+        //dodac inne bazujac na deliveryoperation
     }
 }
