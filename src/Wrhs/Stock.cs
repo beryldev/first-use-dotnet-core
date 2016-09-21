@@ -4,7 +4,7 @@ namespace Wrhs
 {
     public class Stock
     {
-        public string ProductCode { get; set; }
+        public Product Product { get; set; }
 
         public string Location { get; set; }
 
@@ -12,7 +12,7 @@ namespace Wrhs
         
         public override string ToString()
         {
-            return $"ProductCode: {ProductCode} | Location: {Location} | Quantity: {Quantity}";
+            return $"ProductCode: {Product.Code} | Location: {Location} | Quantity: {Quantity}";
         }
         
         public override bool Equals(object obj)
@@ -21,7 +21,7 @@ namespace Wrhs
                 return false;
                 
             var stock = (Stock)obj;
-            return stock.ProductCode.Equals(this.ProductCode)
+            return stock.Product.Code.Equals(this.Product.Code)
                 && stock.Location.Equals(this.Location)
                 && stock.Quantity.Equals(this.Quantity);
         }
@@ -32,7 +32,7 @@ namespace Wrhs
             unchecked
             {
                 int hash = (int) 2166136261;
-                hash = (hash * 16777619) ^ ProductCode.GetHashCode();
+                hash = (hash * 16777619) ^ Product.Code.GetHashCode();
                 hash = (hash * 16777619) ^ Location.GetHashCode();
                 hash = (hash * 16777619) ^ Quantity.GetHashCode();
                 return hash;

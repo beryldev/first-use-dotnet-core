@@ -143,7 +143,7 @@ namespace Wrhs.Tests
             operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
             var allocation = operation.PendingAllocations.First();
 
-            Assert.AreEqual(allocation.ProductCode, order.Lines.First().ProductCode);
+            Assert.AreEqual(allocation.Product, order.Lines.First().Product);
             Assert.AreEqual(allocation.Quantity, quantity);
             Assert.AreEqual(allocation.Location, location);
         }
@@ -227,8 +227,7 @@ namespace Wrhs.Tests
             var order = new Order();
             order.Lines.Add(new OrderLine
             {
-                ProductName = "Some product",
-                ProductCode = "SPROD",
+                Product = new Product{ Name = "Some product", Code = "SPROD" },
                 EAN = "1234567890",
                 SKU = "P12345",
                 Quantity = 5,

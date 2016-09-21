@@ -36,7 +36,7 @@ namespace Wrhs
         public List<Stock> CalculateStocks(string productCode)
         {
             var items = allocService.GetAllocations()
-                .Where(m => m.ProductCode.Equals(productCode));
+                .Where(m => m.Product.Code.Equals(productCode));
 
             return Calculate(items);
         }
@@ -49,7 +49,7 @@ namespace Wrhs
         public List<Stock> ReadStocksByProductCode(string productCode)
         {
             return cache.Read()
-                .Where(item => item.ProductCode.Equals(productCode))
+                .Where(item => item.Product.Code.Equals(productCode))
                 .ToList();
         }
 
@@ -63,10 +63,10 @@ namespace Wrhs
         protected List<Stock> Calculate(IEnumerable<Allocation> items)
         {
             return items
-                .GroupBy(m => new { m.Location, m.ProductCode })
+                .GroupBy(m => new { m.Location, m.Product })
                 .Select(item => new Stock()
                 {
-                    ProductCode = item.First().ProductCode,
+                    Product = item.First().Product,
                     Location = item.First().Location,
                     Quantity = item.Sum(i => i.Quantity)
                 }).ToList();

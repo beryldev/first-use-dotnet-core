@@ -29,7 +29,7 @@ namespace Wrhs.Operations
              if(String.IsNullOrWhiteSpace(allocation.Location))
                 throw new ArgumentException("Empty location. Must provide location");
 
-            if(String.IsNullOrWhiteSpace(allocation.ProductCode))
+            if(String.IsNullOrWhiteSpace(allocation.Product.Code))
                 throw new ArgumentException("Empty produc code. Must provide product code");
         }
     }

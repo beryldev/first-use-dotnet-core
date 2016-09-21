@@ -5,9 +5,7 @@ namespace Wrhs.Documents
 {
     public abstract class DocumentLine
     {
-        public virtual string ProductName { get; set; }
-
-        public virtual string ProductCode { get; set; } = String.Empty;
+        public virtual Product Product { get; set; }
 
         public virtual string EAN { get; set; }
 

@@ -87,11 +87,11 @@ namespace Wrhs.Operations.Delivery
             if(baseDocument !=null)
             {
                 var onDocument = baseDocument.Lines
-                    .Where(l=>l.ProductCode.Equals(item.ProductCode))
+                    .Where(l=>l.Product.Code.Equals(item.Product.Code))
                     .Sum(l=>l.Quantity);
 
                 var allocated = pendingAllocations
-                    .Where(a=>a.ProductCode.Equals(item.ProductCode))
+                    .Where(a=>a.Product.Code.Equals(item.Product.Code))
                     .Sum(a=>a.Quantity);
 
                 if(allocated + quantity > onDocument)
@@ -100,7 +100,7 @@ namespace Wrhs.Operations.Delivery
            
             var allocation = new Allocation
             {
-                ProductCode = item.ProductCode,
+                Product = item.Product,
                 Location = location,
                 Quantity = quantity
             };

@@ -103,7 +103,7 @@ namespace Wrhs.Tests
             {
                 Quantity = quantity,
                 Location = location,
-                ProductCode = code
+                Product = new Product{ Code = code }
             };
         }
 

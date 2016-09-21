@@ -35,7 +35,7 @@ namespace Wrhs.Tests
         public void CalculateStocksByProductCode(int total)
         {
             var items = PrepareAllocations(total);
-            items.Add(new Allocation{ProductCode="SPROD", Quantity=5, Location="LOC-001-01"});
+            items.Add(new Allocation{Product = new Product{ Code="SPROD" }, Quantity=5, Location="LOC-001-01"});
             var warehouse = PrepareWarehouse(PrepareAllocService(SetupAllocationRepository(items)));
 
             var stocks = warehouse.CalculateStocks("SPROD");
@@ -92,9 +92,9 @@ namespace Wrhs.Tests
             var cache = new Mock<IStockCache>();
             cache.Setup(m=>m.Read())
                 .Returns(new List<Stock>{
-                    new Stock{ProductCode = "PROD1", Quantity = 4},
-                    new Stock{ProductCode = "PROD1", Quantity = 3},
-                    new Stock{ProductCode = "PROD2", Quantity = 1}
+                    new Stock{Product = new Product{ Code = "PROD1" }, Quantity = 4},
+                    new Stock{Product = new Product{ Code = "PROD1" }, Quantity = 3},
+                    new Stock{Product = new Product{ Code = "PROD2" }, Quantity = 1}
                 });
 
             var warehouse = PrepareWarehouse(allocService, cache.Object);
@@ -180,7 +180,7 @@ namespace Wrhs.Tests
             return Enumerable.Range(0, total)
             .Select(i=>new Allocation()
             {
-                ProductCode = "PROD1",
+                Product = new Product{ Code = "PROD1" },
                 Quantity = 1,
                 Location = "LOC-001-01"
             }).ToList();
@@ -219,8 +219,7 @@ namespace Wrhs.Tests
             var order = new Order();
             order.Lines.Add(new OrderLine
             {
-                ProductName = "Some product",
-                ProductCode = "SPROD",
+                Product = new Product{ Name = "Some product", Code = "SPROD" },
                 EAN = "1234567890",
                 SKU = "P12345",
                 Quantity = 5,
