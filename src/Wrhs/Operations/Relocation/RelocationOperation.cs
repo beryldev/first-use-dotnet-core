@@ -21,6 +21,11 @@ namespace Wrhs.Operations.Relocation
             set { baseDocument = value; }
         }
 
+        public List<Allocation> PendingAllocations
+        {
+            get { return pendingAllocations.ToList(); }
+        }
+
         Document baseDocument;
 
         List<Allocation> pendingAllocations = new List<Allocation>();
@@ -38,10 +43,10 @@ namespace Wrhs.Operations.Relocation
             return null;
         }
 
-        public void RegisterRelocation(Product product, string from, string to, decimal quantity)
+        public void RelocateItem(Product product, string from, string to, decimal quantity)
         {
-            if(((RelocationDocument)baseDocument).Lines.Where(item => item.Product.Equals(product)).Count() == 0)
-                throw new ArgumentException("Invalid product. Product not present on document.");
+            
+            ValidateRelocation(product, quantity, from, to);
 
             var line = ((RelocationDocument)baseDocument).Lines
                 .Where(item=>item.Product.Equals(product)
@@ -57,6 +62,20 @@ namespace Wrhs.Operations.Relocation
             pendingAllocations.Add(allocFrom);
             pendingAllocations.Add(allocTo);
         }
+
+        protected void ValidateRelocation(Product product, decimal quantity, string from, string to)
+        {
+            if(((RelocationDocument)baseDocument).Lines.Where(item => item.Product.Equals(product)).Count() == 0)
+                throw new ArgumentException("Invalid product. Product not present on document.");
+
+            if(quantity <= 0)
+                throw new ArgumentException("Invalid quantity. Must be more than zero");
+
+            if(from.Equals(to))
+                throw new ArgumentException("Source location can't be destination");
+        }
+
+        
 
         //dodac inne bazujac na deliveryoperation
     }
