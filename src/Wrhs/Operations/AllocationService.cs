@@ -14,9 +14,22 @@ namespace Wrhs.Operations
 
         public void RegisterAllocation(Allocation allocation)
         {
-           Validate(allocation);
+            Validate(allocation);
 
-           repo.Save(allocation);
+            if(allocation.Quantity < 0)
+                throw new InvalidOperationException("Can't register allocation with negative quantity");
+
+            repo.Save(allocation);
+        }
+
+        public void RegisterDeallocation(Allocation deallocation)
+        {
+            Validate(deallocation);
+
+             if(deallocation.Quantity > 0)
+                throw new InvalidOperationException("Can't register allocation with positive quantity");
+
+            repo.Save(deallocation);
         }
         
         public IEnumerable<Allocation> GetAllocations()
@@ -26,7 +39,7 @@ namespace Wrhs.Operations
 
         protected void Validate(Allocation allocation)
         {
-             if(String.IsNullOrWhiteSpace(allocation.Location))
+            if(String.IsNullOrWhiteSpace(allocation.Location))
                 throw new ArgumentException("Empty location. Must provide location");
 
             if(String.IsNullOrWhiteSpace(allocation.Product.Code))

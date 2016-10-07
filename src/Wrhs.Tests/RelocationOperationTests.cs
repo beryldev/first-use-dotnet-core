@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Operations;
@@ -46,12 +47,9 @@ namespace Wrhs.Tests
         [Test]
         public void RelocateItem()
         {
-            var document = MakeRelocationDocument();
-            var operation = new RelocationOperation();
-            operation.SetBaseDocument(document);
+            var operation = MakeRelocationOperation();
 
-            
-            operation.RelocateItem(document.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 1);
+            operation.RelocateItem(operation.BaseDocument.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 1);
 
             Assert.AreEqual(2, operation.PendingAllocations.Count);
         }
@@ -59,13 +57,11 @@ namespace Wrhs.Tests
         [Test]
         public void CantRelocateMoreThanOnDocument()
         {
-            var document = MakeRelocationDocument();
-            var operation = new RelocationOperation();
-            operation.SetBaseDocument(document);
+            var operation = MakeRelocationOperation();
 
             Assert.Throws<ArgumentException>(()=>
             {
-                operation.RelocateItem(document.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 2);
+                operation.RelocateItem(operation.BaseDocument.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 2);
             });
 
             Assert.AreEqual(0, operation.PendingAllocations.Count);
@@ -75,9 +71,7 @@ namespace Wrhs.Tests
         public void CantRelocateNonPresentOnDocProduct()
         {
             var product = new Product();
-            var document = MakeRelocationDocument();
-            var operation = new RelocationOperation();
-            operation.SetBaseDocument(document);
+            var operation = MakeRelocationOperation();
 
             Assert.Throws<ArgumentException>(()=>
             {
@@ -94,13 +88,12 @@ namespace Wrhs.Tests
         [TestCase(-9)]
         public void CantRelocateZeroOrLess(decimal quantity)
         {
-            var document = MakeRelocationDocument();
-            var operation = new RelocationOperation();
-            operation.SetBaseDocument(document);
+            var operation = MakeRelocationOperation();
 
             Assert.Throws<ArgumentException>(()=>
             {
-                operation.RelocateItem(document.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", quantity);
+                operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
+                    "LOC-001-01-1", "LOC-001-01-2", quantity);
             });
 
             Assert.AreEqual(0, operation.PendingAllocations.Count);
@@ -120,16 +113,47 @@ namespace Wrhs.Tests
             });
         }
 
+        [Test]
+        public void PerformRegisterAllocations()
+        {
+            var items = new List<Allocation>();
+            var mock = new Mock<IAllocationService>();
+            mock.Setup(m=>m.RegisterAllocation(It.IsAny<Allocation>()))
+                .Callback((Allocation alloc)=>{ items.Add(alloc); });
+
+            mock.Setup(m=>m.RegisterDeallocation(It.IsAny<Allocation>()))
+                .Callback((Allocation alloc)=>{ items.Add(alloc); });
+
+            var operation = MakeRelocationOperation();
+            operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
+                "LOC-001-01-1", "LOC-001-01-2", 1);
+
+            operation.Perform(mock.Object);
+
+            Assert.AreEqual(2, items.Count);
+            Assert.AreEqual(-1, items[0].Quantity);
+            Assert.AreEqual(1, items[1].Quantity);
+        }
+
+        [Test]
         public void SourceLocationCantBeDestination()
+        {
+            var operation = MakeRelocationOperation();
+
+            Assert.Throws<ArgumentException>(()=>
+            {
+                operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
+                    "LOC-001-01-1", "LOC-001-01-1", 1);
+            });
+        }
+
+        protected RelocationOperation MakeRelocationOperation()
         {
             var document = MakeRelocationDocument();
             var operation = new RelocationOperation();
             operation.SetBaseDocument(document);
 
-            Assert.Throws<ArgumentException>(()=>
-            {
-                operation.RelocateItem(document.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-1", 1);
-            });
+            return operation;
         }
 
         protected RelocationDocument MakeRelocationDocument()

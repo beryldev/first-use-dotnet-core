@@ -44,6 +44,39 @@ namespace Wrhs.Tests
         }
 
         [Test]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("\n")]
+        [TestCase(null)]
+        public void ThrowsExceptionWhenTryRegisterDeallocationWithEmptyLocationName(string location)
+        {
+            var mock = new Mock<IRepository<Allocation>>();
+            var allocation = MakeDeallocation("PROD1", -1, location);
+            var service = MakeService(mock.Object);
+
+            Assert.Throws<ArgumentException>(()=>{
+                service.RegisterDeallocation(allocation);
+            });
+        }
+
+        [Test]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("\n")]
+        [TestCase(null)]
+        public void ThrowsExceptionWhenTryRegisterDeallocationWithoutProductCode(string code)
+        {
+            var items = new List<Allocation>();
+            var mock = PrepareAllocRepoMock(items);
+            var allocation = MakeDeallocation(code);
+            var service = MakeService(mock.Object);
+
+            Assert.Throws<ArgumentException>(()=>{
+                service.RegisterDeallocation(allocation);
+            });
+        }
+
+        [Test]
         public void RegisterSaveAllocationInRepository()
         {
             var items = new List<Allocation>();
@@ -55,6 +88,50 @@ namespace Wrhs.Tests
 
             mock.Verify(m=>m.Save(allocation), Times.Once());
             CollectionAssert.Contains(items, allocation);
+        }
+
+        [Test]
+        public void RegisterSaveDeallocationInRepository()
+        {
+            var items = new List<Allocation>();
+            var mock = PrepareAllocRepoMock(items);
+            var deallocation = MakeDeallocation("PROD1");
+            var service = MakeService(mock.Object);
+
+            service.RegisterDeallocation(deallocation);
+
+            mock.Verify(m=>m.Save(deallocation), Times.Once());
+            CollectionAssert.Contains(items, deallocation);
+        }
+
+        [Test]
+        public void CantRegisterAllocationWithNegativeQuantity()
+        {
+            var items = new List<Allocation>();
+            var mock = PrepareAllocRepoMock(items);
+            var allocation = MakeDeallocation("PROD1");
+            var service = MakeService(mock.Object);
+
+            Assert.Throws<InvalidOperationException>(()=>
+            {
+                service.RegisterAllocation(allocation);
+            });
+            Assert.AreEqual(0, items.Count);
+        }
+
+        [Test]
+        public void CantRegisterDeallocationWithPositiveQuantity()
+        {
+            var items = new List<Allocation>();
+            var mock = PrepareAllocRepoMock(items);
+            var allocation = MakeAllocation("PROD1");
+            var service = MakeService(mock.Object);
+
+            Assert.Throws<InvalidOperationException>(()=>
+            {
+                service.RegisterDeallocation(allocation);
+            });
+            Assert.AreEqual(0, items.Count);
         }
 
         [Test]
@@ -84,6 +161,12 @@ namespace Wrhs.Tests
             CollectionAssert.Contains(result, allocation);
         }
 
+        [Test]
+        public void CantRegisterDeallocationWhenResourceNotExistsOnLocation()
+        {
+            throw new NotImplementedException();
+        }
+
         protected Mock<IRepository<Allocation>> PrepareAllocRepoMock(List<Allocation> items)
         {
             var mock = new Mock<IRepository<Allocation>>();
@@ -98,6 +181,16 @@ namespace Wrhs.Tests
         }
 
         protected Allocation MakeAllocation(string code, decimal quantity=1, string location="LOC-001-01")
+        {
+            return new Allocation
+            {
+                Quantity = quantity,
+                Location = location,
+                Product = new Product{ Code = code }
+            };
+        }
+
+        protected Allocation MakeDeallocation(string code, decimal quantity=-1, string location="LOC-001-01")
         {
             return new Allocation
             {

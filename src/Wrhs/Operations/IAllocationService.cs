@@ -5,7 +5,9 @@ namespace Wrhs.Operations
     public interface IAllocationService
     {
         void RegisterAllocation(Allocation allocation);
-        
+
+        void RegisterDeallocation(Allocation deallocation);
+
         IEnumerable<Allocation> GetAllocations();
     }
 }

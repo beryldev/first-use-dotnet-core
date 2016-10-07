@@ -21,14 +21,22 @@ namespace Wrhs.Operations.Relocation
             set { baseDocument = value; }
         }
 
+        //Returns merged pending allocations and pending deallocations
         public List<Allocation> PendingAllocations
         {
-            get { return pendingAllocations.ToList(); }
+            get 
+            { 
+                var result = pendingAllocations.ToList();
+                result.AddRange(pendingDeallocations.ToList());
+                return result;
+            }
         }
 
         Document baseDocument;
 
         List<Allocation> pendingAllocations = new List<Allocation>();
+
+        List<Allocation> pendingDeallocations = new List<Allocation>();
 
         public void SetBaseDocument(RelocationDocument doc)
         {
@@ -40,12 +48,23 @@ namespace Wrhs.Operations.Relocation
             if(baseDocument == null)
                 throw new InvalidOperationException("Must set base document");
 
+            if(!CheckAllocations())
+                throw new InvalidOperationException("Exists non relocated items");
+
+            if(pendingAllocations.Count != pendingDeallocations.Count)
+                throw new InvalidOperationException("Pending allocations and pending deallocations integrity failed");
+
+            for(var i=0; i<pendingAllocations.Count; i++)
+            {
+                allocService.RegisterDeallocation(pendingDeallocations[i]);
+                allocService.RegisterAllocation(pendingAllocations[i]);
+            }
+
             return null;
         }
 
         public void RelocateItem(Product product, string from, string to, decimal quantity)
         {
-            
             ValidateRelocation(product, quantity, from, to);
 
             var line = ((RelocationDocument)baseDocument).Lines
@@ -59,7 +78,7 @@ namespace Wrhs.Operations.Relocation
 
             var allocFrom = new Allocation(){Product = product, Location = from, Quantity = quantity*(-1) };
             var allocTo = new Allocation(){ Product = product, Location = to, Quantity = quantity };
-            pendingAllocations.Add(allocFrom);
+            pendingDeallocations.Add(allocFrom);
             pendingAllocations.Add(allocTo);
         }
 
@@ -75,8 +94,12 @@ namespace Wrhs.Operations.Relocation
                 throw new ArgumentException("Source location can't be destination");
         }
 
-        
+        protected bool CheckAllocations()
+        {
+            var toAllocate = baseDocument.Lines.Sum(item=>item.Quantity);
+            var allocated = pendingAllocations.Sum(item=>item.Quantity);
 
-        //dodac inne bazujac na deliveryoperation
+            return toAllocate == allocated;
+        }
     }
 }
