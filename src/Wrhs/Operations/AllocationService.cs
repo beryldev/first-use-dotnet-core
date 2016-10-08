@@ -46,7 +46,7 @@ namespace Wrhs.Operations
                 throw new ArgumentException("Empty location. Must provide location");
 
             if(String.IsNullOrWhiteSpace(allocation.Product.Code))
-                throw new ArgumentException("Empty produc code. Must provide product code");
+                throw new ArgumentException("Empty product code. Must provide product code");
         }
 
         protected void VerifyExistResourceAtLocation(Allocation allocation)
@@ -58,7 +58,7 @@ namespace Wrhs.Operations
                 throw new InvalidOperationException("Resource not found at location");
 
             if(items.Sum(item=>item.Quantity) < Math.Abs(allocation.Quantity))
-                throw new InvalidOperationException("Not enought resource at location");
+                throw new InvalidOperationException("Not enough resource at location");
         }
     }
 }
