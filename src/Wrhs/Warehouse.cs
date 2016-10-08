@@ -18,7 +18,7 @@ namespace Wrhs
             this.cache = cache;
         }
 
-        public void ProcessOperation(DeliveryOperation operation)
+        public void ProcessOperation(IOperation operation)
         {
             operation.Perform(allocService);
 

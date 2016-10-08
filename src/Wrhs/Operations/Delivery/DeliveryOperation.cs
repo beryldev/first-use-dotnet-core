@@ -7,7 +7,7 @@ using Wrhs.Orders;
 namespace Wrhs.Operations.Delivery
 {
 
-    public class DeliveryOperation
+    public class DeliveryOperation : IOperation
     {
         List<Allocation> pendingAllocations = new List<Allocation>();
         

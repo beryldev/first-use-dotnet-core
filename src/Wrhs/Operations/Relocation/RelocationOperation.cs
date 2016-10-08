@@ -5,7 +5,7 @@ using Wrhs.Documents;
 
 namespace Wrhs.Operations.Relocation
 {
-    public class RelocationOperation
+    public class RelocationOperation : IOperation
     {
         public Document BaseDocument
         {

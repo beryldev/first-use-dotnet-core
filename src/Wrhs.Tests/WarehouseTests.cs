@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
+using Wrhs.Operations.Relocation;
 using Wrhs.Orders;
 
 namespace Wrhs.Tests
@@ -44,6 +45,18 @@ namespace Wrhs.Tests
         }
 
         [Test]
+        public void WarehouseConsumeIOperation()
+        {
+            var mock = new Mock<IOperation>();
+            var items = PrepareAllocations(0);
+            var allocService = PrepareAllocService(SetupAllocationRepository(items));
+            var warehouse = PrepareWarehouse(allocService);
+
+            warehouse.ProcessOperation(mock.Object);
+            mock.Verify(m=>m.Perform(allocService), Times.Once());
+        }
+
+        [Test]
         public void ProcessDeliveryOperationChangesStocks()
         {
             var items = PrepareAllocations(0);
@@ -58,6 +71,23 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.CalculateStocks("SPROD");
             Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        public void ProcessRelocationOperationNotChangesStocks()
+        {
+            var items = PrepareAllocations(2);
+            var allocService = PrepareAllocService(SetupAllocationRepository(items));
+            var operation = PrepareRelocationOperation();
+            var warehouse = PrepareWarehouse(allocService);
+
+            var stocksBefore = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(2, stocksBefore.Sum(item=>item.Quantity));
+
+            warehouse.ProcessOperation(operation);
+
+            var stocks = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(2, stocks.Sum(item=>item.Quantity));
         }
 
         [Test]
@@ -162,6 +192,11 @@ namespace Wrhs.Tests
                 .Callback((Allocation allocation)=>{
                     allocRepo.Save(allocation);
                 });
+
+            mock.Setup(m=>m.RegisterDeallocation(It.IsAny<Allocation>()))
+                .Callback((Allocation allocation)=>{
+                    allocRepo.Save(allocation);
+                });
                 
             mock.Setup(m=>m.GetAllocations())
                 .Returns(allocRepo.Get());
@@ -237,6 +272,40 @@ namespace Wrhs.Tests
             operation.AllocateItem((OrderLine)order.Lines[0], 5, "LOC-001-01");
 
             return operation;
+        }
+
+        protected RelocationOperation PrepareRelocationOperation()
+        {
+            var operation = new RelocationOperation();
+            var document = MakeRelocationDocument();
+            operation.SetBaseDocument(document);
+            operation.RelocateItem(document.Lines[0].Product, "LOC-001-01", "LOC-001-02", 2);
+
+            return operation;
+        }
+
+        protected RelocationDocument MakeRelocationDocument()
+        {
+            var product = new Product()
+            {
+                Name =  "Product 1",
+                Code = "PROD1",
+                EAN = "123456789012",
+                SKU = "P1234"
+            };
+
+            var docLine = new RelocationDocumentLine()
+            {
+                Product = product,
+                Quantity = 2,
+                From = "LOC-001-01",
+                To = "LOC-001-02"
+            };
+
+            var doc = new RelocationDocument();
+            doc.Lines.Add(docLine);
+
+            return doc;
         }
     }
 }
