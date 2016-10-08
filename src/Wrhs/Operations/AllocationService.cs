@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Wrhs.Operations
@@ -29,6 +30,8 @@ namespace Wrhs.Operations
              if(deallocation.Quantity > 0)
                 throw new InvalidOperationException("Can't register allocation with positive quantity");
 
+            VerifyExistResourceAtLocation(deallocation);
+
             repo.Save(deallocation);
         }
         
@@ -44,6 +47,18 @@ namespace Wrhs.Operations
 
             if(String.IsNullOrWhiteSpace(allocation.Product.Code))
                 throw new ArgumentException("Empty produc code. Must provide product code");
+        }
+
+        protected void VerifyExistResourceAtLocation(Allocation allocation)
+        {
+            var items = repo.Get().Where(item=>item.Product.Code.Equals(allocation.Product.Code) 
+                && item.Location.Equals(allocation.Location));
+
+            if(items.Count() == 0)
+                throw new InvalidOperationException("Resource not found at location");
+
+            if(items.Sum(item=>item.Quantity) < Math.Abs(allocation.Quantity))
+                throw new InvalidOperationException("Not enought resource at location");
         }
     }
 }

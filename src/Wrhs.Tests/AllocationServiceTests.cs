@@ -93,10 +93,11 @@ namespace Wrhs.Tests
         [Test]
         public void RegisterSaveDeallocationInRepository()
         {
-            var items = new List<Allocation>();
+            var alloc = MakeAllocation("PROD1");
+            var items = new List<Allocation>{alloc};
             var mock = PrepareAllocRepoMock(items);
-            var deallocation = MakeDeallocation("PROD1");
             var service = MakeService(mock.Object);
+            var deallocation = MakeDeallocation("PROD1");
 
             service.RegisterDeallocation(deallocation);
 
@@ -164,7 +165,17 @@ namespace Wrhs.Tests
         [Test]
         public void CantRegisterDeallocationWhenResourceNotExistsOnLocation()
         {
-            throw new NotImplementedException();
+            var items = new List<Allocation>{MakeAllocation("PROD1")};
+            var mock = PrepareAllocRepoMock(items);
+            var service = MakeService(mock.Object);
+            var dealloc = MakeDeallocation("PROD1");
+            dealloc.Location = "LOC-001-04";
+
+            Assert.Throws<InvalidOperationException>(()=>
+            {
+                service.RegisterDeallocation(dealloc);
+            });
+            Assert.AreEqual(1, items.Count);
         }
 
         protected Mock<IRepository<Allocation>> PrepareAllocRepoMock(List<Allocation> items)
