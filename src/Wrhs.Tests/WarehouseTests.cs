@@ -91,6 +91,29 @@ namespace Wrhs.Tests
         }
 
         [Test]
+        public void ProcessRelocationOperationChangeLocation()
+        {
+            var items = PrepareAllocations(2);
+            var allocService = PrepareAllocService(SetupAllocationRepository(items));
+            var operation = PrepareRelocationOperation();
+            var warehouse = PrepareWarehouse(allocService);
+
+            var stockBefore = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(2, 
+                stockBefore.Where(item=>item.Location.Equals("LOC-001-01")).Sum(item=>item.Quantity));
+            Assert.AreEqual(0, 
+                stockBefore.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
+
+            warehouse.ProcessOperation(operation);
+
+            var stockAfter = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(0, 
+                stockAfter.Where(item=>item.Location.Equals("LOC-001-01")).Sum(item=>item.Quantity));
+            Assert.AreEqual(2, 
+                stockAfter.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
+        }
+
+        [Test]
         public void ReadStocksReturnsStocksList()
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
