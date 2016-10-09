@@ -1,0 +1,87 @@
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Wrhs.Documents;
+
+namespace Wrhs.Operations.Release
+{
+    public class ReleaseOperation : IOperation
+    {
+        public Document BaseDocument { get { return baseDocument; } }
+
+        public ReleaseDocument BaseReleaseDocument
+        {
+            get
+            {
+                return baseDocument.GetType().Equals(typeof(ReleaseDocument)) ?
+                    (ReleaseDocument)baseDocument : null;
+            }
+
+            set { baseDocument = value; }
+        }
+
+        public List<Allocation> PendingAllocations
+        {
+            get { return pendingAllocations.ToList(); }
+        }
+        
+        Document baseDocument;
+
+        List<Allocation> pendingAllocations = new List<Allocation>();
+
+
+        public void ReleaseItem(Product product, string location, decimal quantity)
+        {
+
+           VerifyRelease(product, location, quantity);
+
+            var alloc = new Allocation
+            {
+                Product = product,
+                Location = location,
+                Quantity = quantity
+            };
+
+            pendingAllocations.Add(alloc);
+        }
+
+        public OperationResult Perform(IAllocationService allocService)
+        {
+            if(baseDocument == null)
+                throw new InvalidOperationException("Can't perform operation without base document");
+
+            throw new NotImplementedException();
+        }
+
+        public void SetBaseDocument(ReleaseDocument document)
+        {
+            baseDocument = document;
+        }
+
+        protected void VerifyRelease(Product product, string location , decimal quantity)
+        {
+            if(quantity <= 0)
+                throw new ArgumentException("Can't release zero or less");
+                
+             var lines = baseDocument.Lines
+                .Where(item=>item.Product.Equals(product));
+            
+            if(lines.Count() == 0)
+                throw new ArgumentException("Product not exists at document");
+
+            var line = lines.Where(item=>((ReleaseDocumentLine)item).Location.Equals(location))
+                .FirstOrDefault();
+
+            if(line == null)
+                throw new ArgumentException("Location not exists at document");
+
+            quantity += pendingAllocations.Where(item=>item.Product.Equals(product) 
+                && item.Location.Equals(location)).Sum(item=>item.Quantity);
+
+
+            if(quantity > line.Quantity)
+                throw new ArgumentException("Can't release more than at document");
+        }
+    }
+}
