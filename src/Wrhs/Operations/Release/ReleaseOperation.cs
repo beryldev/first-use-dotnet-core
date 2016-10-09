@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,8 +59,6 @@ namespace Wrhs.Operations.Release
                 allocService.RegisterDeallocation(pendingAllocations[i]);
             }
             
-                
-
             return null;
         }
 

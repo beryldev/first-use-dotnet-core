@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Documents;
 using Wrhs.Operations;
 using Wrhs.Operations.Release;
 
