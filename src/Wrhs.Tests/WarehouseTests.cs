@@ -114,6 +114,12 @@ namespace Wrhs.Tests
         }
 
         [Test]
+        public void ProcessReleaseOperationChangesStocks()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Test]
         public void ReadStocksReturnsStocksList()
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
