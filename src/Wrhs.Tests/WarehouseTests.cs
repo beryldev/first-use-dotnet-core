@@ -4,8 +4,8 @@ using Moq;
 using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
-using Wrhs.Operations.Release;
 using Wrhs.Operations.Relocation;
+using Wrhs.Operations.Release;
 using Wrhs.Orders;
 
 namespace Wrhs.Tests
@@ -113,7 +113,7 @@ namespace Wrhs.Tests
                 stockAfter.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
         }
 
-        //[Test]
+        [Test]
         public void ProcessReleaseOperationChangesStocks()
         {
             var items = PrepareAllocations(2);
@@ -351,8 +351,37 @@ namespace Wrhs.Tests
         protected ReleaseOperation PrepareReleaseOperation()
         {
             var operation = new ReleaseOperation();
+            var document = MakeReleaseDocument();
+            operation.SetBaseDocument(document);
+            operation.ReleaseItem(document.Lines[0].Product, "LOC-001-01", 1);
             
             return operation;
+        }
+
+        protected ReleaseDocument MakeReleaseDocument()
+        {
+            var document = new ReleaseDocument();
+
+            document.Lines.Add(new ReleaseDocumentLine
+            {
+                Product = MakeProduct(),
+                Quantity = 1,
+                Location = "LOC-001-01"
+            });
+
+            return document;
+        }
+
+        protected Product MakeProduct(string code="PROD1", string name="Product 1", string ean = "111111111111")
+        {
+            var product = new Product
+            {
+                Code = code,
+                Name = name,
+                EAN = ean
+            };
+
+            return product;
         }
 
         

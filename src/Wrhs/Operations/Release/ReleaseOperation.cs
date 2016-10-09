@@ -51,7 +51,18 @@ namespace Wrhs.Operations.Release
             if(baseDocument == null)
                 throw new InvalidOperationException("Can't perform operation without base document");
 
-            throw new NotImplementedException();
+            if(pendingAllocations.Sum(item=>item.Quantity) < baseDocument.Lines.Sum(item=>item.Quantity))
+                throw new InvalidOperationException("Can't perform release operation. Exists not release resources.");
+
+            for(var i=0; i<pendingAllocations.Count; i++)
+            {
+                pendingAllocations[i].Quantity *= -1;
+                allocService.RegisterDeallocation(pendingAllocations[i]);
+            }
+            
+                
+
+            return null;
         }
 
         public void SetBaseDocument(ReleaseDocument document)
