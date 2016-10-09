@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
+using Wrhs.Operations.Release;
 using Wrhs.Operations.Relocation;
 using Wrhs.Orders;
 
@@ -113,10 +113,21 @@ namespace Wrhs.Tests
                 stockAfter.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
         }
 
-        [Test]
+        //[Test]
         public void ProcessReleaseOperationChangesStocks()
         {
-            throw new NotImplementedException();
+            var items = PrepareAllocations(2);
+            var allocService = PrepareAllocService(SetupAllocationRepository(items));
+            var operation = PrepareReleaseOperation();
+            var warehouse = PrepareWarehouse(allocService);
+
+            var stockBefore = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(2, stockBefore.Sum(item=>item.Quantity));
+
+            warehouse.ProcessOperation(operation);
+
+            var stockAfter = warehouse.CalculateStocks("PROD1");
+            Assert.AreEqual(1, stockAfter.Sum(item=>item.Quantity));
         }
 
         [Test]
@@ -336,5 +347,14 @@ namespace Wrhs.Tests
 
             return doc;
         }
+
+        protected ReleaseOperation PrepareReleaseOperation()
+        {
+            var operation = new ReleaseOperation();
+            
+            return operation;
+        }
+
+        
     }
 }

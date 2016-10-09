@@ -16,7 +16,8 @@ namespace Wrhs.Operations.Relocation
         {
             get 
             { 
-                return baseDocument.GetType() == typeof(RelocationDocument) ? (RelocationDocument)baseDocument : null; 
+                return baseDocument.GetType() == typeof(RelocationDocument) ? 
+                    (RelocationDocument)baseDocument : null; 
             }
             set { baseDocument = value; }
         }
