@@ -178,6 +178,65 @@ namespace Wrhs.Tests
             Assert.AreEqual(1, items.Count);
         }
 
+        [Test]
+        public void TransactionalRegisterAllocations()
+        {
+            var items = new List<Allocation>{ MakeAllocation("PROD1") };
+            var mock = PrepareAllocRepoMock(items);
+            var service = MakeService(mock.Object);
+
+            service.BeginTransaction();
+            service.RegisterAllocation(MakeAllocation("PROD1", 2));
+            service.CommitTransaction();
+            
+            Assert.AreEqual(2, items.Count);
+            Assert.AreEqual(3, items.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        public void TransactionalRegisterDeallocations()
+        {
+            var items = new List<Allocation>{ MakeAllocation("PROD1") };
+            var mock = PrepareAllocRepoMock(items);
+            var service = MakeService(mock.Object);
+
+            service.BeginTransaction();
+            service.RegisterDeallocation(MakeAllocation("PROD1", -1));
+            service.CommitTransaction();
+            
+            Assert.AreEqual(2, items.Count);
+            Assert.AreEqual(0, items.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        public void UncomittedTransactionNotChangeRepo()
+        {
+            var items = new List<Allocation>{ MakeAllocation("PROD1") };
+            var mock = PrepareAllocRepoMock(items);
+            var service = MakeService(mock.Object);
+
+            service.BeginTransaction();
+            service.RegisterAllocation(MakeAllocation("PROD1", 2));
+            
+            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1, items.Sum(item=>item.Quantity));
+        }
+
+        [Test]
+        public void RolledbackTransactionNotChangeRepo()
+        {
+            var items = new List<Allocation>{ MakeAllocation("PROD1") };
+            var mock = PrepareAllocRepoMock(items);
+            var service = MakeService(mock.Object);
+
+            service.BeginTransaction();
+            service.RegisterAllocation(MakeAllocation("PROD1", 2));
+            service.RollbackTransaction();
+            
+            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1, items.Sum(item=>item.Quantity));
+        }
+
         protected Mock<IRepository<Allocation>> PrepareAllocRepoMock(List<Allocation> items)
         {
             var mock = new Mock<IRepository<Allocation>>();

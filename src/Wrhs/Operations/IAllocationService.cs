@@ -9,5 +9,11 @@ namespace Wrhs.Operations
         void RegisterDeallocation(Allocation deallocation);
 
         IEnumerable<Allocation> GetAllocations();
+
+        void BeginTransaction();
+
+        void CommitTransaction();
+
+        void RollbackTransaction();
     }
 }

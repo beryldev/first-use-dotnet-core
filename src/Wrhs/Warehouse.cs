@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Wrhs.Operations;
+using System;
 
 namespace Wrhs
 {
@@ -19,9 +20,22 @@ namespace Wrhs
 
         public void ProcessOperation(IOperation operation)
         {
-            operation.Perform(allocService);
-
-            cache.Refresh(this);
+            try
+            {
+                allocService.BeginTransaction();
+                operation.Perform(allocService);
+                allocService.CommitTransaction();    
+            }
+            catch(Exception)
+            {
+                allocService.RollbackTransaction();
+                throw;
+            }
+            finally
+            {
+                cache.Refresh(this);
+            }
+            
         }
 
         public List<Stock> CalculateStocks()

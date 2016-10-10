@@ -8,6 +8,10 @@ namespace Wrhs.Operations
     {
         IRepository<Allocation> repo;
 
+        bool isInTransaction = false;
+
+        List<Allocation> transactionItems;
+
         public AllocationService(IRepository<Allocation> repo)
         {
             this.repo = repo;
@@ -20,7 +24,10 @@ namespace Wrhs.Operations
             if(allocation.Quantity < 0)
                 throw new InvalidOperationException("Can't register allocation with negative quantity");
 
-            repo.Save(allocation);
+            if(isInTransaction)
+                transactionItems.Add(allocation);
+            else
+                repo.Save(allocation);
         }
 
         public void RegisterDeallocation(Allocation deallocation)
@@ -32,12 +39,39 @@ namespace Wrhs.Operations
 
             VerifyExistResourceAtLocation(deallocation);
 
-            repo.Save(deallocation);
+            if(isInTransaction)
+                transactionItems.Add(deallocation);
+            else
+                repo.Save(deallocation);
         }
         
         public IEnumerable<Allocation> GetAllocations()
         {
             return repo.Get();
+        }
+
+        public void BeginTransaction()
+        {
+            if(isInTransaction)
+                throw new InvalidOperationException("Transaction is active");
+
+            transactionItems = new List<Allocation>();
+            isInTransaction = true;
+        }
+
+        public void CommitTransaction()
+        {
+            foreach(var item in transactionItems)
+                repo.Save(item);
+
+            transactionItems = new List<Allocation>();
+            isInTransaction = false;
+        }
+
+        public void RollbackTransaction()
+        {
+            transactionItems = new List<Allocation>();
+            isInTransaction = false;
         }
 
         protected void Validate(Allocation allocation)

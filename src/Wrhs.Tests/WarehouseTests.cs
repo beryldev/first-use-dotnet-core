@@ -7,6 +7,7 @@ using Wrhs.Operations.Delivery;
 using Wrhs.Operations.Relocation;
 using Wrhs.Operations.Release;
 using Wrhs.Orders;
+using System;
 
 namespace Wrhs.Tests
 {
@@ -222,6 +223,44 @@ namespace Wrhs.Tests
             stockCacheMock.Verify(m=>m.Refresh(warehouse), Times.Once());
             Assert.AreEqual(warehouse.CalculateStocks().Count, warehouse.ReadStocks().Count);
             CollectionAssert.AreEquivalent(warehouse.CalculateStocks(), warehouse.ReadStocks());
+        }
+
+        [Test]
+        public void WhenProcessOperationFailStockAreInBerforeProcessState()
+        {
+            var items = new List<Allocation>
+            {
+                new Allocation
+                {
+                    Product = MakeProduct("PROD1"),
+                    Location = "LOC-001-01",
+                    Quantity = 1
+                }
+            };
+            
+            var allocService = new AllocationService(SetupAllocationRepository(items));
+            var warehouse = PrepareWarehouse(allocService);
+            var operationMock = new Mock<IOperation>();
+            operationMock.Setup(m=>m.Perform(It.IsAny<IAllocationService>()))
+                .Callback((IAllocationService service)=>
+                {
+                    service.RegisterAllocation(new Allocation
+                    {
+                        Product = MakeProduct("PROD1"),
+                        Location = "LOC-001-02",
+                        Quantity = 2
+                    });
+
+                    throw new Exception("Test exception");
+                });
+
+            Assert.Throws<Exception>(()=>
+            {
+                warehouse.ProcessOperation(operationMock.Object);
+            });
+
+            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1, warehouse.CalculateStocks("PROD1").Sum(s=>s.Quantity));
         }
         
         protected IAllocationService PrepareAllocService(IRepository<Allocation> allocRepo)
