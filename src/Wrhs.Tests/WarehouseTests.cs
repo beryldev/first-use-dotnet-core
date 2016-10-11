@@ -73,7 +73,7 @@ namespace Wrhs.Tests
             var stocks = warehouse.CalculateStocks("SPROD");
             Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
         }
-
+        
         [Test]
         public void ProcessRelocationOperationNotChangesStocks()
         {
