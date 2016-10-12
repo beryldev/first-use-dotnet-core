@@ -12,7 +12,7 @@ namespace Wrhs.Core
 
         IEnumerable<ValidationResult> validationResults = new List<ValidationResult>();
 
-        public IEnumerable<ValidationResult> ValidationResults { get { return validationResults; }  }
+        public IEnumerable<ValidationResult> ValidationResults { get { return validationResults.ToList(); }  }
 
         public ValidationCommandHandlerDecorator(ICommandHandler<T> handler, IValidator<T> validator)
         {
