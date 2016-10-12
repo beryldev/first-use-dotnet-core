@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using Wrhs.Core;
+using Wrhs.Products;
 
 namespace Wrhs.Tests
 {
@@ -10,21 +12,24 @@ namespace Wrhs.Tests
     public class ProductServiceTests
     {
         [Test]
-        public void CreateProductSaveToRepository()
+        public void CreateProductCommandSaveProductToRepository()
         {
             var items = new List<Product>();
-            var service = MakeProductService(items);
-            var product = new Product
+            var repoMock = MakeProductRepo(items);
+            var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
+                new CreateProductCommandHandler(repoMock.Object),
+                new CreateProductCommandValidator(repoMock.Object)
+            );
+            var command = new CreateProductCommand
             {
                 Code = "PROD1",
                 Name = "Product 1",
                 EAN = "123456789012"
             };
 
-            service.CreateProduct(product);
+            service.Handle(command);
 
             Assert.AreEqual(1, items.Count);
-            CollectionAssert.Contains(items, product);
         }
 
         [Test]
