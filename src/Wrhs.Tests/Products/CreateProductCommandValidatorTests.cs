@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Wrhs.Products;
 
-namespace Wrhs.Tests
+namespace Wrhs.Tests.Products
 {
     [TestFixture]
     public class CreateProductCommandValidatorTests
