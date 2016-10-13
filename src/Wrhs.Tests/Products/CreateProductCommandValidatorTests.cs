@@ -79,7 +79,7 @@ namespace Wrhs.Tests.Products
         [TestCase("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessageWhenOnlyProducCodeDuplicated(string presentCode, string newCode)
         {
-            var items = new List<Product>{ new Product { Code=presentCode, Name="Product 1", EAN="123456789012" } };
+            var items = new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } };
             var repo = MakeProductRepository(items);
             var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
@@ -122,7 +122,7 @@ namespace Wrhs.Tests.Products
         [TestCase("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessagesWhenEANAndCodeDuplicated(string presentCode, string newCode)
         {
-            var items = new List<Product>{ new Product { Code=presentCode, Name="Product 1", EAN="123456789012" } };
+            var items = new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } };
             var repo = MakeProductRepository(items);
             var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand

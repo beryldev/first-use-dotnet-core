@@ -7,5 +7,9 @@ namespace Wrhs
         T Save(T item);
 
         IEnumerable<T> Get();
+
+        T GetById(int id);
+
+        void Update(T item);
     }
 }

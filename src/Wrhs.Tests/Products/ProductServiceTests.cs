@@ -108,7 +108,7 @@ namespace Wrhs.Tests.Products
         public void CantCreateProductWithExistingEAN()
         {
             var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789011" } };
-             var repoMock = MakeProductRepo(items);
+            var repoMock = MakeProductRepo(items);
             var command = new CreateProductCommand
             {
                 Code = "PROD2",

@@ -29,10 +29,10 @@ namespace Wrhs.Products
                     || p.EAN.Equals(command.EAN, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            if(items.Where(item=>item.Code.Equals(command.Code, StringComparison.OrdinalIgnoreCase)).Count() > 0)
+            if(items.Where(item=>item.Code==command.Code.ToUpper()).Count() > 0)
                 result.Add(new ValidationResult("Code", "Product with this code already exists"));
 
-            if(items.Where(item=>item.EAN.Equals(command.EAN, StringComparison.OrdinalIgnoreCase)).Count() > 0)
+            if(items.Where(item=>item.EAN==command.EAN.ToUpper()).Count() > 0)
                 result.Add(new ValidationResult("EAN", "Product with this EAN already exists"));
 
             return result;

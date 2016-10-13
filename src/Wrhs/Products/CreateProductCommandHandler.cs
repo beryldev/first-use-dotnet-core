@@ -15,7 +15,7 @@ namespace Wrhs.Products
         {
             var product = new Product
             {
-                Code = command.Code,
+                Code = command.Code.ToUpper(),
                 Name = command.Name,
                 EAN = command.EAN,
                 Description = command.Description
