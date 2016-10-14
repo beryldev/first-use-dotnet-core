@@ -1,5 +1,5 @@
 
-namespace Wrhs.Documents
+namespace Wrhs.Products.Documents
 {
     public abstract class DocumentLine
     {

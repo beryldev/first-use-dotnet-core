@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Collections.Generic;
-using Wrhs.Operations;
+using Wrhs.Products.Operations;
 using System;
 
-namespace Wrhs
+namespace Wrhs.Products
 {
     public class Warehouse
     {

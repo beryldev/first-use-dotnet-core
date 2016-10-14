@@ -1,4 +1,4 @@
-namespace Wrhs.Core
+namespace Wrhs.Products.Core
 {
     public interface ICommandHandler<TCommand>
     {

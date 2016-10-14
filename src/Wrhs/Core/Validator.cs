@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Wrhs.Core
+namespace Wrhs.Products.Core
 {
     public abstract class Validator<TCommand> : IValidator<TCommand>
     {

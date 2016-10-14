@@ -1,5 +1,5 @@
 
-namespace Wrhs
+namespace Wrhs.Products
 {
     public class Stock
     {

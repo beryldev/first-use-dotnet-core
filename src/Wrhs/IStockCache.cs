@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Wrhs 
+namespace Wrhs.Products 
 {
     public interface IStockCache
     {

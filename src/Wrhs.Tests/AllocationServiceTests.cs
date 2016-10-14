@@ -3,9 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Operations;
+using Wrhs.Products.Operations;
 
-namespace Wrhs.Tests
+namespace Wrhs.Products.Tests
 {
     [TestFixture]
     public class AllocationServiceTests

@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using Moq;
-using Wrhs.Operations;
-using Wrhs.Operations.Delivery;
-using Wrhs.Orders;
+using Wrhs.Products.Operations;
+using Wrhs.Products.Operations.Delivery;
+using Wrhs.Products.Orders;
 
-namespace Wrhs.Tests
+namespace Wrhs.Products.Tests
 {
     [TestFixture]
     public class DeliveryOperationTests

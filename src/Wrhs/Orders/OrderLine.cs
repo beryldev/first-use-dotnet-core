@@ -1,6 +1,6 @@
-using Wrhs.Documents;
+using Wrhs.Products.Documents;
 
-namespace Wrhs.Orders
+namespace Wrhs.Products.Orders
 {
     public class OrderLine : DocumentLine
     {

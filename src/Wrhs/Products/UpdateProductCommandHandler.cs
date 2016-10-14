@@ -1,7 +1,7 @@
 using System;
-using Wrhs.Core;
+using Wrhs.Products.Core;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Products
 {
     public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
     {

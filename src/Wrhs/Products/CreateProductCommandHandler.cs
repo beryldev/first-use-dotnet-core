@@ -1,6 +1,6 @@
-using Wrhs.Core;
+using Wrhs.Products.Core;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Products
 {
     public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
     {

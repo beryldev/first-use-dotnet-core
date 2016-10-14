@@ -1,4 +1,4 @@
-namespace Wrhs.Products
+namespace Wrhs.Products.Products
 {
     public class CreateProductCommand
     {

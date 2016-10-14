@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrhs.Documents;
+using Wrhs.Products.Documents;
 
-namespace Wrhs.Operations.Relocation
+namespace Wrhs.Products.Operations.Relocation
 {
     public class RelocationOperation : IOperation
     {

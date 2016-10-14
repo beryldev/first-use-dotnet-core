@@ -1,5 +1,5 @@
 
-namespace Wrhs.Operations
+namespace Wrhs.Products.Operations
 {
     public interface IOperation
     {

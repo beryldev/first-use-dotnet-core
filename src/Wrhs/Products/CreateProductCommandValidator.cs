@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrhs.Core;
+using Wrhs.Products.Core;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Products
 {
     public class CreateProductCommandValidator : IValidator<CreateProductCommand>
     {

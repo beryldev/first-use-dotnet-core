@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Wrhs.Documents
+namespace Wrhs.Products.Documents
 {
     public abstract class Document
     {

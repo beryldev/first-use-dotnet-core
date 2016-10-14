@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Wrhs
+namespace Wrhs.Products
 {
     public class ProductService
     {

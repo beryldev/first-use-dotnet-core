@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Operations;
-using Wrhs.Operations.Delivery;
-using Wrhs.Operations.Relocation;
-using Wrhs.Operations.Release;
-using Wrhs.Orders;
+using Wrhs.Products.Operations;
+using Wrhs.Products.Operations.Delivery;
+using Wrhs.Products.Operations.Relocation;
+using Wrhs.Products.Operations.Release;
+using Wrhs.Products.Orders;
 using System;
 
-namespace Wrhs.Tests
+namespace Wrhs.Products.Tests
 {
     [TestFixture]
     public class WarehouseTests

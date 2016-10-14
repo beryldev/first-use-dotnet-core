@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrhs.Documents;
+using Wrhs.Products.Documents;
 
-namespace Wrhs.Operations.Release
+namespace Wrhs.Products.Operations.Release
 {
     public class ReleaseOperation : IOperation
     {

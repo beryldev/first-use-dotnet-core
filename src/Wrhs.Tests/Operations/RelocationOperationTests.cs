@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Operations;
-using Wrhs.Operations.Relocation;
+using Wrhs.Products.Operations;
+using Wrhs.Products.Operations.Relocation;
 
-namespace Wrhs.Tests
+namespace Wrhs.Products.Tests
 {
     [TestFixture]
     public class RelocationOperationTests

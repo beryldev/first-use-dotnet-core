@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Core;
-using Wrhs.Products;
+using Wrhs.Products.Core;
+using Wrhs.Products.Products;
 
-namespace Wrhs.Tests.Products
+namespace Wrhs.Products.Tests.Products
 {
     [TestFixture]
     public class ProductServiceTests

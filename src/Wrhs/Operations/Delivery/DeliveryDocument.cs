@@ -1,6 +1,6 @@
-using Wrhs.Documents;
+using Wrhs.Products.Documents;
 
-namespace Wrhs.Operations.Delivery
+namespace Wrhs.Products.Operations.Delivery
 {
     public class DeliveryDocument : Document
     {

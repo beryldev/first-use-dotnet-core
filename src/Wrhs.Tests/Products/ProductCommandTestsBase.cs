@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 
-namespace Wrhs.Tests.Products
+namespace Wrhs.Products.Tests.Products
 {
     public abstract class ProductCommandTestsBase
     {

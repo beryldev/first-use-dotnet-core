@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Wrhs.Documents;
-using Wrhs.Orders;
+using Wrhs.Products.Documents;
+using Wrhs.Products.Orders;
 
-namespace Wrhs.Operations.Delivery
+namespace Wrhs.Products.Operations.Delivery
 {
 
     public class DeliveryOperation : IOperation
