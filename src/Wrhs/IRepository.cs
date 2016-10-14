@@ -11,5 +11,7 @@ namespace Wrhs
         T GetById(int id);
 
         void Update(T item);
+
+        void Delete(T item);
     }
 }

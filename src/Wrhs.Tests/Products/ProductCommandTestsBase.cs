@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -47,6 +46,12 @@ namespace Wrhs.Tests.Products
                         items.Remove(p);
                         items.Add(product);
                     }
+                });
+
+            mock.Setup(m=>m.Delete(It.IsAny<Product>()))
+                .Callback((Product product) =>
+                {
+                    items.Remove(product);
                 });
 
             return mock.Object;
