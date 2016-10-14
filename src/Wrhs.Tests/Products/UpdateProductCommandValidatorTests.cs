@@ -96,5 +96,87 @@ namespace Wrhs.Tests.Products
             CollectionAssert.Contains(result.Select(item=>item.Field), "Name");
         }
 
+        [Test]
+        public void ReturnValidationFailMessageWhenNewCodeDuplicated()
+        {
+            var items = MakeProductList();
+            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
+            var repo = MakeProductRepository(items);
+            var validator = new UpdateProductCommandValidator(repo);
+            var command = new UpdateProductCommand
+            {
+                ProductId = 1,
+                Code = "PROD2",
+                Name = "Product 1",
+                EAN = "111111111111"
+            };
+
+            var result = validator.Validate(command);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("Code", result.First().Field);
+        }
+
+        [Test]
+        public void ReturnNoValidationFailMessageWhenCodeAreNotChanged()
+        {
+            var items = MakeProductList();
+            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
+            var repo = MakeProductRepository(items);
+            var validator = new UpdateProductCommandValidator(repo);
+            var command = new UpdateProductCommand
+            {
+                ProductId = 1,
+                Code = "PROD1",
+                Name = "Product 1 new",
+                EAN = "111111111111"
+            };
+
+            var result = validator.Validate(command);
+
+            CollectionAssert.IsEmpty(result);
+        }
+
+         [Test]
+        public void ReturnValidationFailMessageWhenNewEANDuplicated()
+        {
+            var items = MakeProductList();
+            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111111" });
+            var repo = MakeProductRepository(items);
+            var validator = new UpdateProductCommandValidator(repo);
+            var command = new UpdateProductCommand
+            {
+                ProductId = 1,
+                Code = "PROD1",
+                Name = "Product 1",
+                EAN = "111111111111"
+            };
+
+            var result = validator.Validate(command);
+
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual("EAN", result.First().Field);
+        }
+
+        [Test]
+        public void ReturnNoValidationFailMessageWhenEANAreNotChanged()
+        {
+            var items = MakeProductList();
+            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
+            var repo = MakeProductRepository(items);
+            var validator = new UpdateProductCommandValidator(repo);
+            var command = new UpdateProductCommand
+            {
+                ProductId = 1,
+                Code = "PROD1",
+                Name = "Product 1 new",
+                EAN = "111111111111"
+            };
+
+            var result = validator.Validate(command);
+
+            CollectionAssert.IsEmpty(result);
+        }
+
     }
 }
