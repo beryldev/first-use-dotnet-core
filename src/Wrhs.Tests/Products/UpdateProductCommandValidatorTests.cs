@@ -1,8 +1,8 @@
 using System.Linq;
 using NUnit.Framework;
-using Wrhs.Products.Products;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Tests.Products
+namespace Wrhs.Tests.Products
 {
     [TestFixture]
     public class UpdateProductCommandValidatorTests : ProductCommandTestsBase

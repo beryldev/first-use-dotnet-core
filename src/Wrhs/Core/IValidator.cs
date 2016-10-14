@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Wrhs.Products.Core
+namespace Wrhs.Core
 {
     public interface IValidator<TCommand>
     {

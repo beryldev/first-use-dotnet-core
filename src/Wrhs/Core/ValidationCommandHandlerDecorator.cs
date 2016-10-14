@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Wrhs.Products.Core
+namespace Wrhs.Core
 {
     public class ValidationCommandHandlerDecorator<T> : ICommandHandler<T>
     {

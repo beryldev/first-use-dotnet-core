@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using Wrhs.Core;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Tests.Products
+namespace Wrhs.Tests.Products
 {
     public abstract class ProductCommandTestsBase
     {

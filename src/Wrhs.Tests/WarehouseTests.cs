@@ -8,8 +8,10 @@ using Wrhs.Products.Operations.Relocation;
 using Wrhs.Products.Operations.Release;
 using Wrhs.Products.Orders;
 using System;
+using Wrhs.Products;
+using Wrhs.Core;
 
-namespace Wrhs.Products.Tests
+namespace Wrhs.Tests
 {
     [TestFixture]
     public class WarehouseTests

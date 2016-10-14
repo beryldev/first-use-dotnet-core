@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Products.Operations;
+using Wrhs.Core;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Tests
+namespace Wrhs.Tests
 {
     [TestFixture]
     public class AllocationServiceTests

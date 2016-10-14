@@ -1,5 +1,5 @@
 
-namespace Wrhs.Products.Core
+namespace Wrhs.Core
 { 
     public class ValidationResult
     {

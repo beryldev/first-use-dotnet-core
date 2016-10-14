@@ -1,5 +1,5 @@
 
-namespace Wrhs.Products
+namespace Wrhs.Core
 {
     public interface IEntity
     {

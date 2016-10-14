@@ -1,4 +1,4 @@
-namespace Wrhs.Products.Products
+namespace Wrhs.Products
 {
     public class UpdateProductCommand
     {

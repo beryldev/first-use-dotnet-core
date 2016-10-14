@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Wrhs.Products
+namespace Wrhs.Core
 {
     public interface IRepository<T> where T : IEntity
     {

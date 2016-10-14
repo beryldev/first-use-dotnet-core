@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Products.Products;
+using Wrhs.Core;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Tests.Products
+namespace Wrhs.Tests.Products
 {
     [TestFixture]
     public class CreateProductCommandValidatorTests

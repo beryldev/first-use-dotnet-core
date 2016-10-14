@@ -1,10 +1,8 @@
 
-using System;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Products.Core;
-using Wrhs.Products.Products;
+using Wrhs.Core;
 
 namespace Wrhs.Products.Tests.Products
 {
@@ -135,12 +133,6 @@ namespace Wrhs.Products.Tests.Products
                 .Returns(items);
 
             return mock;
-        }
-
-        protected ProductService MakeProductService(List<Product> items)
-        {
-            var repo = MakeProductRepo(items);
-            return new ProductService(repo.Object);
         }
     }
 }

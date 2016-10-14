@@ -1,6 +1,6 @@
-using Wrhs.Products.Core;
+using Wrhs.Core;
 
-namespace Wrhs.Products.Products
+namespace Wrhs.Products
 {
     public class DeleteProductCommandHandler : ICommandHandler<DeleteProductCommand>
     {
