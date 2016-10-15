@@ -2,7 +2,7 @@ using Wrhs.Core;
 using Wrhs.Core.Search;
 using Wrhs.Core.Search.Interfaces;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Search
 {
     public class ProductSearch : ResourceSearcher<Product>
     {

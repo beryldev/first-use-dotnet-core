@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Wrhs.Core.Search;
 using Wrhs.Products;
+using Wrhs.Products.Search;
 
 namespace Wrhs.Tests.Products
 {

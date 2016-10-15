@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Wrhs.Core;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Commands
 {
     public class DeleteProductCommandValidator : IValidator<DeleteProductCommand>
     {

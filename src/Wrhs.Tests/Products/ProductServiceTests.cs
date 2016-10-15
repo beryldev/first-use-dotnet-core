@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
+using Wrhs.Products.Commands;
 
 namespace Wrhs.Products.Tests.Products
 {

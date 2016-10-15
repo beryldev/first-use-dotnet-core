@@ -1,11 +1,9 @@
-namespace Wrhs.Products
+namespace Wrhs.Products.Commands
 {
-    public class UpdateProductCommand
+    public class CreateProductCommand
     {
-        public int ProductId { get; set; }
-
         public string Code { get; set; }
-        
+
         public string Name { get; set; }
 
         public string EAN { get; set; }

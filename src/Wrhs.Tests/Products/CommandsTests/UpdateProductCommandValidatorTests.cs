@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Wrhs.Products;
+using Wrhs.Products.Commands;
 
 namespace Wrhs.Tests.Products
 {

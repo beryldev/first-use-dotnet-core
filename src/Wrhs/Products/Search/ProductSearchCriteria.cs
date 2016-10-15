@@ -1,7 +1,7 @@
 using System;
 using Wrhs.Core.Search;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Search
 {
     public class ProductSearchCriteria : SearchCriteria<Product>
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Core;
 
-namespace Wrhs.Products
+namespace Wrhs.Products.Commands
 {
     public class UpdateProductCommandValidator : IValidator<UpdateProductCommand>
     {
