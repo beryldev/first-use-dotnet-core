@@ -110,7 +110,7 @@ namespace Wrhs.Tests.Products
                 {
                     Code = $"PROD{i+1}",
                     Name = $"Product {i+1}",
-                    EAN = $"111111111{i+1}"
+                    EAN = $"000{i+1}"
                 });
             }
 
