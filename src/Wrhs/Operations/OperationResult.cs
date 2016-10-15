@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Wrhs.Products.Operations
+namespace Wrhs.Operations
 {
     public class OperationResult
     {

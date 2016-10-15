@@ -101,6 +101,42 @@ namespace Wrhs.Tests.Products
             Assert.AreEqual(count, result.Total);
         }
 
+        [Test]
+        [TestCase("0001")]
+        [TestCase("00012")]
+        [TestCase("00020")]
+        public void OnSerachReturnProductsByEAN(string ean)
+        {
+            var items = MakeItems(20);
+            var repo = MakeProductRepository(items);
+            var search = new ProductSearch(repo, new Paginator<Product>());
+            var criteria = (ProductSearchCriteria)search.MakeCriteria();
+            criteria.WhereEAN(Condition.Equal, ean);
+
+            var result = search.Exec(criteria);
+
+            Assert.AreEqual(1, result.Items.Count());
+            Assert.AreEqual(1, result.Total);
+            Assert.AreEqual(ean, result.Items.First().EAN);
+        }
+
+        [Test]
+        [TestCase("000", 20)]
+        [TestCase("0006", 1)]
+        [TestCase("0001", 11)]
+        public void OnSerachReturnProductsByEANContainsString(string ean, int count)
+        {
+            var items = MakeItems(20);
+            var repo = MakeProductRepository(items);
+            var search = new ProductSearch(repo, new Paginator<Product>());
+            var criteria = (ProductSearchCriteria)search.MakeCriteria();
+            criteria.WhereEAN(Condition.Contains, ean);
+
+            var result = search.Exec(criteria);
+
+            Assert.AreEqual(count, result.Total);
+        }
+
         protected List<Product> MakeItems(int count)
         {
             var items = new List<Product>();

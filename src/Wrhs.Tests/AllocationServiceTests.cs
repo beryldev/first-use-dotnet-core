@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Products.Operations;
+using Wrhs.Operations;
 using Wrhs.Core;
 using Wrhs.Products;
 

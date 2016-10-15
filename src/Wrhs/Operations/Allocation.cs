@@ -1,7 +1,8 @@
 
 using Wrhs.Core;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Operations
+namespace Wrhs.Operations
 {
     public class Allocation : IEntity
     {

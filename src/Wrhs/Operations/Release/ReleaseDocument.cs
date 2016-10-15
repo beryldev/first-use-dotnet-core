@@ -1,7 +1,7 @@
 
-using Wrhs.Products.Documents;
+using Wrhs.Documents;
 
-namespace Wrhs.Products.Operations.Release
+namespace Wrhs.Operations.Release
 {
     public class ReleaseDocument : Document
     {

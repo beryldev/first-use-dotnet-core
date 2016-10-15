@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Wrhs.Core;
 
-namespace Wrhs.Products.Operations
+namespace Wrhs.Operations
 {
     public class AllocationService : IAllocationService
     {

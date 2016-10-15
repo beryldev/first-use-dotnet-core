@@ -1,6 +1,6 @@
-using Wrhs.Products.Documents;
+using Wrhs.Documents;
 
-namespace Wrhs.Products.Operations.Relocation
+namespace Wrhs.Operations.Relocation
 {
     public class RelocationDocument : Document
     {

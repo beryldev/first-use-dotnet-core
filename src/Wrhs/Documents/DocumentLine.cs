@@ -1,8 +1,12 @@
 
-namespace Wrhs.Products.Documents
+using Wrhs.Products;
+
+namespace Wrhs.Documents
 {
     public abstract class DocumentLine
     {
+        public virtual int Id { get; set; } = 0;
+        
         public virtual Product Product { get; set; }
 
         public virtual string EAN { get; set; }

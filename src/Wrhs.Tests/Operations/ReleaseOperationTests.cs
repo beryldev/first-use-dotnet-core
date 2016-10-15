@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using Wrhs.Products.Operations;
-using Wrhs.Products.Operations.Release;
+using Wrhs.Operations;
+using Wrhs.Operations.Release;
+using Wrhs.Products;
 
-namespace Wrhs.Products.Tests
+namespace Wrhs.Tests
 {
     [TestFixture]
     public class ReleaseOperationTests

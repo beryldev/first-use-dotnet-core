@@ -26,5 +26,15 @@ namespace Wrhs.Products.Search
 
             return this;
         }
+
+         public ProductSearchCriteria WhereEAN(Condition cond, string value)
+        {
+            if(cond == Condition.Equal)
+                OnBuildQuery(this, (Product prod)=>{ return prod.EAN == value; });
+            else if(cond == Condition.Contains)
+                OnBuildQuery(this, (Product prod)=>{ return prod.EAN.Contains(value); });
+
+            return this;
+        }
     }
 }
