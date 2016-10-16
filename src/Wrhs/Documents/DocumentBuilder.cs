@@ -17,6 +17,14 @@ namespace Wrhs.Documents
 
         protected List<TDocLine> lines = new List<TDocLine>();
 
+        public IEnumerable<TDocLine> Lines 
+        { 
+            get 
+            { 
+                return lines.ToArray(); 
+            } 
+        }
+
         public DocumentBuilder(IValidator<DocumentBuilderAddLineCommand> addLineValidator, 
             IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator)
         {

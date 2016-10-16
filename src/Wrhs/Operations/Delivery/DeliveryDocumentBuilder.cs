@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
@@ -7,16 +6,7 @@ namespace Wrhs.Operations.Delivery
 {
     public class DeliveryDocumentBuilder : DocumentBuilder<DeliveryDocument, DeliveryDocumentLine>
     {
-
         IRepository<Product> productRepository;
-
-        public IEnumerable<DeliveryDocumentLine> Lines 
-        { 
-            get 
-            { 
-                return (DeliveryDocumentLine[])lines.ToArray(); 
-            } 
-        }
 
         public DeliveryDocumentBuilder(IRepository<Product> productRepository,
             IValidator<DocumentBuilderAddLineCommand> addLineValidator,
