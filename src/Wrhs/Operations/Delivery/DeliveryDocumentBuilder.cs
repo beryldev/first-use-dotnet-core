@@ -28,7 +28,7 @@ namespace Wrhs.Operations.Delivery
         {
             lines.Add(new DeliveryDocumentLine
             {
-                Id = lines.Count+1,
+                Id = lines.Count+1, //TODO napisac test ktory pokaze ze to jest zle rozwiazanie
                 Product = productRepository.GetById(command.ProductId),
                 Quantity = command.Quantity
             });  
