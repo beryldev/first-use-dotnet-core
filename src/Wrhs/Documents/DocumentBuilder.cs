@@ -5,7 +5,7 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public abstract class DocumentBuilder<TDocument>
+    public abstract class DocumentBuilder<TDocument, TDocLine> where TDocLine : DocumentLine
     {
         public event EventHandler<IEnumerable<ValidationResult>> OnAddLineFail;
 
@@ -15,7 +15,7 @@ namespace Wrhs.Documents
 
         protected IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator;
 
-        protected List<DocumentLine> lines = new List<DocumentLine>();
+        protected List<TDocLine> lines = new List<TDocLine>();
 
         public DocumentBuilder(IValidator<DocumentBuilderAddLineCommand> addLineValidator, 
             IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator)
@@ -28,7 +28,7 @@ namespace Wrhs.Documents
 
         protected abstract void AddValidatedLine(DocumentBuilderAddLineCommand command);
 
-        protected abstract DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(DocumentLine line);
+        protected abstract DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(TDocLine line);
 
         public virtual void AddLine(DocumentBuilderAddLineCommand command)
         {
@@ -42,12 +42,12 @@ namespace Wrhs.Documents
             AddValidatedLine(command);
         }
 
-        public virtual void RemoveLine(DocumentLine line)
+        public virtual void RemoveLine(TDocLine line)
         {
             lines.Remove(line);
         }
 
-        public virtual void UpdateLine(DocumentLine line)
+        public virtual void UpdateLine(TDocLine line)
         {
             var command = DocumentLineToUpdateCommand(line);
             var validationResults = updateLineValidator.Validate(command);
