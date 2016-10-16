@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Core;
+using Wrhs.Documents;
 using Wrhs.Products;
 
 namespace Wrhs.Operations.Delivery
@@ -14,15 +15,19 @@ namespace Wrhs.Operations.Delivery
 
         IRepository<Product> productRepository;
 
-        DeliveryDocumentBuilderValidator validator;
+        IValidator<DocumentBuilderAddLineCommand> addLineValidator;
+
+        IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator;
 
         public IEnumerable<DeliveryDocumentLine> Lines { get { return lines.ToArray(); } }
 
         public DeliveryDocumentBuilder(IRepository<Product> productRepository,
-            DeliveryDocumentBuilderValidator validator)
+            IValidator<DocumentBuilderAddLineCommand> addLineValidator,
+            IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator)
         {
             this.productRepository = productRepository;
-            this.validator = validator;
+            this.addLineValidator = addLineValidator;
+            this.updateLineValidator = updateLineValidator;
         }
         
         public DeliveryDocument Build()
@@ -33,20 +38,20 @@ namespace Wrhs.Operations.Delivery
             return document;
         }
 
-        public void AddLine(int productId, decimal quantity)
+        public void AddLine(DocumentBuilderAddLineCommand command)
         {
-            var validationResults = validator.ValidateAddLine(productId, quantity);
+            var validationResults = addLineValidator.Validate(command);
             if(validationResults.Count() > 0)
             {
-                //OnAddLineFail?.Invoke(this, validationResults);
+                OnAddLineFail?.Invoke(this, validationResults);
                 return;
             }
             
             lines.Add(new DeliveryDocumentLine
             {
                 Id = lines.Count+1,
-                Product = productRepository.GetById(productId),
-                Quantity = quantity
+                Product = productRepository.GetById(command.ProductId),
+                Quantity = command.Quantity
             });          
         }
 
@@ -57,6 +62,7 @@ namespace Wrhs.Operations.Delivery
 
         public void UpdateLine(DeliveryDocumentLine line)
         {
+
             var lineToUpdate = lines
                 .Where(item=>item.Id == line.Id)
                 .FirstOrDefault();

@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
+using Wrhs.Documents;
 using Wrhs.Operations.Delivery;
 using Wrhs.Products;
 
@@ -26,16 +26,14 @@ namespace Wrhs.Tests
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
-
-            var productId = 1;
-            var quantity = 5;
-            
-            builder.AddLine(productId, quantity);
+            var command = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5 };
+       
+            builder.AddLine(command);
             var document = builder.Build();
 
             Assert.AreEqual(1, document.Lines.Count);
-            Assert.AreEqual(productId, document.Lines[0].Product.Id);
-            Assert.AreEqual(quantity, document.Lines[0].Quantity);
+            Assert.AreEqual(1, document.Lines[0].Product.Id);
+            Assert.AreEqual(5, document.Lines[0].Quantity);
         }
 
         [Test]
@@ -43,15 +41,12 @@ namespace Wrhs.Tests
         {
             var builder = MakeBuilder();
             
-            var productId = 1;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
-            productId = 3;
-            quantity = 2;
-            builder.AddLine(productId, quantity);
-            productId = 8;
-            quantity = 9;
-            builder.AddLine(productId, quantity);
+            var command = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5 };
+            builder.AddLine(command);
+            command = new DocumentBuilderAddLineCommand { ProductId = 3, Quantity = 2 };
+            builder.AddLine(command);
+            command = new DocumentBuilderAddLineCommand { ProductId = 8, Quantity = 9 };
+            builder.AddLine(command);
 
             var document = builder.Build();
 
@@ -69,9 +64,8 @@ namespace Wrhs.Tests
         {
             var builder = MakeBuilder();
             
-            var productId = 1;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
+            var command = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5 };
+            builder.AddLine(command);
             
             var lines = builder.Lines;
             builder.RemoveLine(lines.First());
@@ -86,15 +80,12 @@ namespace Wrhs.Tests
         {
             var builder = MakeBuilder();
             
-            var productId = 1;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
-            productId = 3;
-            quantity = 2;
-            builder.AddLine(productId, quantity);
-            productId = 8;
-            quantity = 9;
-            builder.AddLine(productId, quantity);
+            var command = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5};
+            builder.AddLine(command);
+            command = new DocumentBuilderAddLineCommand { ProductId = 3, Quantity = 2 };
+            builder.AddLine(command);
+            command = new DocumentBuilderAddLineCommand { ProductId = 8, Quantity = 9 };
+            builder.AddLine(command);
 
             var lineToRemove = ((DeliveryDocumentLine[])builder.Lines)[1];
             builder.RemoveLine(lineToRemove);
@@ -111,9 +102,8 @@ namespace Wrhs.Tests
         {
             var builder = MakeBuilder();
 
-            var productId = 1;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
+            var command = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5 };
+            builder.AddLine(command);
 
             var line = builder.Lines.First();
             line.Quantity = 20;
@@ -126,13 +116,22 @@ namespace Wrhs.Tests
         }
 
         [Test]
-        public void AfterAddLineWithInvalidProductIdBuildReturnDocWithUnchangedLines()
+        public void WhenOnAddLineValidationFailBuildReturnDocWithUnchangedLines()
         {
-            var builder = MakeBuilder();
+            var repo = ProductRepositoryFactory.Make();
 
-            var productId = -34;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
+            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+            addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
+                .Returns(new ValidationResult[]{ new ValidationResult() });
+
+            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
+            updateLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderUpdateLineCommand>()))
+                .Returns(new ValidationResult[0]);
+
+            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, updateLineValidMock.Object);
+
+            var command = new DocumentBuilderAddLineCommand { ProductId = -34, Quantity = 5 };
+            builder.AddLine(command);
 
             var document = builder.Build();
 
@@ -140,26 +139,37 @@ namespace Wrhs.Tests
         }
 
         [Test]
-        public void OnAddLineWithInvalidProductIdCallOnAddLineFail()
+        public void WhenOnAddLineValidationFailCallOnAddLineFail()
         {
             var onAddLineFailCalled = false;
-            var builder = MakeBuilder();
-            builder.OnAddLineFail += (object sender, IEnumerable<Valida;
+            var repo = ProductRepositoryFactory.Make();
 
-            var productId = -34;
-            var quantity = 5;
-            builder.AddLine(productId, quantity);
+            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+            addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
+                .Returns(new ValidationResult[]{ new ValidationResult() });
 
-            mock.Raise(x=>x.Invoke())  
+            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
+            updateLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderUpdateLineCommand>()))
+                .Returns(new ValidationResult[0]);
+
+            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, updateLineValidMock.Object);
+            builder.OnAddLineFail += (object sender, IEnumerable<ValidationResult> args) => onAddLineFailCalled=true;
+
+            var command = new DocumentBuilderAddLineCommand { ProductId = -34, Quantity = 5 };
+            builder.AddLine(command);
+
+            Assert.IsTrue(onAddLineFailCalled);
         }
 
         public DeliveryDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo, new DeliveryDocumentBuilderValidator(repo));
+            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
+
+            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, updateLineValidMock.Object);
             return builder;
         }
-
 
         public IRepository<Product> MakeProductRepository()
         {
