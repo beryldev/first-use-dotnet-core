@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -14,8 +15,7 @@ namespace Wrhs.Tests
         [Test]
         public void BuildReturnsDeliveryDocument()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
 
             var document = builder.Build();
 
@@ -25,8 +25,8 @@ namespace Wrhs.Tests
         [Test]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
+
             var productId = 1;
             var quantity = 5;
             
@@ -41,8 +41,7 @@ namespace Wrhs.Tests
         [Test]
         public void AfterManyAddLineBuildReturnDocumentWithAddedLines()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
             
             var productId = 1;
             var quantity = 5;
@@ -68,8 +67,7 @@ namespace Wrhs.Tests
         [Test]
         public void AfterRemoveLineBuildReturnDocWithoutRemovedLine()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
             
             var productId = 1;
             var quantity = 5;
@@ -86,8 +84,7 @@ namespace Wrhs.Tests
         [Test]
         public void WhenExistsMoreThanOneLineAfterRemoveLineBuildReturnDocWithoutOnlyRemovedLine()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
             
             var productId = 1;
             var quantity = 5;
@@ -112,8 +109,7 @@ namespace Wrhs.Tests
         [Test]
         public void AfterUpdateLineBuildReturnDocumentWithUpdatedLine()
         {
-            var repo = MakeProductRepository();
-            var builder = new DeliveryDocumentBuilder(repo);
+            var builder = MakeBuilder();
 
             var productId = 1;
             var quantity = 5;
@@ -128,6 +124,42 @@ namespace Wrhs.Tests
             Assert.AreEqual(1, document.Lines.Count);
             Assert.AreEqual(20, document.Lines.First().Quantity);
         }
+
+        [Test]
+        public void AfterAddLineWithInvalidProductIdBuildReturnDocWithUnchangedLines()
+        {
+            var builder = MakeBuilder();
+
+            var productId = -34;
+            var quantity = 5;
+            builder.AddLine(productId, quantity);
+
+            var document = builder.Build();
+
+            CollectionAssert.IsEmpty(document.Lines);
+        }
+
+        [Test]
+        public void OnAddLineWithInvalidProductIdCallOnAddLineFail()
+        {
+            var onAddLineFailCalled = false;
+            var builder = MakeBuilder();
+            builder.OnAddLineFail += (object sender, IEnumerable<Valida;
+
+            var productId = -34;
+            var quantity = 5;
+            builder.AddLine(productId, quantity);
+
+            mock.Raise(x=>x.Invoke())  
+        }
+
+        public DeliveryDocumentBuilder MakeBuilder()
+        {
+            var repo = MakeProductRepository();
+            var builder = new DeliveryDocumentBuilder(repo, new DeliveryDocumentBuilderValidator(repo));
+            return builder;
+        }
+
 
         public IRepository<Product> MakeProductRepository()
         {

@@ -8,15 +8,21 @@ namespace Wrhs.Operations.Delivery
 {
     public class DeliveryDocumentBuilder
     {
+        public event EventHandler<IEnumerable<ValidationResult>> OnAddLineFail;
+
         List<DeliveryDocumentLine> lines = new List<DeliveryDocumentLine>();
 
         IRepository<Product> productRepository;
 
+        DeliveryDocumentBuilderValidator validator;
+
         public IEnumerable<DeliveryDocumentLine> Lines { get { return lines.ToArray(); } }
 
-        public DeliveryDocumentBuilder(IRepository<Product> productRepository)
+        public DeliveryDocumentBuilder(IRepository<Product> productRepository,
+            DeliveryDocumentBuilderValidator validator)
         {
             this.productRepository = productRepository;
+            this.validator = validator;
         }
         
         public DeliveryDocument Build()
@@ -29,12 +35,19 @@ namespace Wrhs.Operations.Delivery
 
         public void AddLine(int productId, decimal quantity)
         {
+            var validationResults = validator.ValidateAddLine(productId, quantity);
+            if(validationResults.Count() > 0)
+            {
+                //OnAddLineFail?.Invoke(this, validationResults);
+                return;
+            }
+            
             lines.Add(new DeliveryDocumentLine
             {
                 Id = lines.Count+1,
                 Product = productRepository.GetById(productId),
                 Quantity = quantity
-            });
+            });          
         }
 
         public void RemoveLine(DeliveryDocumentLine line)
