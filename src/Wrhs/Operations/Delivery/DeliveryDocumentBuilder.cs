@@ -24,17 +24,13 @@ namespace Wrhs.Operations.Delivery
             return document;
         }
 
-        int lastId = 0;
-        protected override void AddValidatedLine(DocumentBuilderAddLineCommand command)
+        protected override DeliveryDocumentLine CommandToDocumentLine(DocumentBuilderAddLineCommand command)
         {
-            lastId++;
-
-            lines.Add(new DeliveryDocumentLine
+            return new DeliveryDocumentLine
             {
-                Id = lastId,
                 Product = productRepository.GetById(command.ProductId),
                 Quantity = command.Quantity
-            });  
+            };
         }
 
         protected override DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(DeliveryDocumentLine line)

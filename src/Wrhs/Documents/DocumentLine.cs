@@ -3,7 +3,7 @@ using Wrhs.Products;
 
 namespace Wrhs.Documents
 {
-    public abstract class DocumentLine
+    public class DocumentLine
     {
         public virtual int Id { get; set; } = 0;
         

@@ -34,7 +34,16 @@ namespace Wrhs.Documents
 
         public abstract TDocument Build();
 
-        protected abstract void AddValidatedLine(DocumentBuilderAddLineCommand command);
+        int lastId = 0;
+        protected void AddValidatedLine(DocumentBuilderAddLineCommand command)
+        {
+            lastId++;
+            var line = CommandToDocumentLine(command);
+            line.Id = lastId;
+            lines.Add(line);
+        }
+
+        protected abstract TDocLine CommandToDocumentLine(DocumentBuilderAddLineCommand command);
 
         protected abstract DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(TDocLine line);
 
