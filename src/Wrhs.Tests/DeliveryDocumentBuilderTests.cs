@@ -161,6 +161,22 @@ namespace Wrhs.Tests
             Assert.IsTrue(onAddLineFailCalled);
         }
 
+        [Test]
+        public void WhenAddLineEachLineHasUniqeId()
+        {
+            var builder = MakeBuilder();
+
+            var command1 = new DocumentBuilderAddLineCommand { ProductId = 1, Quantity = 1 };
+            var command2 = new DocumentBuilderAddLineCommand { ProductId = 2, Quantity = 2 };
+            builder.AddLine(command1);
+            builder.AddLine(command2);
+            var line = ((DeliveryDocumentLine[])builder.Lines)[0];
+            builder.RemoveLine(line);
+            builder.AddLine(command1);
+
+            Assert.AreEqual(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
+        }
+
         public DeliveryDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();

@@ -24,11 +24,14 @@ namespace Wrhs.Operations.Delivery
             return document;
         }
 
+        int lastId = 0;
         protected override void AddValidatedLine(DocumentBuilderAddLineCommand command)
         {
+            lastId++;
+
             lines.Add(new DeliveryDocumentLine
             {
-                Id = lines.Count+1, //TODO napisac test ktory pokaze ze to jest zle rozwiazanie
+                Id = lastId,
                 Product = productRepository.GetById(command.ProductId),
                 Quantity = command.Quantity
             });  
