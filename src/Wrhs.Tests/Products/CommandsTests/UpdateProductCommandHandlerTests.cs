@@ -12,17 +12,7 @@ namespace Wrhs.Tests.Products
         [Test]
         public void OnHandleUpdateExistingProduct()
         {
-            var items = new List<Product>()
-            {
-                new Product
-                {
-                    Id = 1,
-                    Code = "PROD1",
-                    Name = "Product 1",
-                    Description = "Some desc"
-                }
-            };
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeSingleItemList());
             var command = new UpdateProductCommand
             {
                 ProductId = 1,
@@ -35,7 +25,7 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            var prod = items.First();
+            var prod = repo.Get().First();
             Assert.AreEqual("NPROD1", prod.Code);
             Assert.AreEqual("New name product 1", prod.Name);
             Assert.AreEqual("New desc", prod.Description);
@@ -49,17 +39,7 @@ namespace Wrhs.Tests.Products
         [TestCase("NpRoD1")]
         public void OnHandleAlwaysUppercaseProductCode(string newCode)
         {
-            var items = new List<Product>()
-            {
-                new Product
-                {
-                    Id = 1,
-                    Code = "PROD1",
-                    Name = "Product 1",
-                    Description = "Some desc"
-                }
-            };
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeSingleItemList());
             var command = new UpdateProductCommand
             {
                 ProductId = 1,
@@ -72,8 +52,22 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            var prod = items.First();
+            var prod = repo.Get().First();
             Assert.AreEqual("NPROD1", prod.Code);
+        }
+
+        protected List<Product> MakeSingleItemList()
+        {
+            return new List<Product>()
+            {
+                new Product
+                {
+                    Id = 1,
+                    Code = "PROD1",
+                    Name = "Product 1",
+                    Description = "Some desc"
+                }
+            };
         }
     }
 }

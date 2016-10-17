@@ -11,8 +11,7 @@ namespace Wrhs.Tests.Products
         [Test]
         public void OnHandleRemoveProductFromRepository()
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var handler = new DeleteProductCommandHandler(repo);
             var command = new DeleteProductCommand
             {
@@ -27,8 +26,7 @@ namespace Wrhs.Tests.Products
         [Test]
         public void OnHandleRemoveUnexistedProductRepositoryInUnchaged()
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var handler = new DeleteProductCommandHandler(repo);
             var command = new DeleteProductCommand
             {
@@ -37,8 +35,8 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            Assert.AreEqual(1, items.Count());
-            Assert.AreEqual("PROD1", items.First().Code);
+            Assert.AreEqual(1, repo.Get().Count());
+            Assert.AreEqual("PROD1", repo.Get().First().Code);
         }
     }
 }

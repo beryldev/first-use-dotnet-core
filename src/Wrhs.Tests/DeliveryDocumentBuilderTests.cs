@@ -118,7 +118,7 @@ namespace Wrhs.Tests
         [Test]
         public void WhenOnAddLineValidationFailBuildReturnDocWithUnchangedLines()
         {
-            var repo = ProductRepositoryFactory.Make();
+            var repo = RepositoryFactory<Product>.Make();
 
             var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
             addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
@@ -142,7 +142,7 @@ namespace Wrhs.Tests
         public void WhenOnAddLineValidationFailCallOnAddLineFail()
         {
             var onAddLineFailCalled = false;
-            var repo = ProductRepositoryFactory.Make();
+            var repo = RepositoryFactory<Product>.Make();
 
             var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
             addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
@@ -189,42 +189,17 @@ namespace Wrhs.Tests
 
         public IRepository<Product> MakeProductRepository()
         {
-            return MakeProductRepository(MakeItems(20));
+            return MakeProductRepository(20);
         }
 
-        protected IRepository<Product> MakeProductRepository(List<Product> items)
+        protected IRepository<Product> MakeProductRepository(int itemsCount)
         {
-            var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m=>m.Save(It.IsAny<Product>()))
-                .Callback((Product prod)=>{ items.Add(prod); });
-
-            mock.Setup(m=>m.Get())
-                .Returns(items);
-
-            mock.Setup(m=>m.GetById(It.IsAny<int>()))
-                .Returns((int id)=>
-                { 
-                    return items.ToArray().Where(item=>item.Id==id).FirstOrDefault(); 
-                });
-
-            mock.Setup(m=>m.Update(It.IsAny<Product>()))
-                .Callback((Product product)=>
-                {
-                    var p = items.Where(item=>item.Id==product.Id).FirstOrDefault();
-                    if(p!=null)
-                    {
-                        items.Remove(p);
-                        items.Add(product);
-                    }
-                });
-
-            mock.Setup(m=>m.Delete(It.IsAny<Product>()))
-                .Callback((Product product) =>
-                {
-                    items.Remove(product);
-                });
-
-            return mock.Object;
+            var repo = RepositoryFactory<Product>.Make();
+            var items = MakeItems(itemsCount);
+            foreach(var item in items)
+                repo.Save(item);
+           
+           return repo;
         }
 
         protected List<Product> MakeItems(int count)

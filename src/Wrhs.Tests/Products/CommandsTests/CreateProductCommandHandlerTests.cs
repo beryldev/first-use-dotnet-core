@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
@@ -8,14 +9,13 @@ using Wrhs.Products.Commands;
 namespace Wrhs.Tests.Products
 {
     [TestFixture]
-    public class CreateProductCommandHandlerTests
+    public class CreateProductCommandHandlerTests : ProductCommandTestsBase
     {
         [Test]
         public void OnHandleCreateAndSaveNewProduct()
         {
-            var items = new List<Product>();
-            var repoMock = MakeProductRepoMock(items);
-            var handler = new CreateProductCommandHandler(repoMock);
+            var repo = MakeProductRepository(new List<Product>());
+            var handler = new CreateProductCommandHandler(repo);
             
             var command = new CreateProductCommand
             {
@@ -26,8 +26,8 @@ namespace Wrhs.Tests.Products
             };
             handler.Handle(command);
 
-            Assert.AreEqual(1, items.Count);
-            Assert.AreEqual("PROD1", items[0].Code);
+            Assert.AreEqual(1, repo.Get().Count());
+            Assert.AreEqual("PROD1", repo.Get().First().Code);
         }
 
         [Test]
@@ -37,9 +37,8 @@ namespace Wrhs.Tests.Products
         [TestCase("PrOd1")]
         public void OnHandleAlwaysUppercaseProductCode(string code)
         {
-            var items = new List<Product>();
-            var repoMock = MakeProductRepoMock(items);
-            var handler = new CreateProductCommandHandler(repoMock);
+            var repo = MakeProductRepository(new List<Product>());
+            var handler = new CreateProductCommandHandler(repo);
             var command = new CreateProductCommand
             {
                 Code = code,
@@ -50,16 +49,7 @@ namespace Wrhs.Tests.Products
             
             handler.Handle(command);
 
-            Assert.AreEqual("PROD1", items[0].Code);
-        }
-
-        IRepository<Product> MakeProductRepoMock(List<Product> items)
-        {
-            var repoMock = new Mock<IRepository<Product>>();
-            repoMock.Setup(m=>m.Save(It.IsAny<Product>()))
-                .Callback((Product prod)=>{ items.Add(prod); });
-
-            return repoMock.Object;
+            Assert.AreEqual("PROD1", repo.Get().First().Code);
         }
     }
 }

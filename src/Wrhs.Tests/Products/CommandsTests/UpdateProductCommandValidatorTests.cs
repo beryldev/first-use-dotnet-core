@@ -11,8 +11,7 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnValidationFailMessageWhenProductDoesNotExists()
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -34,8 +33,7 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnValidationFailMessageWhenNewCodeIsEmpty(string code)
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -57,8 +55,7 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnValidationFailMessageWhenNewNameIsEmpty(string name)
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository( MakeProductList());
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -80,8 +77,7 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnValidationFailMessagesWhenNewCodeAndNameAreEmpty(string value)
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -100,9 +96,8 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnValidationFailMessageWhenNewCodeDuplicated()
         {
-            var items = MakeProductList();
-            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
+            repo.Save(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -121,9 +116,8 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnNoValidationFailMessageWhenCodeAreNotChanged()
         {
-            var items = MakeProductList();
-            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
+            repo.Save(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -141,9 +135,8 @@ namespace Wrhs.Tests.Products
          [Test]
         public void ReturnValidationFailMessageWhenNewEANDuplicated()
         {
-            var items = MakeProductList();
-            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111111" });
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
+            repo.Save(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111111" });
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {
@@ -162,9 +155,8 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnNoValidationFailMessageWhenEANAreNotChanged()
         {
-            var items = MakeProductList();
-            items.Add(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
+            repo.Save(new Product{Id = 2, Code = "PROD2", Name="Product 2", EAN = "111111111" });
             var validator = new UpdateProductCommandValidator(repo);
             var command = new UpdateProductCommand
             {

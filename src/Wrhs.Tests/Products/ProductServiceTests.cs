@@ -1,9 +1,10 @@
 
 using System.Collections.Generic;
-using Moq;
+using System.Linq;
 using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Products.Commands;
+using Wrhs.Tests;
 
 namespace Wrhs.Products.Tests.Products
 {
@@ -14,10 +15,10 @@ namespace Wrhs.Products.Tests.Products
         public void CanCreateNewProduct()
         {
             var items = new List<Product>();
-            var repoMock = MakeProductRepo(items);
+            var repo = MakeProductRepo(items);
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
-                new CreateProductCommandHandler(repoMock.Object),
-                new CreateProductCommandValidator(repoMock.Object)
+                new CreateProductCommandHandler(repo),
+                new CreateProductCommandValidator(repo)
             );
             var command = new CreateProductCommand
             {
@@ -28,8 +29,8 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
 
-            Assert.AreEqual(1, items.Count);
-            Assert.AreEqual("PROD1", items[0].Code);
+            Assert.AreEqual(1, repo.Get().Count());
+            Assert.AreEqual("PROD1", repo.Get().First().Code);
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace Wrhs.Products.Tests.Products
         public void CantCreateProductWithEmptyCode(string code)
         {
             var items = new List<Product>();
-            var repoMock = MakeProductRepo(items);
+            var repo = MakeProductRepo(items);
             var command = new CreateProductCommand
             {
                 Code = code,
@@ -48,8 +49,8 @@ namespace Wrhs.Products.Tests.Products
                 EAN = "123456789012"
             };
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
-                new CreateProductCommandHandler(repoMock.Object),
-                new CreateProductCommandValidator(repoMock.Object)
+                new CreateProductCommandHandler(repo),
+                new CreateProductCommandValidator(repo)
             );
 
             service.Handle(command);
@@ -65,7 +66,7 @@ namespace Wrhs.Products.Tests.Products
         public void CantCreateProductWithEmptyName(string name)
         {
             var items = new List<Product>();
-            var repoMock = MakeProductRepo(items);
+            var repo = MakeProductRepo(items);
             var command = new CreateProductCommand
             {
                 Code = "PROD1",
@@ -73,8 +74,8 @@ namespace Wrhs.Products.Tests.Products
                 EAN = "123456789012"
             };
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
-                new CreateProductCommandHandler(repoMock.Object),
-                new CreateProductCommandValidator(repoMock.Object)
+                new CreateProductCommandHandler(repo),
+                new CreateProductCommandValidator(repo)
             );
 
             service.Handle(command);
@@ -86,7 +87,7 @@ namespace Wrhs.Products.Tests.Products
         public void CantCreateProductWithExistingCode()
         {
             var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789011" } };
-            var repoMock = MakeProductRepo(items);
+            var repo = MakeProductRepo(items);
             var command = new CreateProductCommand
             {
                 Code = "PROD1",
@@ -94,20 +95,20 @@ namespace Wrhs.Products.Tests.Products
                 EAN = "123456789012"
             };
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
-                new CreateProductCommandHandler(repoMock.Object),
-                new CreateProductCommandValidator(repoMock.Object)
+                new CreateProductCommandHandler(repo),
+                new CreateProductCommandValidator(repo)
             );
 
             service.Handle(command);
         
-            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1, repo.Get().Count());
         }
 
         [Test]
         public void CantCreateProductWithExistingEAN()
         {
             var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789011" } };
-            var repoMock = MakeProductRepo(items);
+            var repo = MakeProductRepo(items);
             var command = new CreateProductCommand
             {
                 Code = "PROD2",
@@ -115,25 +116,22 @@ namespace Wrhs.Products.Tests.Products
                 EAN = "123456789011"
             };
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>(
-                new CreateProductCommandHandler(repoMock.Object),
-                new CreateProductCommandValidator(repoMock.Object)
+                new CreateProductCommandHandler(repo),
+                new CreateProductCommandValidator(repo)
             );
 
             service.Handle(command);
         
-            Assert.AreEqual(1, items.Count);
+            Assert.AreEqual(1, repo.Get().Count());
         }
 
-        protected Mock<IRepository<Product>> MakeProductRepo(List<Product> items)
+        protected IRepository<Product> MakeProductRepo(List<Product> items)
         {
-            var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m=>m.Save(It.IsAny<Product>()))
-                .Callback((Product prod)=>{ items.Add(prod); });
+            var repo = RepositoryFactory<Product>.Make();
+            foreach(var item in items)
+                repo.Save(item);
 
-            mock.Setup(m=>m.Get())
-                .Returns(items);
-
-            return mock;
+           return repo;
         }
     }
 }

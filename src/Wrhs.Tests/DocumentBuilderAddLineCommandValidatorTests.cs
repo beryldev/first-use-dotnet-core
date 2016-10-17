@@ -15,7 +15,7 @@ namespace Wrhs.Tests
         [TestCase(9021)]
         public void WhenInvalidProductIdOnValidateNewLineReturnValidationFailResult(int productId)
         {
-            var repo = ProductRepositoryFactory.Make();
+            var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);            
             var validator = new DocumentBuilderAddLineCommandValidator(repo);
             var command = new DocumentBuilderAddLineCommand{ ProductId = productId, Quantity = 4 };
@@ -32,7 +32,7 @@ namespace Wrhs.Tests
         [TestCase(-23)]
         public void WhenInvalidQuantityOnAddLineReturnValidationFailResult(decimal quanitity) 
         {
-            var repo = ProductRepositoryFactory.Make();
+            var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);
             var validator = new DocumentBuilderAddLineCommandValidator(repo);
             var command = new DocumentBuilderAddLineCommand { ProductId = 5, Quantity = quanitity };

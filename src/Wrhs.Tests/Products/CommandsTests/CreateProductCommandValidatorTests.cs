@@ -9,7 +9,7 @@ using Wrhs.Products.Commands;
 namespace Wrhs.Tests.Products
 {
     [TestFixture]
-    public class CreateProductCommandValidatorTests
+    public class CreateProductCommandValidatorTests : ProductCommandTestsBase
     {
         [Test]
         [TestCase("")]
@@ -18,7 +18,8 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnOneValidationFailMessageWhenOnlyProductCodeEmpty(string code)
         {
-            var validator = new CreateProductCommandValidator(MakeProductRepository());
+            var repo = MakeProductRepository();
+            var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
                 Code = code,
@@ -39,7 +40,8 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnOneValidationFailMessageWhenOnlyProductNameEmpty(string name)
         {
-            var validator = new CreateProductCommandValidator(MakeProductRepository());
+            var repo = MakeProductRepository();
+            var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
                 Code = "PROD1",
@@ -60,7 +62,8 @@ namespace Wrhs.Tests.Products
         [TestCase(null)]
         public void ReturnTwoValidationFailMessagesWhenProductCodeAndNameEmpty(string value)
         {
-            var validator = new CreateProductCommandValidator(MakeProductRepository());
+            var repo = MakeProductRepository();
+            var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
                 Code = value,
@@ -81,8 +84,7 @@ namespace Wrhs.Tests.Products
         [TestCase("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessageWhenOnlyProducCodeDuplicated(string presentCode, string newCode)
         {
-            var items = new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } };
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } });
             var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
@@ -100,8 +102,7 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnValidationFailMessageWhenOnlyProducEANDuplicated()
         {
-            var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789012" } };
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789012" } });
             var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
@@ -124,8 +125,7 @@ namespace Wrhs.Tests.Products
         [TestCase("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessagesWhenEANAndCodeDuplicated(string presentCode, string newCode)
         {
-            var items = new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } };
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } });
             var validator = new CreateProductCommandValidator(repo);
             var command = new CreateProductCommand
             {
@@ -142,15 +142,6 @@ namespace Wrhs.Tests.Products
         protected IRepository<Product> MakeProductRepository()
         {
             return MakeProductRepository(new List<Product>());
-        }
-
-        protected IRepository<Product> MakeProductRepository(IEnumerable<Product> items)
-        {
-            var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m=>m.Get())
-                .Returns(items);
-
-            return mock.Object;
         }
     }
 }

@@ -304,18 +304,11 @@ namespace Wrhs.Tests
 
         protected IRepository<Allocation> SetupAllocationRepository(List<Allocation> items)
         {
-            var mock = new Mock<IRepository<Allocation>>();
-            
-            mock.Setup(m=>m.Save(It.IsAny<Allocation>()))
-                .Callback((Allocation allocation)=>{
-                    items.Add(allocation);
-                });
+            var repo = RepositoryFactory<Allocation>.Make();
+            foreach(var item in items)
+                repo.Save(item);
 
-
-            mock.Setup(m=>m.Get())
-                .Returns(items);
-
-            return mock.Object;
+            return repo;
         }
 
         protected Warehouse PrepareWarehouse(IAllocationService allocService)

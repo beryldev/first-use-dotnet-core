@@ -50,12 +50,11 @@ namespace Wrhs.Tests.Products
         [Test]
         public void ReturnNoValidationFailMessageWhenCommandIsValid()
         {
-            var items = MakeProductList();
-            var repo = MakeProductRepository(items);
+            var repo = MakeProductRepository(MakeProductList());
             var validator = new DeleteProductCommandValidator(repo);
             var command = new DeleteProductCommand
             {
-                ProductId = items.First().Id
+                ProductId = repo.Get().First().Id
             };
 
             var result = validator.Validate(command);
