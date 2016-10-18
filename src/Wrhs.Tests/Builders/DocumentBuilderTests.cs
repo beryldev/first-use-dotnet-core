@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -10,8 +9,7 @@ using Wrhs.Products;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public abstract class DocumentBuilderTests<T> : DocumentBuilderTestsBase
-        where T : DocumentBuilder<Document, DocumentLine>
+    public abstract class DocumentBuilderTests : DocumentBuilderTestsBase
      {
         [Test]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
@@ -160,21 +158,17 @@ namespace Wrhs.Tests
             Assert.AreEqual(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
         }
 
-        protected abstract T MakeBuilder();
+        DocumentBuilderClassInTest MakeBuilder()
+        {
+            var repo = MakeProductRepository();
+            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
 
-        // public virtual DocumentBuilder<Document, DocumentLine> MakeBuilder()
-        // {
-        //     var repo = MakeProductRepository();
-        //     var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
-
-        //     var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
-        //     return builder;
-        // }
-
-      
+            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
+            return builder;
+        }      
     }
 
-    class DocumentBuilderClassInTest : DocumentBuilder<Document, DocumentLine>
+    class DocumentBuilderClassInTest : DocumentBuilder<Document, DocumentLine, DocumentBuilderAddLineCommand>
     {
         IRepository<Product> productRepository;
 

@@ -5,11 +5,12 @@ using Wrhs.Products;
 
 namespace Wrhs.Operations.Relocation
 {
-    public class RelocationDocumentBuilder : DocumentBuilder<RelocationDocument, RelocationDocumentLine>
+    public class RelocationDocumentBuilder 
+        : DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocationDocumentBuilderAddLineCommand>
     {
         IRepository<Product> productRepository;
 
-        public RelocationDocumentBuilder(IRepository<Product> productRepository, IValidator<DocumentBuilderAddLineCommand> addLineValidator) 
+        public RelocationDocumentBuilder(IRepository<Product> productRepository, IValidator<RelocationDocumentBuilderAddLineCommand> addLineValidator) 
             : base(addLineValidator)
         {
             this.productRepository = productRepository;
@@ -22,12 +23,12 @@ namespace Wrhs.Operations.Relocation
             return document;
         }
 
-        protected override RelocationDocumentLine CommandToDocumentLine(DocumentBuilderAddLineCommand command)
+        protected override RelocationDocumentLine CommandToDocumentLine(RelocationDocumentBuilderAddLineCommand command)
         {
             throw new NotImplementedException();
         }
 
-        protected override DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(RelocationDocumentLine line)
+        protected override RelocationDocumentBuilderAddLineCommand DocumentLineToAddLineCommand(RelocationDocumentLine line)
         {
             throw new NotImplementedException();
         }

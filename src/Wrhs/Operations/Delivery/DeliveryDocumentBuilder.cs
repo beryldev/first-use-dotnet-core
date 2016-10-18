@@ -4,7 +4,7 @@ using Wrhs.Products;
 
 namespace Wrhs.Operations.Delivery
 {
-    public class DeliveryDocumentBuilder : DocumentBuilder<DeliveryDocument, DeliveryDocumentLine>
+    public class DeliveryDocumentBuilder : DocumentBuilder<DeliveryDocument, DeliveryDocumentLine, DocumentBuilderAddLineCommand>
     {
         IRepository<Product> productRepository;
 

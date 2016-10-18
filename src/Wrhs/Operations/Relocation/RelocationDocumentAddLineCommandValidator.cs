@@ -1,21 +1,21 @@
-using System;
 using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Documents;
 using Wrhs.Products;
 
 namespace Wrhs.Operations.Relocation
 {
-    public class RelocationDocumentAddLineCommandValidator : DocumentBuilderAddLineCommandValidator
+    public class RelocationDocumentAddLineCommandValidator : Validator<RelocationDocumentBuilderAddLineCommand>
     {
+        IRepository<Product> productRepository;
+        
         public RelocationDocumentAddLineCommandValidator(IRepository<Product> productRepository) 
-            : base(productRepository)
         {
+            this.productRepository = productRepository;
         }
 
-        public override IEnumerable<ValidationResult> Validate(DocumentBuilderAddLineCommand command)
+        public override IEnumerable<ValidationResult> Validate(RelocationDocumentBuilderAddLineCommand command)
         {
-            return base.Validate(command);
+            return null;
         }
     }
 }

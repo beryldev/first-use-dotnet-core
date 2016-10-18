@@ -5,8 +5,7 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public abstract class DocumentBuilder<TDocument, TDocLine>
-        : IDocumentBuilder<TDocument, TDocLine>
+    public abstract class DocumentBuilder<TDocument, TDocLine, TAddLineCmd>
         where TDocument : IDocument
         where TDocLine : IDocumentLine 
     {
@@ -14,7 +13,7 @@ namespace Wrhs.Documents
 
         public event EventHandler<IEnumerable<ValidationResult>> OnUpdateLineFail;
 
-        protected IValidator<DocumentBuilderAddLineCommand> addLineValidator;
+        protected IValidator<TAddLineCmd> addLineValidator;
 
         protected List<TDocLine> lines = new List<TDocLine>();
 
@@ -26,7 +25,7 @@ namespace Wrhs.Documents
             } 
         }
 
-        public DocumentBuilder(IValidator<DocumentBuilderAddLineCommand> addLineValidator)
+        public DocumentBuilder(IValidator<TAddLineCmd> addLineValidator)
         {
             this.addLineValidator = addLineValidator;
         }
@@ -34,7 +33,7 @@ namespace Wrhs.Documents
         public abstract TDocument Build();
 
         int lastId = 0;
-        protected void AddValidatedLine(DocumentBuilderAddLineCommand command)
+        protected void AddValidatedLine(TAddLineCmd command)
         {
             lastId++;
             var line = CommandToDocumentLine(command);
@@ -42,11 +41,11 @@ namespace Wrhs.Documents
             lines.Add(line);
         }
 
-        protected abstract TDocLine CommandToDocumentLine(DocumentBuilderAddLineCommand command);
+        protected abstract TDocLine CommandToDocumentLine(TAddLineCmd command);
 
-        protected abstract DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(TDocLine line);
+        protected abstract TAddLineCmd DocumentLineToAddLineCommand(TDocLine line);
 
-        public virtual void AddLine(DocumentBuilderAddLineCommand command)
+        public virtual void AddLine(TAddLineCmd command)
         {
             var validationResults = addLineValidator.Validate(command);
             if(validationResults.Count() > 0)
