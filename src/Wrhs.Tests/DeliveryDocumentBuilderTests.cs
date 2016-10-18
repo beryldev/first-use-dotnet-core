@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
@@ -7,7 +8,8 @@ using Wrhs.Operations.Delivery;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class DeliveryDocumentBuilderTests : DocumentBuilderTestsBase
+    public class DeliveryDocumentBuilderTests 
+        : DocumentBuilderTests<DeliveryDocumentBuilder>
     {
         [Test]
         public void BuildReturnsDeliveryDocument()
@@ -19,13 +21,18 @@ namespace Wrhs.Tests
             Assert.IsInstanceOf<DeliveryDocument>(document);
         }
 
-        public DeliveryDocumentBuilder MakeBuilder()
-        {
-            var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+        // public DeliveryDocumentBuilder MakeBuilder()
+        // {
+        //     var repo = MakeProductRepository();
+        //     var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
 
-            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object);
-            return builder;
+        //     var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object);
+        //     return builder;
+        // }
+
+        protected override DeliveryDocumentBuilder MakeBuilder()
+        {
+            throw new NotImplementedException();
         }
     }
 }

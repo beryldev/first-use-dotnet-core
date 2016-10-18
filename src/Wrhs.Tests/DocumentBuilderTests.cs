@@ -10,7 +10,8 @@ using Wrhs.Products;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class DocumentBuilderTests : DocumentBuilderTestsBase
+    public abstract class DocumentBuilderTests<T> : DocumentBuilderTestsBase
+        where T : DocumentBuilder<Document, DocumentLine>
      {
         [Test]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
@@ -159,14 +160,16 @@ namespace Wrhs.Tests
             Assert.AreEqual(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
         }
 
-        public virtual DocumentBuilder<Document, DocumentLine> MakeBuilder()
-        {
-            var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+        protected abstract T MakeBuilder();
 
-            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
-            return builder;
-        }
+        // public virtual DocumentBuilder<Document, DocumentLine> MakeBuilder()
+        // {
+        //     var repo = MakeProductRepository();
+        //     var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
+
+        //     var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
+        //     return builder;
+        // }
 
       
     }
