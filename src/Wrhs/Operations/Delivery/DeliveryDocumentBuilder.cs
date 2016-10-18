@@ -34,7 +34,7 @@ namespace Wrhs.Operations.Delivery
 
         protected override DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(DeliveryDocumentLine line)
         {
-            return new DocumentBuilderUpdateLineCommand
+            return new DocumentBuilderAddLineCommand
             {
                 ProductId = line.Product.Id,
                 Quantity = line.Quantity

@@ -230,7 +230,7 @@ namespace Wrhs.Tests
 
         protected override DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(DocumentLine line)
         {
-            return new DocumentBuilderUpdateLineCommand
+            return new DocumentBuilderAddLineCommand
             {
                 ProductId = line.Product.Id,
                 Quantity = line.Quantity
