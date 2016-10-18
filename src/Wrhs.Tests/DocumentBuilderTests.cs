@@ -113,11 +113,7 @@ namespace Wrhs.Tests
             addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
                 .Returns(new ValidationResult[]{ new ValidationResult() });
 
-            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
-            updateLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderUpdateLineCommand>()))
-                .Returns(new ValidationResult[0]);
-
-            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object, updateLineValidMock.Object);
+            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
 
             var command = new DocumentBuilderAddLineCommand { ProductId = -34, Quantity = 5 };
             builder.AddLine(command);
@@ -137,11 +133,7 @@ namespace Wrhs.Tests
             addLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderAddLineCommand>()))
                 .Returns(new ValidationResult[]{ new ValidationResult() });
 
-            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
-            updateLineValidMock.Setup(m=>m.Validate(It.IsAny<DocumentBuilderUpdateLineCommand>()))
-                .Returns(new ValidationResult[0]);
-
-            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object, updateLineValidMock.Object);
+            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
             builder.OnAddLineFail += (object sender, IEnumerable<ValidationResult> args) => onAddLineFailCalled=true;
 
             var command = new DocumentBuilderAddLineCommand { ProductId = -34, Quantity = 5 };
@@ -170,9 +162,8 @@ namespace Wrhs.Tests
         {
             var repo = MakeProductRepository();
             var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
-            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
 
-            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object, updateLineValidMock.Object);
+            var builder = new DocumentBuilderClassInTest(repo, addLineValidMock.Object);
             return builder;
         }
 
@@ -214,8 +205,8 @@ namespace Wrhs.Tests
     {
         IRepository<Product> productRepository;
 
-        public DocumentBuilderClassInTest(IRepository<Product> productRepository, IValidator<DocumentBuilderAddLineCommand> addLineValidator, IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator) 
-            : base(addLineValidator, updateLineValidator)
+        public DocumentBuilderClassInTest(IRepository<Product> productRepository, IValidator<DocumentBuilderAddLineCommand> addLineValidator) 
+            : base(addLineValidator)
         {
             this.productRepository = productRepository;
         }
@@ -237,7 +228,7 @@ namespace Wrhs.Tests
             };
         }
 
-        protected override DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(DocumentLine line)
+        protected override DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(DocumentLine line)
         {
             return new DocumentBuilderUpdateLineCommand
             {

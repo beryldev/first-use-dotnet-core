@@ -26,9 +26,8 @@ namespace Wrhs.Tests
         {
             var repo = MakeProductRepository();
             var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
-            var updateLineValidMock = new Mock<IValidator<DocumentBuilderUpdateLineCommand>>();
 
-            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, updateLineValidMock.Object);
+            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object);
             return builder;
         }
 

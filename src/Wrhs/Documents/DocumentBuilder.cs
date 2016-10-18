@@ -13,8 +13,6 @@ namespace Wrhs.Documents
 
         protected IValidator<DocumentBuilderAddLineCommand> addLineValidator;
 
-        protected IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator;
-
         protected List<TDocLine> lines = new List<TDocLine>();
 
         public IEnumerable<TDocLine> Lines 
@@ -25,11 +23,9 @@ namespace Wrhs.Documents
             } 
         }
 
-        public DocumentBuilder(IValidator<DocumentBuilderAddLineCommand> addLineValidator, 
-            IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator)
+        public DocumentBuilder(IValidator<DocumentBuilderAddLineCommand> addLineValidator)
         {
             this.addLineValidator = addLineValidator;
-            this.updateLineValidator = updateLineValidator;
         }
 
         public abstract TDocument Build();
@@ -45,7 +41,7 @@ namespace Wrhs.Documents
 
         protected abstract TDocLine CommandToDocumentLine(DocumentBuilderAddLineCommand command);
 
-        protected abstract DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(TDocLine line);
+        protected abstract DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(TDocLine line);
 
         public virtual void AddLine(DocumentBuilderAddLineCommand command)
         {
@@ -66,8 +62,8 @@ namespace Wrhs.Documents
 
         public virtual void UpdateLine(TDocLine line)
         {
-            var command = DocumentLineToUpdateCommand(line);
-            var validationResults = updateLineValidator.Validate(command);
+            var command = DocumentLineToAddLineCommand(line);
+            var validationResults = addLineValidator.Validate(command);
             if(validationResults.Count() > 0)
             {
                 OnUpdateLineFail?.Invoke(this, validationResults);

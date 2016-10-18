@@ -9,9 +9,8 @@ namespace Wrhs.Operations.Delivery
         IRepository<Product> productRepository;
 
         public DeliveryDocumentBuilder(IRepository<Product> productRepository,
-            IValidator<DocumentBuilderAddLineCommand> addLineValidator,
-            IValidator<DocumentBuilderUpdateLineCommand> updateLineValidator)
-            : base(addLineValidator, updateLineValidator)
+            IValidator<DocumentBuilderAddLineCommand> addLineValidator)
+            : base(addLineValidator)
         {
             this.productRepository = productRepository;
         }
@@ -33,7 +32,7 @@ namespace Wrhs.Operations.Delivery
             };
         }
 
-        protected override DocumentBuilderUpdateLineCommand DocumentLineToUpdateCommand(DeliveryDocumentLine line)
+        protected override DocumentBuilderAddLineCommand DocumentLineToAddLineCommand(DeliveryDocumentLine line)
         {
             return new DocumentBuilderUpdateLineCommand
             {
