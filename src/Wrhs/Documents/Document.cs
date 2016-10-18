@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Wrhs.Documents
 {
-    public class Document
+    public class Document : IDocument
     {
         public virtual int Id { get; set; }
 

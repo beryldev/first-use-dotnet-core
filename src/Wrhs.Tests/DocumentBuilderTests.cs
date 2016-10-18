@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -9,8 +10,8 @@ using Wrhs.Products;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class DocumentBuilderTests
-    {
+    public class DocumentBuilderTests : DocumentBuilderTestsBase
+     {
         [Test]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
@@ -158,7 +159,7 @@ namespace Wrhs.Tests
             Assert.AreEqual(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
         }
 
-        public DocumentBuilder<Document, DocumentLine> MakeBuilder()
+        public virtual DocumentBuilder<Document, DocumentLine> MakeBuilder()
         {
             var repo = MakeProductRepository();
             var addLineValidMock = new Mock<IValidator<DocumentBuilderAddLineCommand>>();
@@ -167,39 +168,8 @@ namespace Wrhs.Tests
             return builder;
         }
 
-        public IRepository<Product> MakeProductRepository()
-        {
-            return MakeProductRepository(20);
-        }
-
-        protected IRepository<Product> MakeProductRepository(int itemsCount)
-        {
-            var repo = RepositoryFactory<Product>.Make();
-            var items = MakeItems(itemsCount);
-            foreach(var item in items)
-                repo.Save(item);
-           
-           return repo;
-        }
-
-        protected List<Product> MakeItems(int count)
-        {
-            var items = new List<Product>();
-            for(var i=0; i<count; i++)
-            {
-                items.Add(new Product
-                {
-                    Id = i+1,
-                    Code = $"PROD{i+1}",
-                    Name = $"Product {i+1}",
-                    EAN = $"000{i+1}"
-                });
-            }
-
-            return items;
-        }
+      
     }
-
 
     class DocumentBuilderClassInTest : DocumentBuilder<Document, DocumentLine>
     {
@@ -216,7 +186,7 @@ namespace Wrhs.Tests
             var doc = new Document();
             doc.Lines.AddRange(lines);
 
-            return doc;
+            return (Document)doc;
         }
 
         protected override DocumentLine CommandToDocumentLine(DocumentBuilderAddLineCommand command)

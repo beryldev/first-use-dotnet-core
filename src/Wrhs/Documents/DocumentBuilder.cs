@@ -5,7 +5,10 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public abstract class DocumentBuilder<TDocument, TDocLine> where TDocLine : DocumentLine
+    public abstract class DocumentBuilder<TDocument, TDocLine>
+        : IDocumentBuilder<TDocument, TDocLine>
+        where TDocument : IDocument
+        where TDocLine : IDocumentLine 
     {
         public event EventHandler<IEnumerable<ValidationResult>> OnAddLineFail;
 
