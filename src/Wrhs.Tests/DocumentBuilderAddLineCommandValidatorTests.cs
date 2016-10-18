@@ -17,8 +17,8 @@ namespace Wrhs.Tests
         {
             var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);            
-            var validator = new DocumentBuilderAddLineCommandValidator(repo);
-            var command = new DocumentBuilderAddLineCommand{ ProductId = productId, Quantity = 4 };
+            var validator = new DocBuilderAddLineCmdValidator(repo);
+            var command = new DocBuilderAddLineCmd{ ProductId = productId, Quantity = 4 };
             
             var result = validator.Validate(command);
 
@@ -34,8 +34,8 @@ namespace Wrhs.Tests
         {
             var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);
-            var validator = new DocumentBuilderAddLineCommandValidator(repo);
-            var command = new DocumentBuilderAddLineCommand { ProductId = 5, Quantity = quanitity };
+            var validator = new DocBuilderAddLineCmdValidator(repo);
+            var command = new DocBuilderAddLineCmd { ProductId = 5, Quantity = quanitity };
 
             var result = validator.Validate(command);
 

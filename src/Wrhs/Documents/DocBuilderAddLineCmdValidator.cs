@@ -4,16 +4,16 @@ using Wrhs.Products;
 
 namespace Wrhs.Documents
 {
-    public class DocumentBuilderAddLineCommandValidator : Validator<DocumentBuilderAddLineCommand>
+    public class DocBuilderAddLineCmdValidator : Validator<DocBuilderAddLineCmd>
     {
         IRepository<Product> productRepository;
 
-        public DocumentBuilderAddLineCommandValidator(IRepository<Product> productRepository)
+        public DocBuilderAddLineCmdValidator(IRepository<Product> productRepository)
         {
             this.productRepository = productRepository;
         }
 
-        public override IEnumerable<ValidationResult> Validate(DocumentBuilderAddLineCommand command)
+        public override IEnumerable<ValidationResult> Validate(DocBuilderAddLineCmd command)
         {
             var result = new List<ValidationResult>();
 

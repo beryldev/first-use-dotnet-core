@@ -2,7 +2,7 @@ using Wrhs.Documents;
 
 namespace Wrhs.Operations.Relocation
 {
-    public class RelocationDocumentBuilderAddLineCommand : DocumentBuilderAddLineCommand
+    public class RelocDocBuilderAddLineCmd : DocBuilderAddLineCmd
     {
         public string From { get; set; }
 

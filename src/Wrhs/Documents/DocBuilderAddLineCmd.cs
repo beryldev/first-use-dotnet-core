@@ -1,6 +1,6 @@
 namespace Wrhs.Documents
 {
-    public class DocumentBuilderAddLineCommand
+    public class DocBuilderAddLineCmd
     {
         public int ProductId { get; set; }
 

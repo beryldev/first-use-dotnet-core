@@ -2,7 +2,6 @@ using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
-using Wrhs.Products;
 
 namespace Wrhs.Tests
 {
@@ -13,7 +12,7 @@ namespace Wrhs.Tests
         public void OnBuildReturnRelocationDocument()
         {
             var repo = MakeProductRepository();
-            var addLineValidator = new RelocationDocumentAddLineCommandValidator(repo);
+            var addLineValidator = new RelocDocAddLineCmdValidator(repo);
             var builder = new RelocationDocumentBuilder(repo, addLineValidator);
 
             var document = builder.Build();
@@ -25,7 +24,7 @@ namespace Wrhs.Tests
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
-            var command = new RelocationDocumentBuilderAddLineCommand { ProductId = 1, Quantity = 5 };
+            var command = new RelocDocBuilderAddLineCmd { ProductId = 1, Quantity = 5 };
        
             builder.AddLine(command);
             var document = builder.Build();
@@ -38,7 +37,7 @@ namespace Wrhs.Tests
         RelocationDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<RelocationDocumentBuilderAddLineCommand>>();
+            var addLineValidMock = new Mock<IValidator<RelocDocBuilderAddLineCmd>>();
 
             var builder = new RelocationDocumentBuilder(repo, addLineValidMock.Object);
             return builder;
