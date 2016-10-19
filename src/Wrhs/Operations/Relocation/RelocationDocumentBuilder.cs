@@ -25,12 +25,28 @@ namespace Wrhs.Operations.Relocation
 
         protected override RelocationDocumentLine CommandToDocumentLine(RelocDocBuilderAddLineCmd command)
         {
-            throw new NotImplementedException();
+            var line = new RelocationDocumentLine
+            {
+                Product = productRepository.GetById(command.ProductId),
+                Quantity = command.Quantity,
+                From = command.From,
+                To = command.To
+            };
+
+            return line;
         }
 
         protected override RelocDocBuilderAddLineCmd DocumentLineToAddLineCommand(RelocationDocumentLine line)
         {
-            throw new NotImplementedException();
+            var cmd = new RelocDocBuilderAddLineCmd
+            {
+                ProductId = line.Product.Id,
+                Quantity = line.Quantity,
+                From = line.From,
+                To = line.To
+            };
+
+            return cmd;
         }
     }
 }

@@ -4,7 +4,7 @@ using Wrhs.Products;
 
 namespace Wrhs.Documents
 {
-    public class DocBuilderAddLineCmdValidator : Validator<DocBuilderAddLineCmd>
+    public class DocBuilderAddLineCmdValidator : Validator<IDocBuilderAddLineCmd>
     {
         IRepository<Product> productRepository;
 
@@ -13,7 +13,7 @@ namespace Wrhs.Documents
             this.productRepository = productRepository;
         }
 
-        public override IEnumerable<ValidationResult> Validate(DocBuilderAddLineCmd command)
+        public override IEnumerable<ValidationResult> Validate(IDocBuilderAddLineCmd command)
         {
             var result = new List<ValidationResult>();
 
