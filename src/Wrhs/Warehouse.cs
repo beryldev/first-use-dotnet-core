@@ -5,7 +5,7 @@ using System;
 
 namespace Wrhs
 {
-    public class Warehouse
+    public class Warehouse : IWarehouse
     {
         IAllocationService allocService;
 

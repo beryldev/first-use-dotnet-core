@@ -6,7 +6,7 @@ namespace Wrhs.Documents
 {
     public class DocBuilderAddLineCmdValidator : Validator<IDocBuilderAddLineCmd>
     {
-        IRepository<Product> productRepository;
+        protected IRepository<Product> productRepository;
 
         public DocBuilderAddLineCmdValidator(IRepository<Product> productRepository)
         {
