@@ -1,9 +1,8 @@
-using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
-using Wrhs.Products;
 
 namespace Wrhs.Tests
 {
@@ -27,7 +26,7 @@ namespace Wrhs.Tests
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 1, Quantity = 5 };
+            var command = new RelocDocBuilderAddLineCmd { ProductId = 1, Quantity = 5, From = "LOC-001-01", To = "LOC-001-02" };
        
             builder.AddLine(command);
             var document = builder.Build();
@@ -35,6 +34,34 @@ namespace Wrhs.Tests
             Assert.AreEqual(1, document.Lines.Count);
             Assert.AreEqual(1, document.Lines[0].Product.Id);
             Assert.AreEqual(5, document.Lines[0].Quantity);
+            Assert.AreEqual("LOC-001-01", ((RelocationDocumentLine)document.Lines[0]).From);
+            Assert.AreEqual("LOC-001-02", ((RelocationDocumentLine)document.Lines[0]).To);
+        }
+
+        [Test]
+        public void AfterUpdateLineBuildReturnDocumentWithUpdatedLine()
+        {
+            var builder = MakeBuilder();
+
+            var command = new RelocDocBuilderAddLineCmd 
+            { 
+                ProductId = 1, 
+                Quantity = 5,  
+                From = "LOC-001-01",
+                To = "LOC-001-02"
+            };
+            builder.AddLine(command);
+
+            var line = builder.Lines.First() as RelocationDocumentLine;
+            line.Quantity = 20;
+            line.To = "LOC-001-03";
+
+            builder.UpdateLine(line);
+            var document = builder.Build();
+
+            Assert.AreEqual(1, document.Lines.Count);
+            Assert.AreEqual(20, document.Lines.First().Quantity);
+            Assert.AreEqual("LOC-001-03", ((RelocationDocumentLine)document.Lines.First()).To);
         }
 
         RelocationDocumentBuilder MakeBuilder()
@@ -46,18 +73,6 @@ namespace Wrhs.Tests
             return builder;
         }
 
-        IWarehouse MakeWarehouse(IRepository<Product> repo)
-        {
-            var warehouseMock = new Mock<IWarehouse>();
-            warehouseMock.Setup(m=>m.CalculateStocks(It.IsAny<string>()))
-                .Returns(new List<Stock>
-                {
-                    new Stock { Product=repo.GetById(5), Location="LOC-001-01", Quantity=5},
-                    new Stock { Product=repo.GetById(8), Location="LOC-001-01", Quantity=24},
-                    new Stock { Product=repo.GetById(5), Location="LOC-001-02", Quantity=15}
-                });
-
-            return warehouseMock.Object;
-        }
+       
     }
 }

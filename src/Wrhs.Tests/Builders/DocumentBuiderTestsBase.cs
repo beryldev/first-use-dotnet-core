@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Moq;
 using Wrhs.Core;
 using Wrhs.Products;
 
@@ -36,6 +37,20 @@ namespace Wrhs.Tests
             }
 
             return items;
+        }
+
+        protected IWarehouse MakeWarehouse(IRepository<Product> repo)
+        {
+            var warehouseMock = new Mock<IWarehouse>();
+            warehouseMock.Setup(m=>m.CalculateStocks(It.IsAny<string>()))
+                .Returns(new List<Stock>
+                {
+                    new Stock { Product=repo.GetById(5), Location="LOC-001-01", Quantity=5},
+                    new Stock { Product=repo.GetById(8), Location="LOC-001-01", Quantity=24},
+                    new Stock { Product=repo.GetById(5), Location="LOC-001-02", Quantity=15}
+                });
+
+            return warehouseMock.Object;
         }
     }
 }

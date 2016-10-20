@@ -10,7 +10,7 @@ namespace Wrhs.Tests
     public class DeliveryDocumentBuilderTests : DocumentBuilderTestsBase
     {
         [Test]
-        public void BuildReturnsDeliveryDocument()
+        public void OnBuildReturnsDeliveryDocument()
         {
             var builder = MakeBuilder();
 
