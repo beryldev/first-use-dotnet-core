@@ -7,7 +7,7 @@ using Wrhs.Products;
 
 namespace Wrhs.Operations.Relocation
 {
-    public class RelocDocAddLineCmdValidator : DocBuilderAddLineCmdValidator, IValidator<RelocDocBuilderAddLineCmd>
+    public class RelocDocAddLineCmdValidator : DocAddLineCmdValidator, IValidator<RelocDocAddLineCmd>
     {
         IWarehouse warehouse;
 
@@ -16,9 +16,9 @@ namespace Wrhs.Operations.Relocation
             this.warehouse = warehouse;
         }
 
-        public IEnumerable<ValidationResult> Validate(RelocDocBuilderAddLineCmd command)
+        public IEnumerable<ValidationResult> Validate(RelocDocAddLineCmd command)
         {
-            var result = (List<ValidationResult>)base.Validate((IDocBuilderAddLineCmd)command);
+            var result = (List<ValidationResult>)base.Validate((IDocAddLineCmd)command);
 
             if(String.IsNullOrWhiteSpace(command.From))
                 result.Add(new ValidationResult("From", "From address can't be empty."));

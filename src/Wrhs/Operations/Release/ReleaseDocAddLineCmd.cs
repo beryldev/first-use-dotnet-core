@@ -2,7 +2,7 @@ using Wrhs.Documents;
 
 namespace Wrhs.Operations.Release
 {
-    public class ReleaseDocAddLineCmd : DocBuilderAddLineCmd
+    public class ReleaseDocAddLineCmd : DocAddLineCmd
     {
         public string Location { get; set; }
     }

@@ -9,7 +9,7 @@ using Wrhs.Products;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class RelocDocBuilderAddLineCmdValidatorTests
+    public class RelocDocAddLineCmdValidatorTests
     {
         [Test]
         [TestCase(0)]
@@ -21,7 +21,7 @@ namespace Wrhs.Tests
             FillRepository(repo);  
             var warehouse = MakeWarehouse(repo);          
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd{ ProductId = productId, Quantity = 4, From="LOC-001-01", To="Loc-001-02" };
+            var command = new RelocDocAddLineCmd{ ProductId = productId, Quantity = 4, From="LOC-001-01", To="Loc-001-02" };
             
             var result = validator.Validate(command);
 
@@ -39,7 +39,7 @@ namespace Wrhs.Tests
             FillRepository(repo);
             var warehouse = MakeWarehouse(repo);
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 5, Quantity = quanitity, From="LOC-001-01", To="Loc-001-02" };
+            var command = new RelocDocAddLineCmd { ProductId = 5, Quantity = quanitity, From="LOC-001-01", To="Loc-001-02" };
 
             var result = validator.Validate(command);
 
@@ -58,7 +58,7 @@ namespace Wrhs.Tests
             FillRepository(repo);
             var warehouse = MakeWarehouse(repo);
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 5, Quantity = 3, From=from, To="Loc-001-02" };
+            var command = new RelocDocAddLineCmd { ProductId = 5, Quantity = 3, From=from, To="Loc-001-02" };
 
             var result = validator.Validate(command);
 
@@ -77,7 +77,7 @@ namespace Wrhs.Tests
             FillRepository(repo);
             var warehouse = MakeWarehouse(repo);
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 5, Quantity = 3, From="LOC-001-01", To=to };
+            var command = new RelocDocAddLineCmd { ProductId = 5, Quantity = 3, From="LOC-001-01", To=to };
 
             var result = validator.Validate(command);
 
@@ -97,7 +97,7 @@ namespace Wrhs.Tests
             FillRepository(repo);
             var warehouse = MakeWarehouse(repo);
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 5, Quantity = 3, From=from, To=to };
+            var command = new RelocDocAddLineCmd { ProductId = 5, Quantity = 3, From=from, To=to };
 
             var result = validator.Validate(command).ToArray();
 
@@ -114,7 +114,7 @@ namespace Wrhs.Tests
             FillRepository(repo);
             var warehouse = MakeWarehouse(repo);
             var validator = new RelocDocAddLineCmdValidator(repo, warehouse);
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 5, Quantity = 6, From="LOC-001-01", To="LOC-001-02" };
+            var command = new RelocDocAddLineCmd { ProductId = 5, Quantity = 6, From="LOC-001-01", To="LOC-001-02" };
 
             var result = validator.Validate(command).ToArray();
 

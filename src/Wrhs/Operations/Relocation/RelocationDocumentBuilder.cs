@@ -6,11 +6,11 @@ using Wrhs.Products;
 namespace Wrhs.Operations.Relocation
 {
     public class RelocationDocumentBuilder 
-        : DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocBuilderAddLineCmd>
+        : DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd>
     {
         IRepository<Product> productRepository;
 
-        public RelocationDocumentBuilder(IRepository<Product> productRepository, IValidator<RelocDocBuilderAddLineCmd> addLineValidator) 
+        public RelocationDocumentBuilder(IRepository<Product> productRepository, IValidator<RelocDocAddLineCmd> addLineValidator) 
             : base(addLineValidator)
         {
             this.productRepository = productRepository;
@@ -23,7 +23,7 @@ namespace Wrhs.Operations.Relocation
             return document;
         }
 
-        protected override RelocationDocumentLine CommandToDocumentLine(RelocDocBuilderAddLineCmd command)
+        protected override RelocationDocumentLine CommandToDocumentLine(RelocDocAddLineCmd command)
         {
             var line = new RelocationDocumentLine
             {
@@ -36,9 +36,9 @@ namespace Wrhs.Operations.Relocation
             return line;
         }
 
-        protected override RelocDocBuilderAddLineCmd DocumentLineToAddLineCommand(RelocationDocumentLine line)
+        protected override RelocDocAddLineCmd DocumentLineToAddLineCommand(RelocationDocumentLine line)
         {
-            var cmd = new RelocDocBuilderAddLineCmd
+            var cmd = new RelocDocAddLineCmd
             {
                 ProductId = line.Product.Id,
                 Quantity = line.Quantity,

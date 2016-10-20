@@ -22,7 +22,7 @@ namespace Wrhs.Tests
         public DeliveryDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<DocBuilderAddLineCmd>>();
+            var addLineValidMock = new Mock<IValidator<DocAddLineCmd>>();
 
             var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object);
             return builder;

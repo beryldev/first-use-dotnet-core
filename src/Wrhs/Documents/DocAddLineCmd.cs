@@ -1,6 +1,6 @@
 namespace Wrhs.Documents
 {
-    public class DocBuilderAddLineCmd : IDocBuilderAddLineCmd
+    public class DocAddLineCmd : IDocAddLineCmd
     {
         public int ProductId { get; set; }
 
@@ -8,7 +8,7 @@ namespace Wrhs.Documents
     }
 
 
-    public interface IDocBuilderAddLineCmd
+    public interface IDocAddLineCmd
     {
         int ProductId { get; set; }
 

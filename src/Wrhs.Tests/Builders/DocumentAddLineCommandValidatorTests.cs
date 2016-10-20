@@ -7,7 +7,7 @@ using Wrhs.Products;
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class DocumentBuilderAddLineCommandValidatorTests
+    public class DocumentAddLineCommandValidatorTests
     {
         [Test]
         [TestCase(0)]
@@ -17,8 +17,8 @@ namespace Wrhs.Tests
         {
             var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);            
-            var validator = new DocBuilderAddLineCmdValidator(repo);
-            var command = new DocBuilderAddLineCmd{ ProductId = productId, Quantity = 4 };
+            var validator = new DocAddLineCmdValidator(repo);
+            var command = new DocAddLineCmd{ ProductId = productId, Quantity = 4 };
             
             var result = validator.Validate(command);
 
@@ -34,8 +34,8 @@ namespace Wrhs.Tests
         {
             var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);
-            var validator = new DocBuilderAddLineCmdValidator(repo);
-            var command = new DocBuilderAddLineCmd { ProductId = 5, Quantity = quanitity };
+            var validator = new DocAddLineCmdValidator(repo);
+            var command = new DocAddLineCmd { ProductId = 5, Quantity = quanitity };
 
             var result = validator.Validate(command);
 

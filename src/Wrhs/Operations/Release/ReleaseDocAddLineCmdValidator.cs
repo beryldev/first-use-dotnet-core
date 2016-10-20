@@ -7,7 +7,7 @@ using Wrhs.Products;
 
 namespace Wrhs.Operations.Release
 {
-    public class ReleaseDocAddLineCmdValidator : DocBuilderAddLineCmdValidator, IValidator<ReleaseDocAddLineCmd>
+    public class ReleaseDocAddLineCmdValidator : DocAddLineCmdValidator, IValidator<ReleaseDocAddLineCmd>
     {
         IWarehouse warehouse;
 

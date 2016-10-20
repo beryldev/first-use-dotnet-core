@@ -4,12 +4,12 @@ using Wrhs.Products;
 
 namespace Wrhs.Operations.Delivery
 {
-    public class DeliveryDocumentBuilder : DocumentBuilder<DeliveryDocument, DeliveryDocumentLine, DocBuilderAddLineCmd>
+    public class DeliveryDocumentBuilder : DocumentBuilder<DeliveryDocument, DeliveryDocumentLine, DocAddLineCmd>
     {
         IRepository<Product> productRepository;
 
         public DeliveryDocumentBuilder(IRepository<Product> productRepository,
-            IValidator<DocBuilderAddLineCmd> addLineValidator)
+            IValidator<DocAddLineCmd> addLineValidator)
             : base(addLineValidator)
         {
             this.productRepository = productRepository;
@@ -23,7 +23,7 @@ namespace Wrhs.Operations.Delivery
             return document;
         }
 
-        protected override DeliveryDocumentLine CommandToDocumentLine(DocBuilderAddLineCmd command)
+        protected override DeliveryDocumentLine CommandToDocumentLine(DocAddLineCmd command)
         {
             return new DeliveryDocumentLine
             {
@@ -32,9 +32,9 @@ namespace Wrhs.Operations.Delivery
             };
         }
 
-        protected override DocBuilderAddLineCmd DocumentLineToAddLineCommand(DeliveryDocumentLine line)
+        protected override DocAddLineCmd DocumentLineToAddLineCommand(DeliveryDocumentLine line)
         {
-            return new DocBuilderAddLineCmd
+            return new DocAddLineCmd
             {
                 ProductId = line.Product.Id,
                 Quantity = line.Quantity

@@ -26,7 +26,7 @@ namespace Wrhs.Tests
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
-            var command = new RelocDocBuilderAddLineCmd { ProductId = 1, Quantity = 5, From = "LOC-001-01", To = "LOC-001-02" };
+            var command = new RelocDocAddLineCmd { ProductId = 1, Quantity = 5, From = "LOC-001-01", To = "LOC-001-02" };
        
             builder.AddLine(command);
             var document = builder.Build();
@@ -43,7 +43,7 @@ namespace Wrhs.Tests
         {
             var builder = MakeBuilder();
 
-            var command = new RelocDocBuilderAddLineCmd 
+            var command = new RelocDocAddLineCmd 
             { 
                 ProductId = 1, 
                 Quantity = 5,  
@@ -67,7 +67,7 @@ namespace Wrhs.Tests
         RelocationDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<RelocDocBuilderAddLineCmd>>();
+            var addLineValidMock = new Mock<IValidator<RelocDocAddLineCmd>>();
 
             var builder = new RelocationDocumentBuilder(repo, addLineValidMock.Object);
             return builder;
