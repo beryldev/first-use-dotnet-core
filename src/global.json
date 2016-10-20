@@ -1,6 +1,7 @@
 {
     "projects": [
         "Wrhs",
-        "Wrhs.Tests"
+        "Wrhs.Tests",
+        "Wrhs.Data"
     ]
 }
