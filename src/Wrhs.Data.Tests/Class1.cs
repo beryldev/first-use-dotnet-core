@@ -6,13 +6,13 @@ namespace Wrhs.Data.Tests
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
     public class Class1
     {
-        [Fact]
+        //[Fact]
         public void PassingTest()
         {
             Assert.Equal(4, Add(2, 2));
         }
 
-        [Fact]
+        //[Fact]
         public void FailingTest()
         {
             Assert.Equal(5, Add(2, 2));

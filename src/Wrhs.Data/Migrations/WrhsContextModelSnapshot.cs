@@ -7,8 +7,8 @@ using Wrhs.Data;
 
 namespace Wrhs.Data.Migrations
 {
-    [DbContext(typeof(ProductContext))]
-    partial class ProductContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(WrhsContext))]
+    partial class WrhsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

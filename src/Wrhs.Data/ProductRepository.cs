@@ -8,11 +8,11 @@ namespace Wrhs.Data
 {
     public class ProductRepository : IRepository<Product>, IDisposable
     {
-        ProductContext context;
+        WrhsContext context;
 
-        public ProductRepository()
+        public ProductRepository(WrhsContext context)
         {
-            context = new ProductContext();
+            this.context = context;
         }
 
         public IEnumerable<Product> Get()
@@ -37,14 +37,15 @@ namespace Wrhs.Data
 
         public void Delete(Product item)
         {
-            throw new NotImplementedException();
+            context.Products.Remove(item);
+            context.SaveChanges();
         }
 
-       
-
+        
         public void Update(Product item)
         {
-            throw new NotImplementedException();
+            context.Update(item);
+            context.SaveChanges();
         }
 
         #region IDisposable Support

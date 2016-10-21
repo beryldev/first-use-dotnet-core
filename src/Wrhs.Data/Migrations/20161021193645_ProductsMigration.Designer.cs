@@ -7,8 +7,8 @@ using Wrhs.Data;
 
 namespace Wrhs.Data.Migrations
 {
-    [DbContext(typeof(ProductContext))]
-    [Migration("20161020192945_ProductsMigration")]
+    [DbContext(typeof(WrhsContext))]
+    [Migration("20161021193645_ProductsMigration")]
     partial class ProductsMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
