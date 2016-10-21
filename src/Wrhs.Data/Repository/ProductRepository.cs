@@ -4,7 +4,7 @@ using System.Linq;
 using Wrhs.Core;
 using Wrhs.Products;
 
-namespace Wrhs.Data
+namespace Wrhs.Data.Repository
 {
     public class ProductRepository : IRepository<Product>, IDisposable
     {

@@ -8,9 +8,10 @@ using Wrhs.Data;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    partial class WrhsContextModelSnapshot : ModelSnapshot
+    [Migration("20161021201832_AllocationsMigration")]
+    partial class AllocationsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");

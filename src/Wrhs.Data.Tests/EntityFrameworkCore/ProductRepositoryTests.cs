@@ -1,8 +1,9 @@
 using System.Linq;
 using Wrhs.Products;
+using Wrhs.Data.Repository;
 using Xunit;
 
-namespace Wrhs.Data.Tests.EntityFrameworkCore
+namespace Wrhs.Data.Tests
 {
     public class ProductRepositoryTests : TestsBase
     {

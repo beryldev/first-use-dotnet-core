@@ -1,6 +1,6 @@
 using Wrhs.Data.ContextFactory;
 
-namespace Wrhs.Data.Tests.EntityFrameworkCore
+namespace Wrhs.Data.Tests
 {
     public class TestsBase
     {
