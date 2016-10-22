@@ -18,7 +18,8 @@ namespace Wrhs.Data.Repository
 
         public void Delete(DeliveryDocument item)
         {
-            throw new NotImplementedException();
+            context.DeliveryDocuments.Remove(item);
+            context.SaveChanges();
         }
 
         public IEnumerable<DeliveryDocument> Get()

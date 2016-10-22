@@ -64,6 +64,20 @@ namespace Wrhs.Data.Tests
             Assert.Equal(200, doc.Lines.First().Quantity);
         }
 
+        [Fact]
+        public void ShouldDeleteDocumentWithLines()
+        {
+            context.DeliveryDocuments.Add(CreateDocument());
+            context.SaveChanges();
+            var repo = new DeliveryDocumentRepository(context);
+
+            var document = repo.GetById(1);
+            repo.Delete(document);
+
+            Assert.Empty(context.DeliveryDocuments);
+            Assert.Empty(context.DeliveryDocumentLines);
+        }
+
         DeliveryDocument CreateDocument()
         {
             var doc = new DeliveryDocument

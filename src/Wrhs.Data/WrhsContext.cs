@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Wrhs.Data.ContextFactory;
@@ -18,7 +20,7 @@ namespace Wrhs.Data
         public DbSet<DeliveryDocumentLine> DeliveryDocumentLines { get; set; }
 
         public WrhsContext(DbContextOptions<WrhsContext> options)
-            : base(options){ }
+            : base(options){ }      
     }
 
     public class WrhsContextFactory : IDbContextFactory<WrhsContext>
