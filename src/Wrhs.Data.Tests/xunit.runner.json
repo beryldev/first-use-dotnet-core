@@ -1,6 +1,6 @@
 {
     "diagnosticMessages": false,
     "methodDisplay": "classAndMethod",
-    "parallelizeTestCollections": true
+    "parallelizeTestCollections": false
 
 }

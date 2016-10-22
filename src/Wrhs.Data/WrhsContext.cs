@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Wrhs.Data.ContextFactory;
 using Wrhs.Operations;
+using Wrhs.Operations.Delivery;
 using Wrhs.Products;
 
 namespace Wrhs.Data
@@ -11,6 +12,10 @@ namespace Wrhs.Data
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Allocation> Allocations { get; set; }
+
+        public DbSet<DeliveryDocument> DeliveryDocuments { get; set; }
+
+        public DbSet<DeliveryDocumentLine> DeliveryDocumentLines { get; set; }
 
         public WrhsContext(DbContextOptions<WrhsContext> options)
             : base(options){ }

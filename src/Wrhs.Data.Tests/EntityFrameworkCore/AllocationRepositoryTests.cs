@@ -16,10 +16,10 @@ namespace Wrhs.Data.Tests
         }
 
         [Fact]
-        public void CanSaveAllocation()
+        public void ShouldSaveAllocation()
         {
            
-            var product = CreateProduct();
+            var product = CreateProduct(context);
             var repo = new AllocationRepository(context);
 
             var allocation = new Allocation
@@ -35,9 +35,9 @@ namespace Wrhs.Data.Tests
         }
 
         [Fact]
-        public void CanRetriveAllocationById()
+        public void ShouldRetriveAllocationById()
         {
-            var product = CreateProduct();
+            var product = CreateProduct(context);
             var repo = new AllocationRepository(context);
 
             var allocation = new Allocation
@@ -57,7 +57,7 @@ namespace Wrhs.Data.Tests
         [Fact]
         public void SavedAllocationHaveRelatedProduct()
         {
-            var product = CreateProduct();
+            var product = CreateProduct(context);
             var repo = new AllocationRepository(context);
 
             var allocation = new Allocation
@@ -73,18 +73,47 @@ namespace Wrhs.Data.Tests
             Assert.Equal("PROD1", alloc.Product.Code);
         }
 
-        Product CreateProduct()
+        [Fact]
+        public void ShouldUpdateAllocation()
         {
-            var productRepo = new ProductRepository(context);
-            var product = new Product
+            var product = CreateProduct(context);
+            var repo = new AllocationRepository(context);
+
+            var allocation = new Allocation
             {
-                Code = "PROD1",
-                Name = "Product 1",
-                EAN = "1111",
-                SKU = "111"
+                Product = product,
+                Location = "LOC-001-01",
+                Quantity = 100
             };
-            productRepo.Save(product);
-            return product;
+
+            repo.Save(allocation);
+            var id = allocation.Id;
+            allocation.Location = "LOC-002-02";
+            allocation.Quantity = 10;
+            repo.Update(allocation);
+            var updated = repo.Get().First();
+
+            Assert.Equal("LOC-002-02", updated.Location);
+            Assert.Equal(10, updated.Quantity);
+        }
+
+        [Fact]
+        public void ShouldDeleteAllocation()
+        {
+            var product = CreateProduct(context);
+            var repo = new AllocationRepository(context);
+
+            var allocation = new Allocation
+            {
+                Product = product,
+                Location = "LOC-001-01",
+                Quantity = 100
+            };
+
+            repo.Save(allocation);
+            repo.Delete(allocation);
+
+            Assert.Empty(repo.Get());
         }
     }
 }

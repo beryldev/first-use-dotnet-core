@@ -8,9 +8,10 @@ using Wrhs.Data;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    partial class WrhsContextModelSnapshot : ModelSnapshot
+    [Migration("20161022091751_DeliveryDocuments")]
+    partial class DeliveryDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
@@ -21,9 +22,6 @@ namespace Wrhs.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("DeliveryDocumentId");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
 
                     b.Property<string>("EAN");
 
@@ -42,8 +40,6 @@ namespace Wrhs.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("DocumentLine");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("DocumentLine");
                 });
 
             modelBuilder.Entity("Wrhs.Operations.Allocation", b =>
@@ -96,16 +92,6 @@ namespace Wrhs.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Delivery.DeliveryDocumentLine", b =>
-                {
-                    b.HasBaseType("Wrhs.Documents.DocumentLine");
-
-
-                    b.ToTable("DeliveryDocumentLine");
-
-                    b.HasDiscriminator().HasValue("DeliveryDocumentLine");
                 });
 
             modelBuilder.Entity("Wrhs.Documents.DocumentLine", b =>

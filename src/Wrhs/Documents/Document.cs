@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public class Document : IDocument
+    public class Document : IDocument, IEntity
     {
         public virtual int Id { get; set; }
 

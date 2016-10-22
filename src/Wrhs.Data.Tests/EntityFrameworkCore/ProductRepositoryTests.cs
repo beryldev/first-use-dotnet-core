@@ -15,7 +15,7 @@ namespace Wrhs.Data.Tests
         }   
 
         [Fact]
-        public void CanSaveProduct()
+        public void ShouldSaveProduct()
         {
             var repo = new ProductRepository(context);
             var product = new Product
@@ -33,7 +33,7 @@ namespace Wrhs.Data.Tests
         }
 
         [Fact]
-        public void CanRetriveProductById()
+        public void ShouldRetriveProductById()
         {
             var repo = new ProductRepository(context);
             var product = new Product
@@ -52,7 +52,7 @@ namespace Wrhs.Data.Tests
         }
 
         [Fact]
-        public void CanDeleteProduct()
+        public void ShouldDeleteProduct()
         {
             //Given
             var repo = new ProductRepository(context);
@@ -72,7 +72,7 @@ namespace Wrhs.Data.Tests
         }
 
         [Fact]
-        public void CanUpdateProduct()
+        public void ShouldUpdateProduct()
         {
             var repo = new ProductRepository(context);
             var product = new Product

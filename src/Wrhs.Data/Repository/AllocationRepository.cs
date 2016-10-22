@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Core;
@@ -17,7 +16,8 @@ namespace Wrhs.Data.Repository
 
         public void Delete(Allocation item)
         {
-            throw new NotImplementedException();
+            context.Allocations.Remove(item);
+            context.SaveChanges();
         }
 
         public IEnumerable<Allocation> Get()
@@ -42,7 +42,8 @@ namespace Wrhs.Data.Repository
 
         public void Update(Allocation item)
         {
-            throw new NotImplementedException();
+            context.Allocations.Update(item);
+            context.SaveChanges();
         }
     }
 }
