@@ -8,7 +8,7 @@ namespace Wrhs.Operations.Relocation
 {
     public class RelocationOperation : IOperation
     {
-        public Document BaseDocument
+        public RelocationDocument BaseDocument
         {
             get { return baseDocument; }
         }
@@ -34,7 +34,7 @@ namespace Wrhs.Operations.Relocation
             }
         }
 
-        Document baseDocument;
+        RelocationDocument baseDocument;
 
         List<Allocation> pendingAllocations = new List<Allocation>();
 

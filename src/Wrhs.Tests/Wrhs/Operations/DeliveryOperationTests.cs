@@ -11,22 +11,11 @@ namespace Wrhs.Tests
 {
     [TestFixture]
     public class DeliveryOperationTests
-    {
-        [Test]
-        public void OperationCanBasedOnOrder()
-        {
-            var order = new Order();
-            var operation = new DeliveryOperation();
-
-            operation.SetBaseDocument(order);
-
-            Assert.AreEqual(order, operation.BaseDocument);
-        }
-
+    { 
         [Test]
         public void OperationCanBasedOnDeliveryDocument()
         {
-            var document = new DeliveryDocument();
+            var document = new Operations.Delivery.DeliveryDocument();
             var operation = new DeliveryOperation();
 
             operation.SetBaseDocument(document);
@@ -35,51 +24,14 @@ namespace Wrhs.Tests
         }
 
         [Test]
-        public void CanAcccessDirectlyToBaseOrder()
-        {
-            var document = new Order();
-            var operation = new DeliveryOperation();
-            operation.BaseOrder = document;
-
-            Assert.AreEqual(document, operation.BaseDocument);
-        }
-
-        [Test]
         public void CanAccessDirectlyToBaseDeliveryDocument()
         {
-            var document = new DeliveryDocument();
+            var document = new Operations.Delivery.DeliveryDocument();
             var operation = new DeliveryOperation();
 
             operation.BaseDeliveryDocument = document;
 
             Assert.AreEqual(document, operation.BaseDocument);
-        }
-
-        [Test]
-        public void BaseDocumentIsAlwaysLastSetDocumentOrderThenDeliveryDoc()
-        {
-            var operation = new DeliveryOperation();
-            var order = new Order();
-            var deliveryDoc = new DeliveryDocument();
-
-            operation.SetBaseDocument(order);
-            operation.SetBaseDocument(deliveryDoc);
-
-            Assert.AreEqual(deliveryDoc, operation.BaseDocument);
-
-        }
-
-        [Test]
-        public void BaseDocumentIsAlwaysLastSetDocumentDeliveryDocThenOrder()
-        {
-            var operation = new DeliveryOperation();
-            var order = new Order();
-            var deliveryDoc = new DeliveryDocument();
-
-            operation.SetBaseDocument(deliveryDoc);
-            operation.SetBaseDocument(order);
-
-            Assert.AreEqual(order, operation.BaseDocument);
         }
 
         [Test]
@@ -99,8 +51,8 @@ namespace Wrhs.Tests
         {
             var mock = new Mock<IAllocationService>();
             var operation = new DeliveryOperation();
-            var order = new Order();
-            operation.SetBaseDocument(order);
+            var document = new DeliveryDocument();
+            operation.SetBaseDocument(document);
             
             var result = operation.Perform(mock.Object);
 
@@ -112,8 +64,8 @@ namespace Wrhs.Tests
         {
             var mock = new Mock<IAllocationService>();
             var operation = new DeliveryOperation();
-            var order = new Order();
-            operation.SetBaseDocument(order);
+            var document = new Operations.Delivery.DeliveryDocument();
+            operation.SetBaseDocument(document);
 
             var result = operation.Perform(mock.Object);
 
@@ -125,8 +77,8 @@ namespace Wrhs.Tests
         {
             var mock = new Mock<IAllocationService>();
             var operation = new DeliveryOperation();
-            var order = new Order();
-            operation.SetBaseDocument(order);
+            var document = new Operations.Delivery.DeliveryDocument();
+            operation.SetBaseDocument(document);
 
             var result = operation.Perform(mock.Object);
 
@@ -137,14 +89,14 @@ namespace Wrhs.Tests
         public void CanAllocateItemFromBaseDocument()
         {
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
+            var document = CreateDeliveryDocument();
 
             var location = "I-100-10";
             var quantity = 5;
-            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+            operation.AllocateItem(document.Lines.First(), quantity, location);
             var allocation = operation.PendingAllocations.First();
 
-            Assert.AreEqual(allocation.Product, order.Lines.First().Product);
+            Assert.AreEqual(allocation.Product, document.Lines.First().Product);
             Assert.AreEqual(allocation.Quantity, quantity);
             Assert.AreEqual(allocation.Location, location);
         }
@@ -153,11 +105,11 @@ namespace Wrhs.Tests
         public void WhenTryAllocateZeroQuantityThenNoEffect()
         {
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
+            var document = CreateDeliveryDocument();
 
             var location = "I-100-10";
             var quantity = 0;
-            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+            operation.AllocateItem(document.Lines.First(), quantity, location);
 
             CollectionAssert.IsEmpty(operation.PendingAllocations);
         }
@@ -166,14 +118,14 @@ namespace Wrhs.Tests
         public void ThrowsExceptionWhenTryAllocateToEmptyLocationAddress()
         {
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
+            var document = CreateDeliveryDocument();
 
             var location = String.Empty;
             var quantity = 1;
 
             Assert.Throws<InvalidOperationException>(()=>
             {
-                operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+                operation.AllocateItem(document.Lines.First(), quantity, location);
             });
         }
 
@@ -181,18 +133,18 @@ namespace Wrhs.Tests
         public void ThrowsExceptionWhenTryAllocateMoreThanOnDocument()
         {
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
-            operation.SetBaseDocument(order);
+            var document = CreateDeliveryDocument();
+            operation.SetBaseDocument(document);
 
             var location = "LOC-001-01";
             var quantity = 3;
 
     
-            operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+            operation.AllocateItem(document.Lines.First(), quantity, location);
 
             Assert.Throws<InvalidOperationException>(()=>
             {
-                operation.AllocateItem((OrderLine)order.Lines.First(), quantity, location);
+                operation.AllocateItem(document.Lines.First(), quantity, location);
             });
         }
 
@@ -201,8 +153,8 @@ namespace Wrhs.Tests
         {
             var mock = new Mock<IAllocationService>();
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
-            operation.BaseOrder = order;
+            var document = CreateDeliveryDocument();
+            operation.BaseDeliveryDocument = document;
 
             var result = operation.Perform(mock.Object);
 
@@ -215,18 +167,20 @@ namespace Wrhs.Tests
         {
             var mock = new Mock<IAllocationService>();
             var operation = new DeliveryOperation();
-            operation.SetBaseDocument(PrepareOrder());
-            operation.AllocateItem((OrderLine)operation.BaseDocument.Lines.First(), 5, "LOC-001-01");
+            operation.SetBaseDocument(CreateDeliveryDocument());
+            operation.AllocateItem(operation.BaseDocument.Lines.First(), 5, "LOC-001-01");
 
             operation.Perform(mock.Object);
 
             mock.Verify(m=>m.RegisterAllocation(It.IsAny<Allocation>()), Times.Once());
         }
 
-        protected Order PrepareOrder()
+        protected DeliveryDocument CreateDeliveryDocument()
         {
-            var order = new Order();
-            order.Lines.Add(new OrderLine
+            var doc = new DeliveryDocument();
+
+
+            doc.Lines.Add(new DeliveryDocumentLine
             {
                 Product = new Product{ Name = "Some product", Code = "SPROD" },
                 EAN = "1234567890",
@@ -235,7 +189,7 @@ namespace Wrhs.Tests
                 Remarks = ""
             });
 
-            return order;
+            return doc;
         }
     }
 }

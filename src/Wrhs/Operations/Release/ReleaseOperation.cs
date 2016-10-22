@@ -8,7 +8,7 @@ namespace Wrhs.Operations.Release
 {
     public class ReleaseOperation : IOperation
     {
-        public Document BaseDocument { get { return baseDocument; } }
+        public ReleaseDocument BaseDocument { get { return baseDocument; } }
 
         public ReleaseDocument BaseReleaseDocument
         {
@@ -26,7 +26,7 @@ namespace Wrhs.Operations.Release
             get { return pendingAllocations.ToList(); }
         }
         
-        Document baseDocument;
+        ReleaseDocument baseDocument;
 
         List<Allocation> pendingAllocations = new List<Allocation>();
 

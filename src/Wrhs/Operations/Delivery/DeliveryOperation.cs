@@ -13,18 +13,9 @@ namespace Wrhs.Operations.Delivery
         
         public List<Allocation> PendingAllocations { get { return pendingAllocations.ToList();} }
 
-        public Document BaseDocument 
+        public DeliveryDocument BaseDocument 
         { 
            get { return baseDocument; }
-        }
-
-        public Order BaseOrder 
-        { 
-            get 
-            { 
-                return baseDocument.GetType() == typeof(Order) ? (Order)baseDocument : null; 
-            } 
-            set { baseDocument = value; }
         }
 
         public DeliveryDocument BaseDeliveryDocument
@@ -36,7 +27,7 @@ namespace Wrhs.Operations.Delivery
             set { baseDocument = value; }
         }
 
-        Document baseDocument;
+        DeliveryDocument baseDocument;
 
         public OperationResult Perform(IAllocationService allocService)
         {
@@ -66,17 +57,12 @@ namespace Wrhs.Operations.Delivery
             return result;
         }
 
-        public void SetBaseDocument(Order order)
-        {
-            baseDocument = order;
-        }
-
         public void SetBaseDocument(DeliveryDocument delivery)
         {
             baseDocument = delivery;
         }
 
-        public void AllocateItem(OrderLine item, decimal quantity, string location)
+        public void AllocateItem(DeliveryDocumentLine item, decimal quantity, string location)
         {
             if(String.IsNullOrWhiteSpace(location))
                 throw new InvalidOperationException("Wrong location address (empty)");

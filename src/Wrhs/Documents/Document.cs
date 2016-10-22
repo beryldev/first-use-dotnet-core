@@ -4,7 +4,8 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public class Document : IDocument, IEntity
+    public class Document<TLine> : IDocument<TLine>, IEntity
+        where TLine : IDocumentLine
     {
         public virtual int Id { get; set; }
 
@@ -12,7 +13,7 @@ namespace Wrhs.Documents
 
         public virtual DateTime IssueDate { get; set; }
 
-        public virtual List<DocumentLine> Lines { get; } = new List<DocumentLine>();
+        public virtual List<TLine> Lines { get; } = new List<TLine>();
 
     }
 }

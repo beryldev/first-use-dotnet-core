@@ -323,10 +323,10 @@ namespace Wrhs.Tests
             return new Warehouse(allocService, cache);
         }
 
-        protected Order PrepareOrder()
+        protected DeliveryDocument CreateDeliveryDocument()
         {
-            var order = new Order();
-            order.Lines.Add(new OrderLine
+            var doc = new DeliveryDocument();
+            doc.Lines.Add(new DeliveryDocumentLine
             {
                 Product = new Product{ Name = "Some product", Code = "SPROD" },
                 EAN = "1234567890",
@@ -335,15 +335,15 @@ namespace Wrhs.Tests
                 Remarks = ""
             });
 
-            return order;
+            return doc;
         }
 
         protected DeliveryOperation PrepareDeliveryOperation()
         {
             var operation = new DeliveryOperation();
-            var order = PrepareOrder();
+            var order = CreateDeliveryDocument();
             operation.SetBaseDocument(order);
-            operation.AllocateItem((OrderLine)order.Lines[0], 5, "LOC-001-01");
+            operation.AllocateItem(order.Lines[0], 5, "LOC-001-01");
 
             return operation;
         }

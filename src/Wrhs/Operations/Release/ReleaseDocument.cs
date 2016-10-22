@@ -3,7 +3,7 @@ using Wrhs.Documents;
 
 namespace Wrhs.Operations.Release
 {
-    public class ReleaseDocument : Document
+    public class ReleaseDocument : Document<ReleaseDocumentLine>
     {
         
     }

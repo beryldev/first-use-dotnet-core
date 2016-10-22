@@ -18,6 +18,10 @@ namespace Wrhs.Data.Repository
 
         public void Delete(DeliveryDocument item)
         {
+            //TODO temporary
+            foreach(var line in item.Lines)
+                context.DeliveryDocumentLines.Remove(line as DeliveryDocumentLine);
+
             context.DeliveryDocuments.Remove(item);
             context.SaveChanges();
         }

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Wrhs.Documents
 {
-    public interface IDocument
+    public interface IDocument<TLine> where TLine : IDocumentLine
     {
         string FullNumber { get; set; }
 
         DateTime IssueDate { get; set; }
 
-        List<DocumentLine> Lines { get; }
+        List<TLine> Lines { get; }
     }
 }

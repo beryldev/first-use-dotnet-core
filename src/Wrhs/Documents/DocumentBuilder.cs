@@ -6,7 +6,7 @@ using Wrhs.Core;
 namespace Wrhs.Documents
 {
     public abstract class DocumentBuilder<TDocument, TDocLine, TAddLineCmd>
-        where TDocument : IDocument
+        where TDocument : IDocument<TDocLine>
         where TDocLine : IDocumentLine 
     {
         public event EventHandler<IEnumerable<ValidationResult>> OnAddLineFail;

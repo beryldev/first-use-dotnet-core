@@ -168,7 +168,7 @@ namespace Wrhs.Tests
         }      
     }
 
-    class DocumentBuilderClassInTest : DocumentBuilder<Document, DocumentLine, DocAddLineCmd>
+    class DocumentBuilderClassInTest : DocumentBuilder<Document<DocumentLine>, DocumentLine, DocAddLineCmd>
     {
         IRepository<Product> productRepository;
 
@@ -178,12 +178,12 @@ namespace Wrhs.Tests
             this.productRepository = productRepository;
         }
 
-        public override Document Build()
+        public override Document<DocumentLine> Build()
         {
-            var doc = new Document();
+            var doc = new Document<DocumentLine>();
             doc.Lines.AddRange(lines);
 
-            return (Document)doc;
+            return doc;
         }
 
         protected override DocumentLine CommandToDocumentLine(DocAddLineCmd command)
