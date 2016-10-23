@@ -20,9 +20,8 @@ namespace Wrhs.WebApp.Controllers
     {
         IRepository<Product> repo;
         
-        public ProductsController()
+        public ProductsController(WrhsContext context)
         {
-            var context = SqliteContextFactory.Create("Filename=./wrhs.db");
             context.Database.EnsureCreated();
             repo = new ProductRepository(context);
         }
@@ -33,12 +32,11 @@ namespace Wrhs.WebApp.Controllers
             var paginator = new Paginator<Product>();
             var search = new ProductSearch(repo, paginator);
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
-            criteria.WhereCode(Condition.Equal, "PROD1");
             return search.Exec(criteria);
         }
 
         [HttpPost]
-        public void Post(CreateProductCommand cmd)
+        public void Post([FromBody]CreateProductCommand cmd)
         {
             var handler = new CreateProductCommandHandler(repo);
             var validator = new CreateProductCommandValidator(repo);

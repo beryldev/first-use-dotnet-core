@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Wrhs.Data;
+using Wrhs.Data.ContextFactory;
 
 namespace Wrhs.WebApp
 {
@@ -29,6 +31,7 @@ namespace Wrhs.WebApp
         {
             // Add framework services.
             services.AddMvc();
+            services.AddTransient(typeof(WrhsContext), (IServiceProvider provider)=>{ return SqliteContextFactory.Create("Filename=./wrhs.db"); });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
