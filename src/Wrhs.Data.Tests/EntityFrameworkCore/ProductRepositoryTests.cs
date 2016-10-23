@@ -29,6 +29,7 @@ namespace Wrhs.Data.Tests
 
             repo.Save(product);
 
+
             Assert.Equal(1, repo.Get().Count());
         }
 

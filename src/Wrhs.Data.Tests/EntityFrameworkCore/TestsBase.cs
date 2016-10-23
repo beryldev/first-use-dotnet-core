@@ -9,7 +9,6 @@ namespace Wrhs.Data.Tests
         protected WrhsContext CreateContext()
         {
             var context = InMemoryContextFactory.Create();
-            //var context = SqliteContextFactory.Create("Filename=./wrhs.db");
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 

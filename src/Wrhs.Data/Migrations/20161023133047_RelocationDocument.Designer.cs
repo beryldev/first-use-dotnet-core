@@ -8,12 +8,14 @@ using Wrhs.Data;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    partial class WrhsContextModelSnapshot : ModelSnapshot
+    [Migration("20161023133047_RelocationDocument")]
+    partial class RelocationDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
+                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Wrhs.Operations.Allocation", b =>
                 {
@@ -71,48 +73,6 @@ namespace Wrhs.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("DeliveryDocumentLines");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FullNumber");
-
-                    b.Property<DateTime>("IssueDate");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReleaseDocuments");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocumentLine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EAN");
-
-                    b.Property<string>("Location");
-
-                    b.Property<int?>("ProductId");
-
-                    b.Property<decimal>("Quantity");
-
-                    b.Property<int?>("ReleaseDocumentId");
-
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SKU");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ReleaseDocumentId");
-
-                    b.ToTable("ReleaseDocumentLines");
                 });
 
             modelBuilder.Entity("Wrhs.Operations.Relocation.RelocationDocument", b =>
@@ -195,17 +155,6 @@ namespace Wrhs.Data.Migrations
                     b.HasOne("Wrhs.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocumentLine", b =>
-                {
-                    b.HasOne("Wrhs.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Wrhs.Operations.Release.ReleaseDocument")
-                        .WithMany("Lines")
-                        .HasForeignKey("ReleaseDocumentId");
                 });
 
             modelBuilder.Entity("Wrhs.Operations.Relocation.RelocationDocumentLine", b =>
