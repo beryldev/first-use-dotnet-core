@@ -6,6 +6,6 @@ namespace Wrhs
     {
         IEnumerable<Stock> Read();
 
-        void Refresh(Warehouse warehouse);
+        void Refresh(IWarehouse warehouse);
     }
 }

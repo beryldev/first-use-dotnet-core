@@ -15,15 +15,15 @@ namespace Wrhs.Data.Tests
             return context;
         }
 
-        protected Product CreateProduct(WrhsContext context)
+        protected Product CreateProduct(WrhsContext context, string code="PROD1", string name="Product 1", string ean = "1111", string sku ="111")
         {
             var productRepo = new ProductRepository(context);
             var product = new Product
             {
-                Code = "PROD1",
-                Name = "Product 1",
-                EAN = "1111",
-                SKU = "111"
+                Code = code,
+                Name = name,
+                EAN = ean,
+                SKU = sku
             };
             productRepo.Save(product);
             return product;

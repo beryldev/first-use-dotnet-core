@@ -27,6 +27,8 @@ namespace Wrhs.Data
 
         public DbSet<ReleaseDocumentLine> ReleaseDocumentLines { get; set; }
 
+        public DbSet<Stock> StocksCache { get; set; }
+
         public WrhsContext(DbContextOptions<WrhsContext> options)
             : base(options){ }      
     }
