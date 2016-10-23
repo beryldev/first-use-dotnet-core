@@ -209,8 +209,8 @@ namespace Wrhs.Tests
             stockCacheMock.Setup(m=>m.Read())
                 .Returns(cache);
                
-            stockCacheMock.Setup(m=>m.Refresh(It.IsAny<Warehouse>()))
-                .Callback((Warehouse w)=>{
+            stockCacheMock.Setup(m=>m.Refresh(It.IsAny<IWarehouse>()))
+                .Callback((IWarehouse w)=>{
                     cache.Clear();
                     foreach(var s in w.CalculateStocks())
                         cache.Add(s);
