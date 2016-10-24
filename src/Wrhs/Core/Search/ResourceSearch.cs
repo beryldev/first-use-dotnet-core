@@ -5,7 +5,7 @@ using Wrhs.Core.Search.Interfaces;
 
 namespace Wrhs.Core.Search
 {
-    public abstract class ResourceSearcher<T> : IResourceSearcher<T> where T : IEntity
+    public class ResourceSearch<T> : IResourceSearch<T> where T : IEntity
     {
         IEnumerable<T> items;
 
@@ -13,10 +13,14 @@ namespace Wrhs.Core.Search
 
         IPaginator<T> paginator;
 
-        public ResourceSearcher(IRepository<T> repository, IPaginator<T> paginator)
+        ISearchCriteriaFactory<T> criteriaFactory;
+
+        public ResourceSearch(IRepository<T> repository, IPaginator<T> paginator, ISearchCriteriaFactory<T> criteriaFactory)
         {
             this.paginator = paginator;
             this.repository = repository;
+            this.criteriaFactory = criteriaFactory;
+
             items = this.repository.Get();
         }
 
@@ -31,13 +35,11 @@ namespace Wrhs.Core.Search
 
         public ISearchCriteria<T> MakeCriteria()
         {
-            var criteria = FactoryCriteria();
+            var criteria = criteriaFactory.Create();
             criteria.OnBuildQuery += OnBuildQuery;
 
             return criteria;
         }
-
-        protected abstract ISearchCriteria<T> FactoryCriteria();
 
         protected virtual void OnBuildQuery(object sender, Func<T, bool> c)
         {

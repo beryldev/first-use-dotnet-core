@@ -1,7 +1,8 @@
 using System;
 using Wrhs.Core.Search;
+using Wrhs.Core.Search.Interfaces;
 
-namespace Wrhs.Products.Search
+namespace Wrhs.Products
 {
     public class ProductSearchCriteria : SearchCriteria<Product>
     {
@@ -35,6 +36,15 @@ namespace Wrhs.Products.Search
                 OnBuildQuery(this, (Product prod)=>{ return prod.EAN.Contains(value); });
 
             return this;
+        }
+    }
+
+
+    public class ProductSearchCriteriaFactory : ISearchCriteriaFactory<Product>
+    {
+        public ISearchCriteria<Product> Create()
+        {
+            return new ProductSearchCriteria();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Wrhs.Core.Search;
 using Wrhs.Products;
-using Wrhs.Products.Search;
 
 namespace Wrhs.Tests.Products
 {
@@ -19,7 +18,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(itemsCount);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = search.MakeCriteria();
             criteria.PerPage = pageSize;
 
@@ -37,7 +37,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereName(Condition.Equal, productName);
 
@@ -56,7 +57,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereName(Condition.Contains, productName);
 
@@ -73,7 +75,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereCode(Condition.Equal, productCode);
 
@@ -92,7 +95,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereCode(Condition.Contains, productCode);
 
@@ -109,7 +113,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereEAN(Condition.Equal, ean);
 
@@ -128,7 +133,8 @@ namespace Wrhs.Tests.Products
         {
             var items = MakeItems(20);
             var repo = MakeProductRepository(items);
-            var search = new ProductSearch(repo, new Paginator<Product>());
+            var search = new ResourceSearch<Product>(repo, new Paginator<Product>(),
+                new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             criteria.WhereEAN(Condition.Contains, ean);
 
