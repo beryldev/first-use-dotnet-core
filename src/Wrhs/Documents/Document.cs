@@ -4,7 +4,7 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public class Document<TLine> : IDocument<TLine>, IEntity
+    public class Document<TLine> : IDocument<TLine>, IEntity, ISearchableDocument
         where TLine : IDocumentLine
     {
         public virtual int Id { get; set; }

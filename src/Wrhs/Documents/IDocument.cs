@@ -11,4 +11,12 @@ namespace Wrhs.Documents
 
         List<TLine> Lines { get; }
     }
+
+
+    public interface ISearchableDocument
+    {
+        string FullNumber { get; set; }
+
+        DateTime IssueDate { get; set; }
+    }
 }
