@@ -46,5 +46,14 @@ namespace Wrhs.WebApp.Controllers
             return product != null ? warehouse.ReadStocksByProductCode(product.Code)
                 : new List<Stock>();
         }
+
+        [HttpGet("{productId}/stocks/calculated")]
+        public IEnumerable<Stock> CalculatedStocks(int productId, [FromServices]IWarehouse warehouse)
+        {
+            var product = productRepository.GetById(productId);
+
+            return product != null ? warehouse.CalculateStocks(product.Code)
+                : new List<Stock>();
+        }
     }
 }

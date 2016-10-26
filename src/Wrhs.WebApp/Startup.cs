@@ -78,8 +78,7 @@ namespace Wrhs.WebApp
             { 
                 var allocationService = provider.GetService(typeof(IAllocationService)) as IAllocationService;
                 var stockCache = provider.GetService(typeof(IStockCache)) as IStockCache;
-                var warehouse = new Warehouse(allocationService, stockCache);
-                return warehouse;
+                return new Warehouse(allocationService, stockCache);
             });
         }
     }
