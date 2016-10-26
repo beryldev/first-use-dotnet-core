@@ -32,18 +32,38 @@ namespace Wrhs.WebApp
         {
             // Add framework services.
             services.AddMvc();
-            
+
+            services.AddTransient(typeof(WrhsContext),
+                (IServiceProvider provider) => { return SqliteContextFactory.Create("Filename=./wrhs.db"); });
+
             services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
             { 
-                var context = SqliteContextFactory.Create("Filename=./wrhs.db");
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
                 return new ProductRepository(context);
             });
 
-             services.AddTransient(typeof(IWarehouse), (IServiceProvider provider)=>
+            services.AddTransient(typeof(IRepository<Allocation>), (IServiceProvider provider)=>
             { 
-                var context = SqliteContextFactory.Create("Filename=./wrhs.db");
-                var allocationService = new AllocationService(new AllocationRepository(context));
-                var stockCache = new DbStockCache(context);
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new AllocationRepository(context);
+            });
+
+            services.AddTransient(typeof(IStockCache), (IServiceProvider provider)=>
+            { 
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new DbStockCache(context);
+            });
+
+            services.AddTransient(typeof(IAllocationService), (IServiceProvider provider)=>
+            { 
+                var allocationRepository = provider.GetService(typeof(IRepository<Allocation>)) as IRepository<Allocation>;
+                return new AllocationService(allocationRepository);
+            });
+
+            services.AddTransient(typeof(IWarehouse), (IServiceProvider provider)=>
+            { 
+                var allocationService = provider.GetService(typeof(IAllocationService)) as IAllocationService;
+                var stockCache = provider.GetService(typeof(IStockCache)) as IStockCache;
                 var warehouse = new Warehouse(allocationService, stockCache);
                 return warehouse;
             });
