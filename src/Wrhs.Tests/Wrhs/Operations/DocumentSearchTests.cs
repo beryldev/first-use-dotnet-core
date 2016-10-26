@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Core.Search;
 using Wrhs.Documents;
-using Wrhs.Operations.Delivery;
 
 namespace Wrhs.Tests
 {

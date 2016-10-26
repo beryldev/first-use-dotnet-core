@@ -19,4 +19,12 @@ namespace Wrhs.Documents
 
         DateTime IssueDate { get; set; }
     }
+
+
+    public interface INumerableDocument
+    {
+        string FullNumber { get; set; }
+
+        int Number { get; set; }
+    }
 }

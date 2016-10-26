@@ -4,10 +4,12 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public class Document<TLine> : IDocument<TLine>, IEntity, ISearchableDocument
+    public class Document<TLine> : IDocument<TLine>, IEntity, ISearchableDocument, INumerableDocument
         where TLine : IDocumentLine
     {
         public virtual int Id { get; set; }
+
+        public virtual int Number { get; set; }
 
         public virtual string FullNumber { get; set; }
 

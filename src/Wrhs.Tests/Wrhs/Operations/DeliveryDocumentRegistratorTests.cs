@@ -1,35 +1,21 @@
 using System.Linq;
 using NUnit.Framework;
+using Wrhs.Documents;
 using Wrhs.Operations.Delivery;
 
 namespace Wrhs.Tests
 {
     [TestFixture]
-    public class DeliveryDocumentRegistratorTests
+    public class DeliveryDocumentRegistratorTests : DocumentRegistratorTests<DeliveryDocument>
     {
-        [Test]
-        public void ShouldInsertDocumentToRepositoryWhenRegister()
+        protected override string GetDocumentPrefix()
         {
-            var repository = RepositoryFactory<DeliveryDocument>.Make();
-            var document = new DeliveryDocument();
-            var registrator = new DeliveryDocumentRegistrator(repository);
-
-            registrator.Register(document);
-
-            Assert.AreEqual(1, repository.Get().Count());
+            return "D";
         }
 
-        [Test]
-        public void ShouldAssignFullNumberToDocumentWhenRegister()
+        protected override DeliveryDocument CreateDocument()
         {
-            var repository = RepositoryFactory<DeliveryDocument>.Make();
-            var document = new DeliveryDocument();
-            var registrator = new DeliveryDocumentRegistrator(repository);
-
-            registrator.Register(document);
-
-            Assert.IsNotNull(document.FullNumber);
-            Assert.IsNotEmpty(document.FullNumber);
+            return new DeliveryDocument();
         }
     }
 }
