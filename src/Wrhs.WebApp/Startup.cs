@@ -1,14 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Wrhs.Core;
 using Wrhs.Data;
 using Wrhs.Data.ContextFactory;
+using Wrhs.Data.Repository;
+using Wrhs.Operations;
+using Wrhs.Products;
 
 namespace Wrhs.WebApp
 {
@@ -31,7 +32,21 @@ namespace Wrhs.WebApp
         {
             // Add framework services.
             services.AddMvc();
-            services.AddTransient(typeof(WrhsContext), (IServiceProvider provider)=>{ return SqliteContextFactory.Create("Filename=./wrhs.db"); });
+            
+            services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
+            { 
+                var context = SqliteContextFactory.Create("Filename=./wrhs.db");
+                return new ProductRepository(context);
+            });
+
+             services.AddTransient(typeof(IWarehouse), (IServiceProvider provider)=>
+            { 
+                var context = SqliteContextFactory.Create("Filename=./wrhs.db");
+                var allocationService = new AllocationService(new AllocationRepository(context));
+                var stockCache = new DbStockCache(context);
+                var warehouse = new Warehouse(allocationService, stockCache);
+                return warehouse;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

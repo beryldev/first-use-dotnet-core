@@ -1,36 +1,28 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Core;
 using Wrhs.Core.Search;
 using Wrhs.Core.Search.Interfaces;
-using Wrhs.Data;
-using Wrhs.Data.ContextFactory;
-using Wrhs.Data.Repository;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
-using Wrhs.Products.Search;
 
 namespace Wrhs.WebApp.Controllers
 {
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        IRepository<Product> repo;
+        IRepository<Product> productRepository;
         
-        public ProductsController(WrhsContext context)
+        public ProductsController(IRepository<Product> productRepository)
         {
-            context.Database.EnsureCreated();
-            repo = new ProductRepository(context);
+           this.productRepository = productRepository;
         }
 
         [HttpGet]
         public IPaginateResult<Product> Get()
         {
             var paginator = new Paginator<Product>();
-            var search = new ProductSearch(repo, paginator);
+            var search = new ResourceSearch<Product>(productRepository, paginator, new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
             return search.Exec(criteria);
         }
@@ -38,12 +30,21 @@ namespace Wrhs.WebApp.Controllers
         [HttpPost]
         public void Post([FromBody]CreateProductCommand cmd)
         {
-            var handler = new CreateProductCommandHandler(repo);
-            var validator = new CreateProductCommandValidator(repo);
+            var handler = new CreateProductCommandHandler(productRepository);
+            var validator = new CreateProductCommandValidator(productRepository);
             var service = new ValidationCommandHandlerDecorator<CreateProductCommand>
                 (handler, validator);
 
             service.Handle(cmd);
+        }
+
+        [HttpGet("{productId}/stocks")]
+        public IEnumerable<Stock> Stocks(int productId, [FromServices]IWarehouse warehouse)
+        {
+            var product = productRepository.GetById(productId);
+
+            return product != null ? warehouse.ReadStocksByProductCode(product.Code)
+                : new List<Stock>();
         }
     }
 }
