@@ -42,6 +42,8 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<DateTime>("IssueDate");
 
+                    b.Property<int>("Number");
+
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryDocuments");
@@ -81,6 +83,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("FullNumber");
 
                     b.Property<DateTime>("IssueDate");
+
+                    b.Property<int>("Number");
 
                     b.HasKey("Id");
 
@@ -123,6 +127,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("FullNumber");
 
                     b.Property<DateTime>("IssueDate");
+
+                    b.Property<int>("Number");
 
                     b.HasKey("Id");
 
