@@ -32,11 +32,25 @@ namespace Wrhs.WebApp
         {
             // Add framework services.
             services.AddMvc();
+            
+            ConfigureDI(services);
+        }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+            app.UseMvc();
+        }
+
+        void ConfigureDI(IServiceCollection services)
+        {
             services.AddTransient(typeof(WrhsContext),
                 (IServiceProvider provider) => { return SqliteContextFactory.Create("Filename=./wrhs.db"); });
 
-            services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
+             services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
             { 
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
                 return new ProductRepository(context);
@@ -67,15 +81,6 @@ namespace Wrhs.WebApp
                 var warehouse = new Warehouse(allocationService, stockCache);
                 return warehouse;
             });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            app.UseMvc();
         }
     }
 }
