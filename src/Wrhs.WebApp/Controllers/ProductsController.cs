@@ -9,7 +9,7 @@ using Wrhs.Products.Commands;
 namespace Wrhs.WebApp.Controllers
 {
     [Route("api/[controller]")]
-    public class ProductsController : Controller
+    public class ProductsController : BaseController
     {
         IRepository<Product> productRepository;
         
@@ -28,14 +28,10 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]CreateProductCommand cmd)
-        {
-            var handler = new CreateProductCommandHandler(productRepository);
-            var validator = new CreateProductCommandValidator(productRepository);
-            var service = new ValidationCommandHandlerDecorator<CreateProductCommand>
-                (handler, validator);
-
-            service.Handle(cmd);
+        public IActionResult Post([FromBody]CreateProductCommand cmd, [FromServices]IValidator<CreateProductCommand> validator, 
+            [FromServices]ICommandHandler<CreateProductCommand> handler)
+        {            
+            return HandleCommand<CreateProductCommand>(handler, validator, cmd);
         }
 
         [HttpGet("{productId}/stocks")]

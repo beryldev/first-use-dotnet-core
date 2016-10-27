@@ -10,6 +10,7 @@ using Wrhs.Data.ContextFactory;
 using Wrhs.Data.Repository;
 using Wrhs.Operations;
 using Wrhs.Products;
+using Wrhs.Products.Commands;
 
 namespace Wrhs.WebApp
 {
@@ -79,6 +80,18 @@ namespace Wrhs.WebApp
                 var allocationService = provider.GetService(typeof(IAllocationService)) as IAllocationService;
                 var stockCache = provider.GetService(typeof(IStockCache)) as IStockCache;
                 return new Warehouse(allocationService, stockCache);
+            });
+
+            services.AddTransient(typeof(IValidator<CreateProductCommand>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                return new CreateProductCommandValidator(productRepository);
+            });
+
+             services.AddTransient(typeof(ICommandHandler<CreateProductCommand>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                return new CreateProductCommandHandler(productRepository);
             });
         }
     }
