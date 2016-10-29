@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,8 @@ namespace Wrhs.WebApp
         {
             // Add framework services.
             services.AddMvc();
+
+            services.AddMemoryCache();
             
             ConfigureDI(services);
         }
@@ -51,7 +54,12 @@ namespace Wrhs.WebApp
             services.AddTransient(typeof(WrhsContext),
                 (IServiceProvider provider) => { return SqliteContextFactory.Create("Filename=./wrhs.db"); });
 
-             services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
+            services.AddTransient(typeof(ICache), (IServiceProvider provider)=>
+            {
+                return new Cache(provider.GetService(typeof(IMemoryCache)) as IMemoryCache);
+            });
+            
+            services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>
             { 
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
                 return new ProductRepository(context);
@@ -88,7 +96,7 @@ namespace Wrhs.WebApp
                 return new CreateProductCommandValidator(productRepository);
             });
 
-             services.AddTransient(typeof(ICommandHandler<CreateProductCommand>), (IServiceProvider provider) => 
+            services.AddTransient(typeof(ICommandHandler<CreateProductCommand>), (IServiceProvider provider) => 
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
                 return new CreateProductCommandHandler(productRepository);

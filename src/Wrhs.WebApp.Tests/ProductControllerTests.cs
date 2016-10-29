@@ -11,14 +11,14 @@ using Xunit;
 
 namespace Wrhs.WebApp.Tests
 {
-    public class ProductsControllerTests
+    public class ProductControllerTests
     {
         [Fact]
         public void ShouldReturnAllProductsAsPaginateResultWhenNoRequestParams()
         {
             var repository = RepositoryFactory<Product>.Make();
             repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.Get();
 
@@ -30,7 +30,7 @@ namespace Wrhs.WebApp.Tests
         {
             var repository = RepositoryFactory<Product>.Make();
             repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.Get(name:"Product 1");
 
@@ -42,7 +42,7 @@ namespace Wrhs.WebApp.Tests
         {
             var repository = RepositoryFactory<Product>.Make();
             repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.Get(code:"PROD1");
 
@@ -54,7 +54,7 @@ namespace Wrhs.WebApp.Tests
         {
             var repository = RepositoryFactory<Product>.Make();
             repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.Get(ean:"1111");
 
@@ -68,7 +68,7 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<Product>>();
             repository.Setup(m=>m.GetById(It.IsAny<int>()))
                 .Returns(product);
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.GetById(1);
 
@@ -82,7 +82,7 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<Product>>();
             repository.Setup(m=>m.GetById(It.IsAny<int>()))
                 .Returns((Product)null);
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.GetById(1);
 
@@ -99,7 +99,7 @@ namespace Wrhs.WebApp.Tests
             var handler = new Mock<ICommandHandler<CreateProductCommand>>();
             var validator = new Mock<IValidator<CreateProductCommand>>();
             validator.Setup(m=>m.Validate(cmd)).Returns(new List<ValidationResult>());
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.CreateProduct(cmd, validator.Object, handler.Object);
 
@@ -115,7 +115,7 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<CreateProductCommand>>();
             validator.Setup(m=>m.Validate(cmd))
                 .Returns(new List<ValidationResult>(){new ValidationResult{Field="test", Message="test"}});
-            var controller = new ProductsController(repository);
+            var controller = new ProductController(repository);
 
             var result = controller.CreateProduct(cmd, validator.Object, handler.Object);
 
@@ -134,7 +134,7 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<DeleteProductCommand>>();
             validator.Setup(m=>m.Validate(cmd))
                 .Returns(new List<ValidationResult>());
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.Delete(1, cmd, validator.Object, handler.Object);
 
@@ -152,7 +152,7 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<DeleteProductCommand>>();
             validator.Setup(m=>m.Validate(cmd))
                 .Returns(new List<ValidationResult>(){new ValidationResult()});
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.Delete(1, cmd, validator.Object, handler.Object);
 
@@ -170,7 +170,7 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<UpdateProductCommand>>();
             validator.Setup(m=>m.Validate(cmd))
                 .Returns(new List<ValidationResult>());
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.Update(1, cmd, validator.Object, handler.Object);
 
@@ -188,7 +188,7 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<UpdateProductCommand>>();
             validator.Setup(m=>m.Validate(cmd))
                 .Returns(new List<ValidationResult>(){new ValidationResult()});
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.Update(1, cmd, validator.Object, handler.Object);
 
@@ -204,7 +204,7 @@ namespace Wrhs.WebApp.Tests
             var warehouse = new Mock<IWarehouse>();
             warehouse.Setup(m=>m.ReadStocksByProductCode(It.IsAny<string>()))
                 .Returns(new List<Stock>());
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.GetStocks(1, warehouse.Object);
 
@@ -220,7 +220,7 @@ namespace Wrhs.WebApp.Tests
             var warehouse = new Mock<IWarehouse>();
             warehouse.Setup(m=>m.CalculateStocks(It.IsAny<string>()))
                 .Returns(new List<Stock>());
-            var controller = new ProductsController(repository.Object);
+            var controller = new ProductController(repository.Object);
 
             var result = controller.GetCalculatedStocks(1, warehouse.Object);
 

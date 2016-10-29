@@ -10,11 +10,11 @@ using Wrhs.Products.Commands;
 namespace Wrhs.WebApp.Controllers
 {
     [Route("api/[controller]")]
-    public class ProductsController : BaseController
+    public class ProductController : BaseController
     {
         IRepository<Product> productRepository;
         
-        public ProductsController(IRepository<Product> productRepository)
+        public ProductController(IRepository<Product> productRepository)
         {
            this.productRepository = productRepository;
         }
