@@ -110,10 +110,10 @@ namespace Wrhs.WebApp
                 return new CreateProductCommandHandler(productRepository);
             });
 
-            services.AddTransient(typeof(IValidator<DocAddLineCmd>), (IServiceProvider provider) => 
+            services.AddTransient(typeof(IValidator<IDocAddLineCmd>), (IServiceProvider provider) => 
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
-                return (new DocAddLineCmdValidator(productRepository)) as IValidator<DocAddLineCmd>;
+                return (new DocAddLineCmdValidator(productRepository));
             });
         }
     }

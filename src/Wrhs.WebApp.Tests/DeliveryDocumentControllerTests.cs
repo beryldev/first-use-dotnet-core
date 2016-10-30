@@ -57,7 +57,7 @@ namespace Wrhs.WebApp.Tests
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var cache = new Mock<ICache>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
@@ -73,7 +73,7 @@ namespace Wrhs.WebApp.Tests
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var cache = new Mock<ICache>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var controller = new DeliveryDocumentController(repository.Object);
 
             var uid = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
@@ -89,7 +89,7 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -110,7 +110,7 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>(){new ValidationResult()});
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
@@ -151,7 +151,7 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>());
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
@@ -171,7 +171,7 @@ namespace Wrhs.WebApp.Tests
             var uid = "someuid";
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -190,7 +190,7 @@ namespace Wrhs.WebApp.Tests
             var uid = "someuid";
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -208,7 +208,7 @@ namespace Wrhs.WebApp.Tests
             var uid = "someuid";
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -227,7 +227,7 @@ namespace Wrhs.WebApp.Tests
             var uid = "someuid";
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -246,7 +246,7 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
@@ -265,8 +265,8 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
-            validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>()))
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
+            validator.Setup(m=>m.Validate(It.IsAny<IDocAddLineCmd>()))
                 .Returns(new List<ValidationResult>(){new ValidationResult()});
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
@@ -303,7 +303,7 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
-            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))

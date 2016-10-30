@@ -41,11 +41,11 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpGet("new")]
         public string NewDocument([FromServices]ICache cache, [FromServices]IRepository<Product> prodRepository,
-            [FromServices]IValidator<DocAddLineCmd> validator)
+            [FromServices]IValidator<IDocAddLineCmd> validator)
         {
-            //var builder = new DeliveryDocumentBuilder(prodRepository, validator);
+            var builder = new DeliveryDocumentBuilder(prodRepository, validator);
             var guid = System.Guid.NewGuid().ToString();
-            //cache.SetValue(guid, builder);
+            cache.SetValue(guid, builder);
 
             return guid;
         }
