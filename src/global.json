@@ -5,6 +5,7 @@
         "Wrhs.Data",
         "Wrhs.Data.Tests",
         "Wrhs.WebApp",
-        "Wrhs.WebApp.Tests"
+        "Wrhs.WebApp.Tests",
+        "Wrhs.WebApp.Tests.Integration"
     ]
 }

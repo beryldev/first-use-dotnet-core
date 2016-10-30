@@ -62,7 +62,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnProductWhenGetExistedProduct()
+        public void ShouldReturnOkWithProductWhenGetExistedProduct()
         {
             var product = new Product(){Code = "PROD1", Name = "Product 1"};
             var repository = new Mock<IRepository<Product>>();
@@ -72,8 +72,10 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.GetById(1);
 
-            Assert.Equal("PROD1", result.Code);
-            Assert.Equal("Product 1", result.Name);
+            Assert.IsType<OkObjectResult>(result);
+            var resultProd = ((OkObjectResult)result).Value as Product;
+            Assert.Equal("PROD1", resultProd.Code);
+            Assert.Equal("Product 1", resultProd.Name);
         }
 
         [Fact]
@@ -86,9 +88,7 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.GetById(1);
 
-            Assert.Equal(0, result.Id);
-            Assert.Null(result.Code);
-            Assert.Null(result.Name);
+            Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]

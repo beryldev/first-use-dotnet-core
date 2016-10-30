@@ -39,11 +39,14 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public Product GetById(int id)
+        public IActionResult GetById(int id)
         {
             var product = productRepository.GetById(id);
 
-            return product == null ? new Product() : product;
+            if(product == null)
+                return NotFound();
+
+            return Ok(product);
         }
 
         [HttpPost]
