@@ -77,8 +77,12 @@ namespace Wrhs.Documents
                 .FirstOrDefault();
             
             var indexOfLine = lines.IndexOf(lineToUpdate);
-            lines.RemoveAt(indexOfLine);
-            lines.Insert(indexOfLine, line);
+
+            if(indexOfLine > -1)
+            {
+                lines.RemoveAt(indexOfLine);
+                lines.Insert(indexOfLine, line);
+            }
         }
     }
     

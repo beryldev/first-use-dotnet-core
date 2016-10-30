@@ -50,11 +50,15 @@ namespace Wrhs.WebApp.Controllers
             return guid;
         }
 
-        [HttpPost("{guid}/Line")]
+        [HttpPost("new/{guid}/line")]
         public IActionResult AddLine(string guid, DocAddLineCmd cmd, [FromServices]ICache cache)
         {
             var errors = new List<ValidationResult>();
             var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
+
+            if(builder == null)
+                return NotFound();
+
             builder.OnAddLineFail += (object sender, IEnumerable<ValidationResult> result) => { errors = (List<ValidationResult>)result; };
 
             builder.AddLine(cmd);
@@ -62,7 +66,44 @@ namespace Wrhs.WebApp.Controllers
             if(errors.Count > 0)
                 return BadRequest(errors);
 
+            cache.SetValue(guid, builder);
             return Ok();
         }
+
+        [HttpGet("new/{guid}")]
+        public IActionResult GetDocument(string guid, ICache cache)
+        {
+            var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
+
+            if(builder == null)
+                return NotFound();
+
+            var document = builder.Build();
+            return Ok(document);
+        }
+
+        [HttpGet("new/{guid}/line")]
+        public IActionResult GetDocumentLines(string guid, ICache cache)
+        {
+            var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
+
+            if(builder == null)
+                return NotFound();
+
+            return Ok(builder.Lines);
+        }
+
+        [HttpPut("new/{guid}/line")]
+        public IActionResult UpdateLine(string guid, ICache cache, DeliveryDocumentLine line)
+        {
+            var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
+
+            if(builder == null)
+                return NotFound();
+
+            builder.UpdateLine(line);
+
+            return Ok();
+        }       
     }
 }
