@@ -9,7 +9,9 @@ using Wrhs.Core;
 using Wrhs.Data;
 using Wrhs.Data.ContextFactory;
 using Wrhs.Data.Repository;
+using Wrhs.Documents;
 using Wrhs.Operations;
+using Wrhs.Operations.Delivery;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
 
@@ -71,6 +73,12 @@ namespace Wrhs.WebApp
                 return new AllocationRepository(context);
             });
 
+            services.AddTransient(typeof(IRepository<DeliveryDocument>), (IServiceProvider provider)=>
+            { 
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new DeliveryDocumentRepository(context);
+            });
+
             services.AddTransient(typeof(IStockCache), (IServiceProvider provider)=>
             { 
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -100,6 +108,12 @@ namespace Wrhs.WebApp
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
                 return new CreateProductCommandHandler(productRepository);
+            });
+
+            services.AddTransient(typeof(IValidator<DocAddLineCmd>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                return (new DocAddLineCmdValidator(productRepository)) as IValidator<DocAddLineCmd>;
             });
         }
     }

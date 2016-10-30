@@ -43,15 +43,15 @@ namespace Wrhs.WebApp.Controllers
         public string NewDocument([FromServices]ICache cache, [FromServices]IRepository<Product> prodRepository,
             [FromServices]IValidator<DocAddLineCmd> validator)
         {
-            var builder = new DeliveryDocumentBuilder(prodRepository, validator);
+            //var builder = new DeliveryDocumentBuilder(prodRepository, validator);
             var guid = System.Guid.NewGuid().ToString();
-            cache.SetValue(guid, builder);
+            //cache.SetValue(guid, builder);
 
             return guid;
         }
 
         [HttpPost("new/{guid}/line")]
-        public IActionResult AddLine(string guid, DocAddLineCmd cmd, [FromServices]ICache cache)
+        public IActionResult AddLine(string guid, [FromBody]DocAddLineCmd cmd, [FromServices]ICache cache)
         {
             var errors = new List<ValidationResult>();
             var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
@@ -71,7 +71,7 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpGet("new/{guid}")]
-        public IActionResult GetDocument(string guid, ICache cache)
+        public IActionResult GetDocument(string guid, [FromServices]ICache cache)
         {
             var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
 
@@ -83,7 +83,7 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpGet("new/{guid}/line")]
-        public IActionResult GetDocumentLines(string guid, ICache cache)
+        public IActionResult GetDocumentLines(string guid, [FromServices]ICache cache)
         {
             var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
 
@@ -94,16 +94,32 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpPut("new/{guid}/line")]
-        public IActionResult UpdateLine(string guid, ICache cache, DeliveryDocumentLine line)
+        public IActionResult UpdateLine(string guid, [FromServices]ICache cache, [FromBody]DeliveryDocumentLine line)
+        {
+            var errors = new List<ValidationResult>();
+            var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
+            if(builder == null)
+                return NotFound();
+                
+            builder.OnUpdateLineFail += (object sender, IEnumerable<ValidationResult> result) => { errors = (List<ValidationResult>)result; };
+            builder.UpdateLine(line);
+
+            if(errors.Count > 0)
+                return BadRequest(errors);
+
+            return Ok();
+        }  
+
+        [HttpDelete("new/{guid}/line")]
+        public IActionResult DeleteLine(string guid, [FromServices]ICache cache, [FromBody]DeliveryDocumentLine line)
         {
             var builder = cache.GetValue(guid) as DeliveryDocumentBuilder;
-
             if(builder == null)
                 return NotFound();
 
-            builder.UpdateLine(line);
+            builder.RemoveLine(line);
 
             return Ok();
-        }       
+        }     
     }
 }

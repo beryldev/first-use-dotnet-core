@@ -257,5 +257,78 @@ namespace Wrhs.WebApp.Tests
 
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public void ShouldReturnBadRequestWithErrorsOnUpdateLineWhenFail()
+        {
+            var uid = "someuid";
+            var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>()))
+                .Returns(new List<ValidationResult>(){new ValidationResult()});
+            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>()))
+                .Returns(builder);
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.UpdateLine(uid, cache.Object, line);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+            Assert.NotEmpty(((BadRequestObjectResult)result).Value as IEnumerable<ValidationResult>);
+        }
+
+        [Fact]
+        public void ShouldReturnNotFoundOnUpdateLineWhenBuilderNotExists()
+        {
+            var uid = "someuid";
+            var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>()))
+                .Returns(null);
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.UpdateLine(uid, cache.Object, line);
+
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void ShouldReturnOkOnDeleteLineWhenSuccess()
+        {
+            var uid = "someuid";
+            var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<DocAddLineCmd>>();
+            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>()))
+                .Returns(builder);
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.DeleteLine(uid, cache.Object, line);
+
+            Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public void ShouldReturnNotFoundOnDeleteLineWhenBuilderNotExists()
+        {
+            var uid = "someuid";
+            var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>()))
+                .Returns(null);
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.DeleteLine(uid, cache.Object, line);
+
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 }
