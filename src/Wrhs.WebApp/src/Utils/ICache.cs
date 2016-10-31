@@ -1,4 +1,4 @@
-namespace Wrhs.WebApp
+namespace Wrhs.WebApp.Utils
 {
     public interface ICache
     {

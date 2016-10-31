@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Wrhs.WebApp
+namespace Wrhs.WebApp.Utils
 {
     public class Cache : ICache
     {

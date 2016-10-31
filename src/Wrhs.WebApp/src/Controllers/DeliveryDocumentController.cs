@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Wrhs.Core;
 using Wrhs.Core.Search;
 using Wrhs.Core.Search.Interfaces;
 using Wrhs.Documents;
 using Wrhs.Operations.Delivery;
 using Wrhs.Products;
+using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp.Controllers
 {
