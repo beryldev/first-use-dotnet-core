@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="build/css/lib.min.css">
+        <title>WRHS</title>
+    </head>
+    <body ng-app="wrhs">
+        <div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+              			<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">WRHS</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li ui-sref-active="active"><a ui-sref="start">Start</a></li>
+						<li ui-sref-active="active"><a ui-sref="products">Products</a></li>
+						<li><a href="#">Documents</a></li>
+						<li><a href="#">Stocks</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container" ui-view="wrapper">
+		</div>
+
+
+        <script src="build/js/lib.min.js"></script>
+        <script src="build/js/app.min.js"></script>
+    </body>
+</html>
