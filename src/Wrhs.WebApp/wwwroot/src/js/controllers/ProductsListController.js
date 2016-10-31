@@ -5,7 +5,7 @@
         .module("wrhs")
         .controller("ProductsListCtrl", ProductsListCtrl);
 
-    //ProductsListCtrl.$inject = [];
+    ProductsListCtrl.$inject = [];
 
     function ProductsListCtrl(){
         var vm = this;
