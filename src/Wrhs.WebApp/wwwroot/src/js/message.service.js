@@ -44,7 +44,7 @@
                 });
                 error(message, "Operation failed");
             } else {
-                error("Unexpected error.", "Operation failed");
+                error("Unexpected server error", "Operation failed");
             }
         }
     }

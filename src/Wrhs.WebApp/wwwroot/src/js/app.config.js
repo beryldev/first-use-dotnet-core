@@ -38,6 +38,15 @@
                         controller: 'NewProductCtrl as vm'
                     }
                 }
+            })
+            .state('products.details', {
+                url: '/:id',
+                views: {
+                    'wrapper@':{
+                        templateUrl: 'templates/productDetails.html',
+                        controller: 'ProductDetailsCtrl as vm'
+                    }
+                }
             });
     }
 
