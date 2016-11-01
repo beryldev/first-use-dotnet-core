@@ -11,5 +11,7 @@ namespace Wrhs.Core.Search.Interfaces
         int PerPage { get; set; }
 
         int Total { get; set; }
+
+        int TotalPages { get; }
     }
 }

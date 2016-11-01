@@ -1,1 +1,18 @@
-<div ui-grid="vm.gridConfig" class="myGrid"></div>
+
+<h1 class="page-header">Products</h1>
+
+<div class="row">
+    <div class="col-xs-12">
+        <p>
+            <a ui-sref="products.new" class="btn btn-default">New product</a>
+        </p>
+       
+    </div>
+  
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div ui-grid="vm.gridConfig" ui-grid-pagination class="myGrid"></div>
+    </div>
+</div>

@@ -15,6 +15,7 @@ var paths = {
 paths.appJs = [
   paths.webroot + "src/js/app.js",
   paths.webroot + "src/js/app.config.js",
+  paths.webroot + "src/js/message.service.js",
   paths.webroot + "src/js/controllers/*.js"
 ]
 
@@ -29,12 +30,15 @@ paths.libJs = [
     paths.webroot + "lib/angular-ui-router/release/angular-ui-router.js",
     paths.webroot + "lib/angular-animate/angular-animate.js",
     paths.webroot + "lib/angular-touch/angular-touch.js",
-    paths.webroot + "lib/angular-ui-grid/ui-grid.js"
+    paths.webroot + "lib/angular-ui-grid/ui-grid.js",
+    paths.webroot + "lib/jquery/dist/jquery.js",
+    paths.webroot + "lib/toastr/toastr.js"
 ];
 
 paths.libCss = [
     paths.webroot + "lib/bootstrap/dist/css/bootstrap.css",
-    paths.webroot + "lib/angular-ui-grid/ui-grid.css"
+    paths.webroot + "lib/angular-ui-grid/ui-grid.css",
+    paths.webroot + "lib/toastr/toastr.css"
 ];
 
 paths.libRes = [

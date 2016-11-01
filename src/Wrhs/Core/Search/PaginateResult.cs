@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Wrhs.Core.Search.Interfaces;
 
@@ -12,5 +13,13 @@ namespace Wrhs.Core.Search
         public int PerPage { get; set; }
 
         public int Total { get; set; }
+
+        public int TotalPages
+        {
+            get
+            {
+                return (int)Math.Ceiling((double)Total / PerPage);
+            }
+        }
     }
 }

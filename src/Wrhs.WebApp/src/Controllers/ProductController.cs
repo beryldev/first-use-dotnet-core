@@ -20,12 +20,14 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpGet]
-        public IPaginateResult<Product> Get(string name="", string code="",  string ean="")
+        public IPaginateResult<Product> Get(string name="", string code="", string ean="", int page=1, int perPage=10)
         {
             var paginator = new Paginator<Product>();
             var search = new ResourceSearch<Product>(productRepository, paginator, new ProductSearchCriteriaFactory());
             var criteria = (ProductSearchCriteria)search.MakeCriteria();
-            
+            criteria.Page = page;
+            criteria.PerPage = perPage;
+
             if(!String.IsNullOrWhiteSpace(name))
                 criteria.WhereName(Condition.Contains, name);
 

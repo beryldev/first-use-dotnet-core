@@ -26,6 +26,30 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
+        public void ShouldReturnRequestedPage()
+        {
+            var repository = RepositoryFactory<Product>.Make();
+            repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
+            var controller = new ProductController(repository);
+
+            var result = controller.Get(page: 3);
+
+            Assert.Equal(3, result.Page);
+        }
+
+         [Fact]
+        public void ShouldReturnRequestedPageSize()
+        {
+            var repository = RepositoryFactory<Product>.Make();
+            repository.Save(new Product{Code="PROD1", Name="Product 1", EAN = "1111"});
+            var controller = new ProductController(repository);
+
+            var result = controller.Get(perPage: 25);
+
+            Assert.Equal(25, result.PerPage);
+        }
+
+        [Fact]
         public void ShouldReturnFilteredResultWhenPassNameRequestParam()
         {
             var repository = RepositoryFactory<Product>.Make();

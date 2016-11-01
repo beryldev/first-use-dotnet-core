@@ -21,13 +21,21 @@
                     }
                 }
             })
-
             .state('products', {
                 url: '/products',
                 views: {
                     'wrapper@': {
                         templateUrl: 'templates/productsList.html',
                         controller: 'ProductsListCtrl as vm'
+                    }
+                }
+            })
+            .state('products.new', {
+                url: '/new',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/newProduct.html',
+                        controller: 'NewProductCtrl as vm'
                     }
                 }
             });
