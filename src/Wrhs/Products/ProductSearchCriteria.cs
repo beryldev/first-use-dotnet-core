@@ -11,9 +11,9 @@ namespace Wrhs.Products
         public ProductSearchCriteria WhereName(Condition cond, string value)
         {
             if(cond == Condition.Equal)
-                OnBuildQuery(this, (Product prod)=>{ return prod.Name == value; });
+                OnBuildQuery(this, (Product prod)=>{ return prod.Name.ToLower() == value.ToLower(); });
             else if(cond == Condition.Contains)
-                OnBuildQuery(this, (Product prod)=>{ return prod.Name.Contains(value); });
+                OnBuildQuery(this, (Product prod)=>{ return prod.Name.ToLower().Contains(value.ToLower()); });
 
             return this;
         }
@@ -21,9 +21,9 @@ namespace Wrhs.Products
         public ProductSearchCriteria WhereCode(Condition cond, string value)
         {
             if(cond == Condition.Equal)
-                OnBuildQuery(this, (Product prod)=>{ return prod.Code == value; });
+                OnBuildQuery(this, (Product prod)=>{ return prod.Code == value.ToUpper(); });
             else if(cond == Condition.Contains)
-                OnBuildQuery(this, (Product prod)=>{ return prod.Code.Contains(value); });
+                OnBuildQuery(this, (Product prod)=>{ return prod.Code.Contains(value.ToUpper()); });
 
             return this;
         }

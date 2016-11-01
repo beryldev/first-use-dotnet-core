@@ -18,7 +18,7 @@ paths.appJs = [
   paths.webroot + "src/js/controllers/*.js"
 ]
 
-paths.appCss = paths.webroot + "src/css/**/*.css";
+paths.appCss = paths.webroot + "src/css/*.css";
 paths.concatAppJsDest = paths.webroot + "build/js/app.min.js";
 paths.concatAppCssDest = paths.webroot + "build/css/app.min.css";
 paths.concatLibJsDest = paths.webroot + "build/js/lib.min.js";
@@ -35,6 +35,10 @@ paths.libJs = [
 paths.libCss = [
     paths.webroot + "lib/bootstrap/dist/css/bootstrap.css",
     paths.webroot + "lib/angular-ui-grid/ui-grid.css"
+];
+
+paths.libRes = [
+    paths.webroot + "lib/angular-ui-grid/*.{svg,ttf,woff}"
 ];
 
 gulp.task("default",["clean:app", "min:app"]);
@@ -93,4 +97,9 @@ gulp.task("min:lib:css", function () {
     .pipe(gulp.dest("."));
 });
 
-gulp.task("min:lib", ["min:lib:js", "min:lib:css"]);
+gulp.task("min:lib", ["min:lib:js", "min:lib:css", "copy:lib:res"]);
+
+gulp.task("copy:lib:res", function(){
+  gulp.src(paths.libRes)
+  .pipe(gulp.dest(paths.webroot+"build/css"));
+});

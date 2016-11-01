@@ -53,6 +53,7 @@ namespace Wrhs.Tests.Products
         [TestCase("Product", 20)]
         [TestCase("Product 6", 1)]
         [TestCase("Product 1", 11)]
+        [TestCase("product 1", 11)]
         public void OnSerachReturnProductsByNameContainsString(string productName, int count)
         {
             var items = MakeItems(20);
@@ -91,6 +92,7 @@ namespace Wrhs.Tests.Products
         [TestCase("PROD", 20)]
         [TestCase("PROD6", 1)]
         [TestCase("PROD1", 11)]
+        [TestCase("prod1", 11)]
         public void OnSerachReturnProductsByCodeContainsString(string productCode, int count)
         {
             var items = MakeItems(20);
