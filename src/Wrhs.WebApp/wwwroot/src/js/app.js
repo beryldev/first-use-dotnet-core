@@ -1,6 +1,6 @@
 (function(){
     "use strict"
 
-    angular.module("wrhs", ['ui.router']);
+    angular.module("wrhs", ['ui.router', 'ui.grid']);
 
 })();

@@ -28,11 +28,13 @@ paths.libJs = [
     paths.webroot + "lib/angular/angular.js",
     paths.webroot + "lib/angular-ui-router/release/angular-ui-router.js",
     paths.webroot + "lib/angular-animate/angular-animate.js",
-    paths.webroot + "lib/angular-touch/angular-touch.js"
+    paths.webroot + "lib/angular-touch/angular-touch.js",
+    paths.webroot + "lib/angular-ui-grid/ui-grid.js"
 ];
 
 paths.libCss = [
-    paths.webroot + "lib/bootstrap/dist/css/bootstrap.css"
+    paths.webroot + "lib/bootstrap/dist/css/bootstrap.css",
+    paths.webroot + "lib/angular-ui-grid/ui-grid.css"
 ];
 
 gulp.task("default",["clean:app", "min:app"]);
