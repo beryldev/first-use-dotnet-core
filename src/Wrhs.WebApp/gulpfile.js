@@ -32,7 +32,9 @@ paths.libJs = [
     paths.webroot + "lib/angular-touch/angular-touch.js",
     paths.webroot + "lib/angular-ui-grid/ui-grid.js",
     paths.webroot + "lib/jquery/dist/jquery.js",
-    paths.webroot + "lib/toastr/toastr.js"
+    paths.webroot + "lib/toastr/toastr.js",
+    paths.webroot + "lib/angular-bootstrap/ui-bootstrap.js",
+    paths.webroot + "lib/angular-bootstrap/ui-bootstrap-tpls.js",
 ];
 
 paths.libCss = [

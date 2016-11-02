@@ -1,9 +1,9 @@
 (function(){
-    "use strict"
+    'use strict'
 
     angular
-        .module("wrhs")
-        .controller("StartCtrl", StartCtrl);
+        .module('wrhs')
+        .controller('StartCtrl', StartCtrl);
 
     StartCtrl.$inject = [];
 

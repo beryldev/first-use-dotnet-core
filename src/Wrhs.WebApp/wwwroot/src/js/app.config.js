@@ -1,8 +1,8 @@
 (function(){
-    "use strict"
+    'use strict'
 
     angular
-        .module("wrhs")
+        .module('wrhs')
         .config(config);
 
     config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];

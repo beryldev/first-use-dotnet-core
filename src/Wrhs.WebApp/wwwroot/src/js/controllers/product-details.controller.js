@@ -5,18 +5,27 @@
         .module('wrhs')
         .controller('ProductDetailsCtrl', ProductDetailsCtrl);
 
-    ProductDetailsCtrl.$inject = ['$state', '$stateParams', '$http', 'messageService'];
+    ProductDetailsCtrl.$inject = ['$scope', '$state', '$stateParams', '$http', 'messageService'];
 
-    function ProductDetailsCtrl($state, $stateParams, $http, messageService){
+    function ProductDetailsCtrl($scope, $state, $stateParams, $http, messageService){
         var vm = this;
         vm.product = {};
         vm.update = updateProduct;
+        vm.stocksSelect = stocksSelect;
+         vm.gridConfig = {
+            data: loadData(), 
+            enableFiltering: false,
+            columnDefs: [
+                { name: 'location'},
+                { name: 'quantity'},
+            ],
+        }
 
         init();
 
         function init(){
             getProduct($stateParams.id);
-            console.log('ProductDetailsCtrl init', $stateParams.id);
+            console.log('ProductDetailsCtrl init');
         }
 
         function getProduct(id){
@@ -38,12 +47,24 @@
                 .then(onSuccess, onError);
 
             function onSuccess(response){
-                messageService.success("", "Changes saved");
+                messageService.success('', 'Changes saved');
             }
 
             function onError(error){
                 messageService.requestError(error);
             }
+        }
+
+        function stocksSelect(){
+            loadData();
+        }
+
+         function loadData(){
+            $http.get('api/product/'+$stateParams.id+'/stocks')
+                .then(function(response){
+                    var data = response.data;
+                    vm.gridConfig.data = data;
+                });
         }
     }
 })();

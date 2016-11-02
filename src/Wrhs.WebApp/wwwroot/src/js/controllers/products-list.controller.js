@@ -1,9 +1,9 @@
 (function(){
-    "use strict"
+    'use strict'
 
     angular
-        .module("wrhs")
-        .controller("ProductsListCtrl", ProductsListCtrl);
+        .module('wrhs')
+        .controller('ProductsListCtrl', ProductsListCtrl);
 
     ProductsListCtrl.$inject = ['$scope', '$http', '$state', 'uiGridConstants'];
 
@@ -35,8 +35,8 @@
             columnDefs: [
                 { name: 'code'},
                 { name: 'name'},
-                { name: 'ean', displayName: "EAN"},
-                { name: 'sku', displayName: "SKU"},
+                { name: 'ean', displayName: 'EAN'},
+                { name: 'sku', displayName: 'SKU'},
                 { name: 'description'}
             ],
             onRegisterApi: function(gridApi) {
@@ -63,7 +63,7 @@
                 });
             },
             appScopeProvider: $scope.myAppScopeProvider,
-            rowTemplate: "<div ng-dblclick=\"grid.appScope.showInfo(row)\" ng-repeat=\"(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\" class=\"ui-grid-cell\" ng-class=\"{ 'ui-grid-row-header-cell': col.isRowHeader }\" ui-grid-cell></div>"
+            rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
         }
         
         init();
@@ -71,7 +71,7 @@
         function init(){
             vm.data =
 
-            console.log("ProductsListCtrl init");
+            console.log('ProductsListCtrl init');
         }
 
         function loadData(){

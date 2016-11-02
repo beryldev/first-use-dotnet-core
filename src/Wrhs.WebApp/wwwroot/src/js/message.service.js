@@ -1,9 +1,9 @@
 (function(){
-    "use strict"
+    'use strict'
 
     angular
-        .module("wrhs")
-        .factory("messageService", messageService);
+        .module('wrhs')
+        .factory('messageService', messageService);
 
     messageService.$inject = [];
 
@@ -36,15 +36,15 @@
 
         function requestError(errorResponse){
             if(errorResponse.status === 404){
-                error("Not found", "Operation failed");
+                error('Not found', 'Operation failed');
             } else if(errorResponse.status === 400){
-                var message = "";
+                var message = '';
                 errorResponse.data.forEach(function(item){
-                    message += item.message + "<br>";
+                    message += item.message + '<br>';
                 });
-                error(message, "Operation failed");
+                error(message, 'Operation failed');
             } else {
-                error("Unexpected server error", "Operation failed");
+                error('Unexpected server error', 'Operation failed');
             }
         }
     }

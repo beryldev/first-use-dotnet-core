@@ -54,21 +54,10 @@ namespace Wrhs.WebApp
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            
-
-            // app.UseStaticFiles(new StaticFileOptions()
-            // {
-            //     FileProvider = new PhysicalFileProvider(
-            //         Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
-            //     RequestPath = new PathString("/Static")
-            // });
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}");
             });
-
-            
         }
 
         void ConfigureDI(IServiceCollection services)
@@ -134,6 +123,18 @@ namespace Wrhs.WebApp
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
                 return (new DocAddLineCmdValidator(productRepository));
+            });
+
+            services.AddTransient(typeof(IValidator<UpdateProductCommand>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                return new UpdateProductCommandValidator(productRepository);
+            });
+
+            services.AddTransient(typeof(ICommandHandler<UpdateProductCommand>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                return new UpdateProductCommandHandler(productRepository);
             });
         }
     }
