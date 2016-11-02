@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+		<base href="http://localhost:5000/">
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +25,16 @@
 					<ul class="nav navbar-nav">
 						<li ui-sref-active="active"><a ui-sref="start">Start</a></li>
 						<li ui-sref-active="active"><a ui-sref="products">Products</a></li>
-						<li><a href="#">Documents</a></li>
+						<li uib-dropdown ui-sref-active="active">
+							<a href uib-dropdown-toggle> Documents 
+								<span class="caret"></span> 
+							</a>
+							<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown"> 
+								<li><a ui-sref="documents.delivery">Delivery</a></li> 
+								<li><a href="#">Relocation</a></li>
+								<li><a href="#">Release</a></li>
+							</ul> 
+						</li>
 						<li><a href="#">Stocks</a></li>
 					</ul>
 				</div>

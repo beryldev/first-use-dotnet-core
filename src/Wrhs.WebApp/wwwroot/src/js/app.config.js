@@ -47,6 +47,19 @@
                         controller: 'ProductDetailsCtrl as vm'
                     }
                 }
+            })
+            .state('documents', {
+                url: '/documents',
+                abstract: true
+            })
+            .state('documents.delivery', {
+                url: '/delivery',
+                views: {
+                    'wrapper@':{
+                        templateUrl: 'templates/deliveryDocList.html',
+                        controller: 'DeliveryDocListCtrl as vm'
+                    }
+                }
             });
     }
 
