@@ -8,8 +8,8 @@ using Wrhs.Data;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    [Migration("20161026193425_WrhsMigration")]
-    partial class WrhsMigration
+    [Migration("20161104182429_AllMigrations")]
+    partial class AllMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

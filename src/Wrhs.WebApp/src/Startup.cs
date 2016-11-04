@@ -63,7 +63,12 @@ namespace Wrhs.WebApp
         void ConfigureDI(IServiceCollection services)
         {
             services.AddTransient(typeof(WrhsContext),
-                (IServiceProvider provider) => { return SqliteContextFactory.Create("Filename=./wrhs.db"); });
+                (IServiceProvider provider) => 
+                { 
+                    var context = SqliteContextFactory.Create("Filename=./wrhs.db");
+                    context.Database.EnsureCreated();
+                    return context; 
+                });
 
             services.AddTransient(typeof(ICache), (IServiceProvider provider)=>
             {

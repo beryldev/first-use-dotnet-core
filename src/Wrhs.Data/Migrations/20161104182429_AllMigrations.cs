@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wrhs.Data.Migrations
 {
-    public partial class WrhsMigration : Migration
+    public partial class AllMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
