@@ -30,11 +30,11 @@ namespace Wrhs.WebApp.Controllers
 
              var criteria = (DocumentSearchCriteria<DeliveryDocument>) search.MakeCriteria();
 
-            // if(!String.IsNullOrWhiteSpace(fullNumber))
-            //     criteria.WhereFullNumber(Condition.Contains, fullNumber);
+            if(!String.IsNullOrWhiteSpace(fullNumber))
+                criteria.WhereFullNumber(Condition.Contains, fullNumber);
 
-            // if(issueDate != null)
-            //     criteria.WhereIssueDate(Condition.Equal, issueDate??DateTime.Today);
+            if(issueDate != null)
+                criteria.WhereIssueDate(Condition.Equal, issueDate??DateTime.Today);
            
             return search.Exec(criteria);
         }

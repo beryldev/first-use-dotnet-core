@@ -60,6 +60,15 @@
                         controller: 'DeliveryDocListCtrl as vm'
                     }
                 }
+            })
+            .state('documents.delivery.new', {
+                url: '/new',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/newDeliveryDoc.html',
+                        controller: 'NewDeliveryDocCtrl as vm'
+                    }
+                }
             });
     }
 
