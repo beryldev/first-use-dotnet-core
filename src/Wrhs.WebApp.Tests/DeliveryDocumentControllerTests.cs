@@ -68,7 +68,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldCacheBuilderUnderReturnedUidOnNewDocument()
+        public void ShouldCacheBuildedDocumentUnderReturnedUidOnNewDocument()
         {
             var repository = new Mock<IRepository<DeliveryDocument>>();
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
@@ -79,7 +79,27 @@ namespace Wrhs.WebApp.Tests
 
             var uid = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
 
-            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocumentBuilder>()), Times.Once());
+            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()), Times.Once());
+        }
+
+        [Fact]
+        public void ShouldOperateCachedBuildedDocumentOnAddLine()
+        {
+            var uid = "some-uid";
+            var document = new DeliveryDocument();
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>()))
+                .Returns(document);
+            cache.Setup(m=>m.SetValue(It.IsAny<string>(), It.IsAny<DeliveryDocument>()));
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            controller.AddLine(uid, new DocAddLineCmd(), cache.Object, prodRepository.Object, validator.Object);
+
+            cache.Verify(m=>m.GetValue(uid), Times.Once());
+            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()));
         }
 
         [Fact]
@@ -91,14 +111,14 @@ namespace Wrhs.WebApp.Tests
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>());
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.AddLine(uid, cmd, cache.Object);
+            var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkResult>(result);
         }
@@ -113,24 +133,27 @@ namespace Wrhs.WebApp.Tests
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>(){new ValidationResult()});
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
 
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.AddLine(uid, cmd, cache.Object);
+            var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<BadRequestObjectResult>(result);
             Assert.NotEmpty(((BadRequestObjectResult)result).Value as IEnumerable<ValidationResult>);
         }
 
         [Fact]
-        public void ShouldReturnNotFoundOnAddLineWhenBuilderNotExists()
+        public void ShouldReturnNotFoundOnAddLineWhenBuildedDocumentNotExists()
         {
             var uid = "";
             var cmd = new DocAddLineCmd { ProductId=1, Quantity=10 };
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
+            validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>(){new ValidationResult()});
             var repository = new Mock<IRepository<DeliveryDocument>>();
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
             var cache = new Mock<ICache>();
@@ -139,13 +162,13 @@ namespace Wrhs.WebApp.Tests
 
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.AddLine(uid, cmd, cache.Object);
+            var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
         }
 
         [Fact]
-        public void ShouldSaveBuilderToCacheOnAddLineWhenSuccess()
+        public void ShouldSaveBuildedDocumentToCacheOnAddLineWhenSuccess()
         {
             var uid = "someuid";
             var cmd = new DocAddLineCmd { ProductId=1, Quantity=10 };
@@ -154,16 +177,16 @@ namespace Wrhs.WebApp.Tests
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>());
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument();
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.AddLine(uid, cmd, cache.Object);
+            var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkResult>(result);
-            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocumentBuilder>()), Times.Once());
+            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()), Times.Once());
         }
 
         [Fact]
@@ -173,13 +196,13 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.GetDocument(uid, cache.Object);
+            var result = controller.GetDocument(uid, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkObjectResult>(result);
             Assert.IsType<DeliveryDocument>(((OkObjectResult)result).Value);
@@ -198,7 +221,7 @@ namespace Wrhs.WebApp.Tests
                 .Returns(null);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.GetDocument(uid, cache.Object);
+            var result = controller.GetDocument(uid, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
         }
@@ -210,32 +233,31 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.GetDocumentLines(uid, cache.Object);
+            var result = controller.GetDocumentLines(uid, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkObjectResult>(result);
             Assert.IsType<DeliveryDocumentLine[]>(((OkObjectResult)result).Value);
         }
 
         [Fact]
-        public void ShouldReturnNotFoundOnGetDocumentLinesWhenBuilderNotExists()
+        public void ShouldReturnNotFoundOnGetDocumentLinesWhenBuildedDocumentNotExists()
         {
             var uid = "someuid";
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.GetDocumentLines(uid, cache.Object);
+            var result = controller.GetDocumentLines(uid, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
         }
@@ -248,13 +270,13 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.UpdateLine(uid, cache.Object, line);
+            var result = controller.UpdateLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkResult>(result);
         }
@@ -269,30 +291,32 @@ namespace Wrhs.WebApp.Tests
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
             validator.Setup(m=>m.Validate(It.IsAny<IDocAddLineCmd>()))
                 .Returns(new List<ValidationResult>(){new ValidationResult()});
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.UpdateLine(uid, cache.Object, line);
+            var result = controller.UpdateLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<BadRequestObjectResult>(result);
             Assert.NotEmpty(((BadRequestObjectResult)result).Value as IEnumerable<ValidationResult>);
         }
 
         [Fact]
-        public void ShouldReturnNotFoundOnUpdateLineWhenBuilderNotExists()
+        public void ShouldReturnNotFoundOnUpdateLineWhenBuildedDocumentNotExists()
         {
             var uid = "someuid";
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.UpdateLine(uid, cache.Object, line);
+            var result = controller.UpdateLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
         }
@@ -305,29 +329,31 @@ namespace Wrhs.WebApp.Tests
             var repository = new Mock<IRepository<DeliveryDocument>>();
             var prodRepository = new Mock<IRepository<Product>>();
             var validator = new Mock<IValidator<IDocAddLineCmd>>();
-            var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
+            var document = new DeliveryDocument(); 
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
-                .Returns(builder);
+                .Returns(document);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.DeleteLine(uid, cache.Object, line);
+            var result = controller.DeleteLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkResult>(result);
         }
 
         [Fact]
-        public void ShouldReturnNotFoundOnDeleteLineWhenBuilderNotExists()
+        public void ShouldReturnNotFoundOnDeleteLineWhenBuildedDocumentNotExists()
         {
             var uid = "someuid";
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
             var cache = new Mock<ICache>();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
             var controller = new DeliveryDocumentController(repository.Object);
 
-            var result = controller.DeleteLine(uid, cache.Object, line);
+            var result = controller.DeleteLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
         }

@@ -37,7 +37,7 @@ namespace Wrhs.WebApp.Tests.Integration
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            Assert.Equal("{\"items\":[],\"page\":1,\"perPage\":10,\"total\":0}", responseString);
+            Assert.Equal("{\"items\":[],\"page\":1,\"perPage\":10,\"total\":0,\"totalPages\":0}", responseString);
         }
 
         [Theory]
