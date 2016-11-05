@@ -68,7 +68,7 @@ namespace Wrhs.WebApp.Controllers
                 return BadRequest(errors);
 
             cache.SetValue(guid, builder.Build());
-            return Ok();
+            return Ok(builder.Lines);
         }
 
         [HttpGet("new/{guid}")]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Wrhs.Core;
@@ -103,7 +104,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnOkOnAddLineWhenSuccess()
+        public void ShouldReturnOkWithLinesOnAddLineWhenSuccess()
         {
             var uid = "111-22-3";
             var cmd = new DocAddLineCmd { ProductId=1, Quantity=10 };
@@ -120,7 +121,8 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(1, ((IEnumerable<DeliveryDocumentLine>)(result as OkObjectResult).Value).Count());
         }
 
         [Fact]
@@ -185,7 +187,7 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.AddLine(uid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<OkObjectResult>(result);
             cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()), Times.Once());
         }
 
