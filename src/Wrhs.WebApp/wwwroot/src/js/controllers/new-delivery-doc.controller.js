@@ -6,17 +6,19 @@
         .controller('NewDeliveryDocCtrl', NewDeliveryDocCtrl)
         .controller('NewLineModalCtrl', NewLineModalCtrl);
 
-    NewDeliveryDocCtrl.$inject = ['$http', '$uibModal'];
+    NewDeliveryDocCtrl.$inject = ['$http', '$uibModal', 'messageService'];
 
-    function NewDeliveryDocCtrl($http, $uibModal){
+    function NewDeliveryDocCtrl($http, $uibModal, messageService){
         var vm = this;
         vm.doc = {};
         vm.openNewLineModal = openNewLineModal;
+        vm.guid = null;
 
         init();
 
         function init(){
             initEmptyDocument();
+            getNewDocGuid();
             console.log('NewDeliveryDocCtrl init');
         }
 
@@ -25,6 +27,19 @@
                 remarks: '',
                 lines: []
             };
+        }
+
+        function getNewDocGuid(){
+            $http.get('api/document/delivery/new')
+                .then(onSuccess, onError);
+
+            function onSuccess(response){
+                vm.guid = response.data;
+            }
+
+            function onError(error){
+                messageService.requestError(error);
+            }
         }
 
         function openNewLineModal(){
@@ -37,6 +52,26 @@
                 //size: size,
                 //appendTo: parentElem,        
             });
+            modalInstance.close = addDocLine;
+        }
+
+        function addDocLine(line){
+            console.log(line);
+            var cmd = {
+                productId: line.product.id,
+                quantity: line.quantity
+            };
+            
+            $http.post('api/document/delivery/new/'+vm.guid+'/line', cmd)
+                .then(onSuccess, onError);
+
+            function onSuccess(response){
+                vm.doc.lines = response.data;
+            }
+
+            function onError(error){
+                messageService.requestError(error);
+            }
         }
     }
 
@@ -45,13 +80,24 @@
 
     function NewLineModalCtrl($http, $uibModalInstance, messageService){
         var vm = this;
-        vm.cancel = cancel;
+        vm.okClick = okClick;
+        vm.cancelClick = cancelClick;
         vm.product = {};
         vm.products = [];
+        vm.quantity = 1;
         vm.refreshProducts = refreshProducts;
 
-        function cancel(){
-            $uibModalInstance.dismiss('cancel');
+        function cancelClick(){
+            $uibModalInstance.dismiss('cancelClick');
+        }
+
+        function okClick(){
+            var line = {
+                product: vm.product,
+                quantity: vm.quantity
+            };
+            $uibModalInstance.dismiss('okClick');
+            $uibModalInstance.close(line);
         }
 
         function refreshProducts(value){

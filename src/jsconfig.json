@@ -6,12 +6,18 @@
 		"module": "commonjs",
 		"allowSyntheticDefaultImports": true
 	},
+	"files": [
+		"Wrhs.WebApp/src/"
+	],
 	"exclude": [
-		"node_modules",
-		"bower_components",
-		"jspm_packages",
-		"tmp",
-		"temp",
-        "wwwroot/lib",
+		"Wrhs.WebApp/node_modules",
+		"Wrhs.WebApp/bower_components",
+		"Wrhs.WebApp/jspm_packages",
+		"Wrhs.WebApp/tmp",
+		"Wrhs.WebApp/temp",
+        "Wrhs.WebApp/wwwroot/lib",
+		"Wrhs.WebApp/wwwroot/build",
+		"Wrhs.WebApp/bin",
+		"Wrhs.WebApp/obj"
 	]
 }
