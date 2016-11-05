@@ -7,7 +7,7 @@
 		"allowSyntheticDefaultImports": true
 	},
 	"files": [
-		"Wrhs.WebApp/src/"
+		"Wrhs.WebApp/wwwroot/src/"
 	],
 	"exclude": [
 		"Wrhs.WebApp/node_modules",
