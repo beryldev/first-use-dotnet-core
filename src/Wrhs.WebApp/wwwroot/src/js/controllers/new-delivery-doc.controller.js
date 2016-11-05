@@ -12,6 +12,7 @@
         var vm = this;
         vm.doc = {};
         vm.openNewLineModal = openNewLineModal;
+        vm.deleteDocLine = deleteDocLine;
         vm.guid = null;
 
         init();
@@ -31,14 +32,10 @@
 
         function getNewDocGuid(){
             $http.get('api/document/delivery/new')
-                .then(onSuccess, onError);
+                .then(onSuccess, onRequestError);
 
             function onSuccess(response){
                 vm.guid = response.data;
-            }
-
-            function onError(error){
-                messageService.requestError(error);
             }
         }
 
@@ -63,15 +60,29 @@
             };
             
             $http.post('api/document/delivery/new/'+vm.guid+'/line', cmd)
-                .then(onSuccess, onError);
+                .then(onSuccess, onRequestError);
 
             function onSuccess(response){
                 vm.doc.lines = response.data;
             }
+        }
 
-            function onError(error){
-                messageService.requestError(error);
+        function deleteDocLine(line){
+            var config = {
+                data: line,
+                headers: {'Content-Type': 'application/json'}
+            };
+
+            $http.delete('api/document/delivery/new/'+vm.guid+'/line', config)
+                .then(onSuccess, onRequestError);
+            
+            function onSuccess(response){
+                vm.doc.lines = response.data;
             }
+        }
+
+        function onRequestError(error){
+            messageService.requestError(error);
         }
     }
 

@@ -106,6 +106,7 @@ namespace Wrhs.WebApp.Controllers
             var doc = cache.GetValue(guid) as DeliveryDocument;
             if(doc == null)
                 return NotFound();
+                
             var builder = new DeliveryDocumentBuilder(prodRepository, validator, doc);
             builder.OnUpdateLineFail += (object sender, IEnumerable<ValidationResult> result) => { errors = (List<ValidationResult>)result; };
             builder.UpdateLine(line);
@@ -127,7 +128,10 @@ namespace Wrhs.WebApp.Controllers
             var builder = new DeliveryDocumentBuilder(prodRepository, validator, doc);
             builder.RemoveLine(line);
 
-            return Ok();
+            var document = builder.Build();
+            cache.SetValue(guid, document);
+
+            return Ok(builder.Lines);
         }     
     }
 }

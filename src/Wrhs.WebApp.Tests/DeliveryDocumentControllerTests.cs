@@ -324,7 +324,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnOkOnDeleteLineWhenSuccess()
+        public void ShouldReturnOkWithLinesOnDeleteLineWhenSuccess()
         {
             var uid = "someuid";
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
@@ -339,7 +339,9 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.DeleteLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<OkObjectResult>(result);
+            var obj = ((OkObjectResult)result).Value as IEnumerable<DeliveryDocumentLine>;
+            Assert.Empty(obj);
         }
 
         [Fact]
@@ -358,6 +360,26 @@ namespace Wrhs.WebApp.Tests
             var result = controller.DeleteLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void ShouldUpdateBuildedDocInCacheAfterDelete()
+        {
+            var uid = "someuid";
+            var document = new DeliveryDocument();
+            var line = new DeliveryDocumentLine();
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
+            var cache = new Mock<ICache>();
+            cache.Setup(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>())).Verifiable();
+            cache.Setup(m=>m.GetValue(uid)).Returns(document);
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.DeleteLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
+
+            Assert.IsType<OkObjectResult>(result);
+            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()), Times.Once());
         }
     }
 }
