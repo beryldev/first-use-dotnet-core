@@ -6,6 +6,8 @@ namespace Wrhs.Documents
     {
         int Id { get; set; }
 
+        int Lp { get; set; }
+
         Product Product { get; set; }
 
         decimal Quantity { get; set; }

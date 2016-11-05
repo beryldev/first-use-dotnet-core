@@ -52,12 +52,13 @@ namespace Wrhs.Tests
         public void AfterRemoveLineBuildReturnDocWithoutRemovedLine()
         {
             var builder = MakeBuilder();
+            var prodRepo = MakeProductRepository();
             
             var command = new DocAddLineCmd { ProductId = 1, Quantity = 5 };
             builder.AddLine(command);
             
             var lines = builder.Lines;
-            builder.RemoveLine(lines.First());
+            builder.RemoveLine(lines.ToArray().First());
 
             var document = builder.Build();
 

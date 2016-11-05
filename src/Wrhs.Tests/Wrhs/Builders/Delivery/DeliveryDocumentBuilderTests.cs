@@ -43,6 +43,33 @@ namespace Wrhs.Tests
             Assert.AreEqual("some line remarks", line.Remarks);
         }
 
+        [Test]
+        public void ShouldRemovePassedLineOnDelete()
+        {
+            var repo = MakeProductRepository();
+            var document = new DeliveryDocument();
+            var addLineValidMock = new Mock<IValidator<IDocAddLineCmd>>(); 
+            document.Lines.Add(new DeliveryDocumentLine
+            {
+                Product = repo.GetById(1),
+                Quantity = 10,
+                Remarks = "some line remarks"
+            });
+            var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, document);
+
+            var line = new DeliveryDocumentLine
+            {
+                Id = 1,
+                Product = repo.GetById(1),
+                Quantity = 10,
+                Remarks = "some line remarks"
+            };
+            builder.RemoveLine(line);
+
+            Assert.IsEmpty(builder.Build().Lines);
+            Assert.IsEmpty(builder.Lines);
+        }
+
         public DeliveryDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();

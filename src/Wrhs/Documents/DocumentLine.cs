@@ -6,6 +6,8 @@ namespace Wrhs.Documents
     public class DocumentLine : IDocumentLine
     {
         public virtual int Id { get; set; } = 0;
+
+        public virtual int Lp { get; set; }
         
         public virtual Product Product { get; set; }
 

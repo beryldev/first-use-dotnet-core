@@ -32,12 +32,10 @@ namespace Wrhs.Documents
 
         public abstract TDocument Build();
 
-        int lastId = 0;
         protected void AddValidatedLine(TAddLineCmd command)
         {
-            lastId++;
             var line = CommandToDocumentLine(command);
-            line.Id = lastId;
+            line.Lp = lines.Count+1;
             lines.Add(line);
         }
 
@@ -59,7 +57,12 @@ namespace Wrhs.Documents
 
         public virtual void RemoveLine(TDocLine line)
         {
-            lines.Remove(line);
+            var toRemove = lines.Where(item=>item.Lp == line.Lp).FirstOrDefault();
+            if(toRemove != null)
+            {
+                lines.Remove(toRemove);
+                lines.ForEach(item => item.Lp = (lines.IndexOf(item) + 1));
+            }
         }
 
         public virtual void UpdateLine(TDocLine line)
