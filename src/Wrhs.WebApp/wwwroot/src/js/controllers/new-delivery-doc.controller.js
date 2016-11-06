@@ -83,7 +83,7 @@
         }
 
         function addDocLineModal(){
-            openLineModal({ title: 'New line', line: {} }, addDocLine);
+            openLineModal({ title: 'New line', line: {quantity: 1} }, addDocLine);
         }
 
         function changeDocLineModal(line){
