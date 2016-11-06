@@ -76,7 +76,7 @@ namespace Wrhs.Documents
             }
 
             var lineToUpdate = lines
-                .Where(item=>item.Id == line.Id)
+                .Where(item=>item.Lp == line.Lp)
                 .FirstOrDefault();
             
             var indexOfLine = lines.IndexOf(lineToUpdate);
@@ -85,6 +85,7 @@ namespace Wrhs.Documents
             {
                 lines.RemoveAt(indexOfLine);
                 lines.Insert(indexOfLine, line);
+                lines.ForEach(item => item.Lp = (lines.IndexOf(item) + 1));
             }
         }
     }
