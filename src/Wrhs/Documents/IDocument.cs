@@ -23,6 +23,8 @@ namespace Wrhs.Documents
 
     public interface INumerableDocument
     {
+        DateTime IssueDate { get; set; }
+        
         string FullNumber { get; set; }
 
         int Number { get; set; }

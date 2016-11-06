@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Wrhs.Core;
 using Wrhs.Operations.Delivery;
 
@@ -28,7 +29,7 @@ namespace Wrhs.Data.Repository
 
         public IEnumerable<DeliveryDocument> Get()
         {
-            return context.DeliveryDocuments;
+            return context.DeliveryDocuments.Include(m=>m.Lines);
         }
 
         public DeliveryDocument GetById(int id)
@@ -40,7 +41,8 @@ namespace Wrhs.Data.Repository
 
         public DeliveryDocument Save(DeliveryDocument item)
         {
-            context.DeliveryDocuments.Add(item);
+            item.Lines.ForEach(l=>l.Product = context.Products.Where(p=>p.Id==l.Product.Id).First());
+            context.DeliveryDocuments.Add(item);       
             context.SaveChanges();
 
             return item;

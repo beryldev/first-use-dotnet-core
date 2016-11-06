@@ -8,8 +8,8 @@ using Wrhs.Data;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    [Migration("20161104182429_AllMigrations")]
-    partial class AllMigrations
+    [Migration("20161106194135_WrhsMigrations")]
+    partial class WrhsMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,6 +59,8 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("EAN");
 
+                    b.Property<int>("Lp");
+
                     b.Property<int?>("ProductId");
 
                     b.Property<decimal>("Quantity");
@@ -100,6 +102,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("EAN");
 
                     b.Property<string>("Location");
+
+                    b.Property<int>("Lp");
 
                     b.Property<int?>("ProductId");
 
@@ -144,6 +148,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("EAN");
 
                     b.Property<string>("From");
+
+                    b.Property<int>("Lp");
 
                     b.Property<int?>("ProductId");
 

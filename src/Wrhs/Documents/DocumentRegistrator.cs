@@ -19,6 +19,7 @@ namespace Wrhs.Documents
         public void Register(T document)
         {
             AssignDocumentNumber(document);
+            document.IssueDate = DateTime.Now;
             repository.Save(document);
         }
 

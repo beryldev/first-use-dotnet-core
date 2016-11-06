@@ -6,14 +6,15 @@
         .controller('NewDeliveryDocCtrl', NewDeliveryDocCtrl)
         .controller('DocLineModalCtrl', DocLineModalCtrl);
 
-    NewDeliveryDocCtrl.$inject = ['$http', '$uibModal', 'messageService'];
+    NewDeliveryDocCtrl.$inject = ['$http', '$uibModal', '$state', 'messageService'];
 
-    function NewDeliveryDocCtrl($http, $uibModal, messageService){
+    function NewDeliveryDocCtrl($http, $uibModal, $state, messageService){
         var vm = this;
         vm.doc = {};
         vm.addDocLineModal = addDocLineModal;
         vm.deleteDocLine = deleteDocLine;
         vm.changeDocLineModal = changeDocLineModal;
+        vm.save = save;
         vm.guid = null;
 
         init();
@@ -88,6 +89,16 @@
 
         function changeDocLineModal(line){
             openLineModal({ title: 'Change line', line: line }, updateDocLine);
+        }
+
+        function save(){
+            $http.post('api/document/delivery/new/'+vm.guid, vm.doc)
+                .then(onSuccess);
+
+            function onSuccess(response){
+                messageService.success("", "Created new document");
+                $state.go('documents.delivery');
+            }
         }
 
         function openLineModal(content, closeCallback){

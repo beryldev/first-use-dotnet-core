@@ -31,6 +31,13 @@ namespace Wrhs.Data
 
         public WrhsContext(DbContextOptions<WrhsContext> options)
             : base(options){ }      
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<DeliveryDocumentLine>()
+                .HasOne(p => p.Product);
+        }
     }
 
     public class WrhsContextFactory : IDbContextFactory<WrhsContext>

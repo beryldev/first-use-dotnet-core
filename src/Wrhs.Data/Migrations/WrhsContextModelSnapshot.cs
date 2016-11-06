@@ -58,6 +58,8 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("EAN");
 
+                    b.Property<int>("Lp");
+
                     b.Property<int?>("ProductId");
 
                     b.Property<decimal>("Quantity");
@@ -99,6 +101,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("EAN");
 
                     b.Property<string>("Location");
+
+                    b.Property<int>("Lp");
 
                     b.Property<int?>("ProductId");
 
@@ -143,6 +147,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<string>("EAN");
 
                     b.Property<string>("From");
+
+                    b.Property<int>("Lp");
 
                     b.Property<int?>("ProductId");
 

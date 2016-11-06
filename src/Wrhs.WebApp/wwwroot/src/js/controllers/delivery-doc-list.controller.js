@@ -28,7 +28,7 @@
             paginationPageSize: 10,
             columnDefs: [
                 { name: 'fullNumber', displayName: 'Number'},
-                { name: 'issueDate', displayName: 'Issue date'},
+                { name: 'issueDate', displayName: 'Issue date', type: 'date',  cellFilter: 'date:\'yyyy-MM-dd\'' },
                 { name: 'remarks'}
             ],
             onRegisterApi: function(gridApi) {
@@ -70,6 +70,8 @@
 
             function onSuccess(response){
                 console.log(response.data);
+                vm.gridConfig.data = response.data.items;
+                vm.gridConfig.totalItems = response.data.total;
             }
         }
     }

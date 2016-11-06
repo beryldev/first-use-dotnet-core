@@ -136,7 +136,7 @@ namespace Wrhs.WebApp.Controllers
         }     
 
         [HttpPost("new/{guid}")]
-        public IActionResult Register(string guid, [FromServices]ICache cache, IDocumentRegistrator<DeliveryDocument> registrator)
+        public IActionResult Register(string guid, [FromServices]ICache cache, [FromServices]IDocumentRegistrator<DeliveryDocument> registrator)
         {
             var doc = cache.GetValue(guid) as DeliveryDocument;
             if(doc == null)
