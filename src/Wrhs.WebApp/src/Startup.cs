@@ -141,6 +141,12 @@ namespace Wrhs.WebApp
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
                 return new UpdateProductCommandHandler(productRepository);
             });
+
+            services.AddTransient(typeof(IDocumentRegistrator<DeliveryDocument>), (IServiceProvider provider) => 
+            {
+                var docRepository = provider.GetService(typeof(IRepository<DeliveryDocument>)) as IRepository<DeliveryDocument>;
+                return new DocumentRegistrator<DeliveryDocument>(docRepository, "DLV");
+            });
         }
     }
 }

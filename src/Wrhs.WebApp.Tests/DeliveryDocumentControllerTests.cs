@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Wrhs.WebApp.Tests
 {
-    public class DeliveryDocumentControllerTests
+    public class DeliveryDocumentControllerTests : IDisposable
     {
         string guid;
 
@@ -26,6 +26,10 @@ namespace Wrhs.WebApp.Tests
 
         Mock<IValidator<IDocAddLineCmd>> validator;
 
+        Mock<IDocumentRegistrator<DeliveryDocument>> registrator;
+
+        DeliveryDocumentController controller;
+
         public DeliveryDocumentControllerTests()
         {
             guid = "someguid";
@@ -33,13 +37,19 @@ namespace Wrhs.WebApp.Tests
             cache = new Mock<ICache>();
             prodRepository = new Mock<IRepository<Product>>();
             validator = new Mock<IValidator<IDocAddLineCmd>>();
+            registrator = new Mock<IDocumentRegistrator<DeliveryDocument>>();
+            controller = new DeliveryDocumentController(repository.Object);
+        }
+
+        public void Dispose()
+        {
+            controller.Dispose();
         }
 
         [Fact]
         public void ShouldReturnDocumentsOnGetWithoutParameters()
         {
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.Get();
 
@@ -50,7 +60,6 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnDocumentsOnGetWithFullNumberParameter()
         {
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.Get(fullNumber: "D/001/2016");
 
@@ -61,7 +70,6 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnDocumentsOnGetWithIssueDateParameter()
         {
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.Get(issueDate: DateTime.Today);
 
@@ -72,8 +80,7 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnTempDocUidOnNewDocument()
         {
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
-            var controller = new DeliveryDocumentController(repository.Object);
-
+            
             var result = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<string>(result);
@@ -84,7 +91,6 @@ namespace Wrhs.WebApp.Tests
         public void ShouldCacheBuildedDocumentUnderReturnedUidOnNewDocument()
         {
             repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var uid = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
 
@@ -98,7 +104,6 @@ namespace Wrhs.WebApp.Tests
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
             cache.Setup(m=>m.SetValue(It.IsAny<string>(), It.IsAny<DeliveryDocument>()));
-            var controller = new DeliveryDocumentController(repository.Object);
 
             controller.AddLine(guid, new DocAddLineCmd(), cache.Object, prodRepository.Object, validator.Object);
 
@@ -115,7 +120,6 @@ namespace Wrhs.WebApp.Tests
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
             validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>())).Returns(new List<ValidationResult>());
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.AddLine(guid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
@@ -133,8 +137,6 @@ namespace Wrhs.WebApp.Tests
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
 
-            var controller = new DeliveryDocumentController(repository.Object);
-
             var result = controller.AddLine(guid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<BadRequestObjectResult>(result);
@@ -150,8 +152,6 @@ namespace Wrhs.WebApp.Tests
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
 
-            var controller = new DeliveryDocumentController(repository.Object);
-
             var result = controller.AddLine(guid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
             Assert.IsType<NotFoundResult>(result);
@@ -166,7 +166,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument();
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.AddLine(guid, cmd, cache.Object, prodRepository.Object, validator.Object);
 
@@ -180,7 +179,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.GetDocument(guid, cache.Object, prodRepository.Object, validator.Object);
 
@@ -194,7 +192,6 @@ namespace Wrhs.WebApp.Tests
             var builder = new DeliveryDocumentBuilder(prodRepository.Object, validator.Object); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.GetDocument(guid, cache.Object, prodRepository.Object, validator.Object);
 
@@ -207,7 +204,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.GetDocumentLines(guid, cache.Object, prodRepository.Object, validator.Object);
 
@@ -234,7 +230,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.UpdateLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -250,7 +245,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument();
             cache.Setup(m=>m.GetValue(It.IsAny<string>())).Returns(document);
             cache.Setup(m=>m.SetValue(It.IsAny<string>(), It.IsAny<DeliveryDocument>())).Verifiable();
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.UpdateLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -266,7 +260,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.UpdateLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -280,7 +273,6 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.UpdateLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -294,7 +286,6 @@ namespace Wrhs.WebApp.Tests
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.DeleteLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -309,7 +300,6 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))
                 .Returns(null);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.DeleteLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
@@ -323,12 +313,34 @@ namespace Wrhs.WebApp.Tests
             var line = new DeliveryDocumentLine();
             cache.Setup(m=>m.SetValue(guid, It.IsAny<DeliveryDocument>())).Verifiable();
             cache.Setup(m=>m.GetValue(guid)).Returns(document);
-            var controller = new DeliveryDocumentController(repository.Object);
 
             var result = controller.DeleteLine(guid, cache.Object, line, prodRepository.Object, validator.Object);
 
             Assert.IsType<OkObjectResult>(result);
             cache.Verify(m=>m.SetValue(guid, It.IsAny<DeliveryDocument>()), Times.Once());
+        }
+
+        [Fact]
+        public void ShouldReturnOkWithDeliveryDocumentOnRegisterWhenSuccess()
+        {  
+            var document = new DeliveryDocument();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>())).Returns(document);
+
+            var result = controller.Register(guid, cache.Object, registrator.Object);
+
+            Assert.IsType<OkObjectResult>(result);
+            var obj = ((OkObjectResult)result).Value;
+            Assert.IsType<DeliveryDocument>(obj);
+        }
+
+        [Fact]
+        public void ShouldReturnNotFoundOnRegisterWhenDocumentNotExists()
+        {
+            cache.Setup(m=>m.GetValue(It.IsAny<string>())).Returns(null);
+
+            var result = controller.Register(guid, cache.Object, registrator.Object);
+
+            Assert.IsType<NotFoundResult>(result);
         }
     }
 }

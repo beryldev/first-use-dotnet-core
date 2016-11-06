@@ -134,5 +134,17 @@ namespace Wrhs.WebApp.Controllers
 
             return Ok(builder.Lines);
         }     
+
+        [HttpPost("new/{guid}")]
+        public IActionResult Register(string guid, [FromServices]ICache cache, IDocumentRegistrator<DeliveryDocument> registrator)
+        {
+            var doc = cache.GetValue(guid) as DeliveryDocument;
+            if(doc == null)
+                return NotFound();
+
+            registrator.Register(doc);
+
+            return Ok(doc);
+        }
     }
 }

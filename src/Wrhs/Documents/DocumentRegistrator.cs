@@ -4,7 +4,7 @@ using Wrhs.Core;
 
 namespace Wrhs.Documents
 {
-    public class DocumentRegistrator<T> where T : IEntity, INumerableDocument
+    public class DocumentRegistrator<T> : IDocumentRegistrator<T> where T : IEntity, INumerableDocument
     {
         IRepository<T> repository;
 
