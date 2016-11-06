@@ -14,8 +14,9 @@ var paths = {
 //paths.appJs = paths.webroot + 'src/js/**/*.js';
 paths.appJs = [
   paths.webroot + 'src/js/app.js',
-  paths.webroot + 'src/js/app.config.js',
   paths.webroot + 'src/js/message.service.js',
+  paths.webroot + 'src/js/http-interceptor.service.js',
+  paths.webroot + 'src/js/app.config.js',
   paths.webroot + 'src/js/controllers/*.js'
 ]
 

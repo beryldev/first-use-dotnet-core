@@ -5,7 +5,7 @@
         .module('wrhs')
         .config(config);
 
-    config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider'];
+    config.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
 
     function config($stateProvider, $urlRouterProvider, $locationProvider){
 

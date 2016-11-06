@@ -66,14 +66,10 @@
 
         function loadData(){
             $http.get('api/document/delivery', { params: vm.filter})
-                .then(onSuccess, onFail);
+                .then(onSuccess);
 
             function onSuccess(response){
                 console.log(response.data);
-            }
-
-            function onFail(error){
-                messageService.requestError(error);
             }
         }
     }

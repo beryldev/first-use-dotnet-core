@@ -26,15 +26,11 @@
 
         function save(){
             $http.post('api/product', vm.product)
-                .then(onSuccess, onError);
+                .then(onSuccess);
 
             function onSuccess(response){
                 messageService.success('', 'Added new product');
                 $state.go('products');
-            }
-
-            function onError(error){
-                messageService.requestError(error);          
             }
         }
     }

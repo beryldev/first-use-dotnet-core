@@ -265,7 +265,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnOkOnUpdateLineWhenSuccess()
+        public void ShouldReturnOkWithLinesOnUpdateLineWhenSuccess()
         {
             var uid = "someuid";
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
@@ -280,7 +280,28 @@ namespace Wrhs.WebApp.Tests
 
             var result = controller.UpdateLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
 
-            Assert.IsType<OkResult>(result);
+            Assert.IsType<OkObjectResult>(result);
+            var obj = result as OkObjectResult;
+            Assert.IsType<DeliveryDocumentLine[]>(obj.Value);
+        }
+
+        [Fact]
+        public void ShouldSaveBuildedDocumentToCacheOnUpdateLineWhenSuccess()
+        {
+            var uid = "someuid";
+            var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
+            var repository = new Mock<IRepository<DeliveryDocument>>();
+            var prodRepository = new Mock<IRepository<Product>>();
+            var validator = new Mock<IValidator<IDocAddLineCmd>>();
+            var document = new DeliveryDocument();
+            var cache  =new Mock<ICache>();
+            cache.Setup(m=>m.GetValue(It.IsAny<string>())).Returns(document);
+            cache.Setup(m=>m.SetValue(It.IsAny<string>(), It.IsAny<DeliveryDocument>())).Verifiable();
+            var controller = new DeliveryDocumentController(repository.Object);
+
+            var result = controller.UpdateLine(uid, cache.Object, line, prodRepository.Object, validator.Object);
+
+            cache.Verify(m=>m.SetValue(uid, It.IsAny<DeliveryDocument>()), Times.Once());
         }
 
         [Fact]

@@ -30,28 +30,19 @@
 
         function getProduct(id){
             $http.get('api/product/'+id)
-                .then(onSuccess, onError);
+                .then(onSuccess);
 
             function onSuccess(response){
                 vm.product = response.data;
-            }
-
-            function onError(error){
-                messageService.requestError(error);
-                $state.go('products');
             }
         }
 
         function updateProduct(){
             $http.put('api/product/'+$stateParams.id, vm.product)
-                .then(onSuccess, onError);
+                .then(onSuccess);
 
             function onSuccess(response){
                 messageService.success('', 'Changes saved');
-            }
-
-            function onError(error){
-                messageService.requestError(error);
             }
         }
 

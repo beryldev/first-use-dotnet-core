@@ -4,15 +4,16 @@
     angular
         .module('wrhs')
         .controller('NewDeliveryDocCtrl', NewDeliveryDocCtrl)
-        .controller('NewLineModalCtrl', NewLineModalCtrl);
+        .controller('DocLineModalCtrl', DocLineModalCtrl);
 
     NewDeliveryDocCtrl.$inject = ['$http', '$uibModal', 'messageService'];
 
     function NewDeliveryDocCtrl($http, $uibModal, messageService){
         var vm = this;
         vm.doc = {};
-        vm.openNewLineModal = openNewLineModal;
+        vm.addDocLineModal = addDocLineModal;
         vm.deleteDocLine = deleteDocLine;
+        vm.changeDocLineModal = changeDocLineModal;
         vm.guid = null;
 
         init();
@@ -32,35 +33,35 @@
 
         function getNewDocGuid(){
             $http.get('api/document/delivery/new')
-                .then(onSuccess, onRequestError);
+                .then(onSuccess);
 
             function onSuccess(response){
                 vm.guid = response.data;
             }
         }
 
-        function openNewLineModal(){
-            var modalInstance = $uibModal.open({
-                ariaLabelledBy: 'modal-title',
-                ariaDescribedBy: 'modal-body',
-                templateUrl: 'myModalContent.html',
-                controller: 'NewLineModalCtrl',
-                controllerAs: 'vm',
-                //size: size,
-                //appendTo: parentElem,        
-            });
-            modalInstance.close = addDocLine;
-        }
-
         function addDocLine(line){
-            console.log(line);
             var cmd = {
                 productId: line.product.id,
                 quantity: line.quantity
             };
             
             $http.post('api/document/delivery/new/'+vm.guid+'/line', cmd)
-                .then(onSuccess, onRequestError);
+                .then(onSuccess);
+
+            function onSuccess(response){
+                vm.doc.lines = response.data;
+            }
+        }
+
+        function updateDocLine(line){
+            console.log('update', line);
+            var config = {
+                data: line,
+                headers: {'Content-Type': 'application/json'}
+            };
+            $http.put('api/document/delivery/new/'+vm.guid+'/line', line)
+                .then(onSuccess);
 
             function onSuccess(response){
                 vm.doc.lines = response.data;
@@ -74,29 +75,61 @@
             };
 
             $http.delete('api/document/delivery/new/'+vm.guid+'/line', config)
-                .then(onSuccess, onRequestError);
+                .then(onSuccess);
             
             function onSuccess(response){
                 vm.doc.lines = response.data;
             }
         }
 
-        function onRequestError(error){
-            messageService.requestError(error);
+        function addDocLineModal(){
+            openLineModal({ title: 'New line', line: {} }, addDocLine);
+        }
+
+        function changeDocLineModal(line){
+            openLineModal({ title: 'Change line', line: line }, updateDocLine);
+        }
+
+        function openLineModal(content, closeCallback){
+            var modalInstance = $uibModal.open({
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                templateUrl: 'myModalContent.html',
+                controller: 'DocLineModalCtrl',
+                controllerAs: 'vm',
+                resolve: {
+                    content: function() { return content; }
+                }
+                //size: size,
+                //appendTo: parentElem,        
+            });
+            modalInstance.close = closeCallback;
         }
     }
 
 
-    NewLineModalCtrl.$inject = ['$http', '$uibModalInstance', 'messageService'];
+    DocLineModalCtrl.$inject = ['$http', '$uibModalInstance', 'messageService', 'content'];
 
-    function NewLineModalCtrl($http, $uibModalInstance, messageService){
+    function DocLineModalCtrl($http, $uibModalInstance, messageService, content){
         var vm = this;
+        vm.title = '';
         vm.okClick = okClick;
         vm.cancelClick = cancelClick;
         vm.product = {};
         vm.products = [];
         vm.quantity = 1;
         vm.refreshProducts = refreshProducts;
+        vm.lp = null;
+
+        init();
+
+        function init(){
+            console.log('content', content);
+            vm.title = content.title;
+            vm.product = content.line.product;
+            vm.quantity = content.line.quantity;
+            vm.lp = content.line.lp ? content.line.lp : 0;
+        }
 
         function cancelClick(){
             $uibModalInstance.dismiss('cancelClick');
@@ -105,7 +138,8 @@
         function okClick(){
             var line = {
                 product: vm.product,
-                quantity: vm.quantity
+                quantity: vm.quantity,
+                lp: vm.lp
             };
             $uibModalInstance.dismiss('okClick');
             $uibModalInstance.close(line);
@@ -119,16 +153,11 @@
             };
 
             $http.get('api/product', {params: filter})
-                .then(onSuccess, onError);
+                .then(onSuccess);
 
             function onSuccess(response){
                 vm.products = response.data.items;
             }
-
-            function onError(error){
-                messageService.requestError(error);
-            }
         }
-
     }
 })();

@@ -114,7 +114,8 @@ namespace Wrhs.WebApp.Controllers
             if(errors.Count > 0)
                 return BadRequest(errors);
 
-            return Ok();
+            cache.SetValue(guid, builder.Build());
+            return Ok(builder.Lines);
         }  
 
         [HttpDelete("new/{guid}/line")]
