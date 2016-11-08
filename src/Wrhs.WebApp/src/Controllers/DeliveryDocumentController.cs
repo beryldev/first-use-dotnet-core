@@ -34,7 +34,7 @@ namespace Wrhs.WebApp.Controllers
                 criteria.WhereFullNumber(Condition.Contains, fullNumber);
 
             if(issueDate != null)
-                criteria.WhereIssueDate(Condition.Equal, issueDate??DateTime.Today);
+                criteria.WhereIssueDate(Condition.Equal, issueDate.Value);
            
             return search.Exec(criteria);
         }
