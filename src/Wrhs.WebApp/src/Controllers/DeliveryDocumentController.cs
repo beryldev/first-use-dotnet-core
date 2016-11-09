@@ -41,7 +41,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpGet("new")]
         public string NewDocument([FromServices]ICache cache, [FromServices]IRepository<Product> prodRepository,
-            [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var builder = new DeliveryDocumentBuilder(prodRepository, validator);
             var guid = System.Guid.NewGuid().ToString();
@@ -52,7 +52,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpPost("new/{guid}/line")]
         public IActionResult AddLine(string guid, [FromBody]DocAddLineCmd cmd, [FromServices]ICache cache, 
-            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var errors = new List<ValidationResult>();
             var doc = (DeliveryDocument)cache.GetValue(guid);
@@ -73,7 +73,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpGet("new/{guid}")]
         public IActionResult GetDocument(string guid, [FromServices]ICache cache,
-            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var doc = cache.GetValue(guid) as DeliveryDocument;
             if(doc == null)
@@ -87,7 +87,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpGet("new/{guid}/line")]
         public IActionResult GetDocumentLines(string guid, [FromServices]ICache cache,
-            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var document = cache.GetValue(guid) as DeliveryDocument;
             if(document == null)
@@ -100,7 +100,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpPut("new/{guid}/line")]
         public IActionResult UpdateLine(string guid, [FromServices]ICache cache, [FromBody]DeliveryDocumentLine line,
-            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var errors = new List<ValidationResult>();
             var doc = cache.GetValue(guid) as DeliveryDocument;
@@ -120,7 +120,7 @@ namespace Wrhs.WebApp.Controllers
 
         [HttpDelete("new/{guid}/line")]
         public IActionResult DeleteLine(string guid, [FromServices]ICache cache, [FromBody]DeliveryDocumentLine line,
-            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<IDocAddLineCmd> validator)
+            [FromServices]IRepository<Product> prodRepository, [FromServices]IValidator<DocAddLineCmd> validator)
         {
             var doc = cache.GetValue(guid) as DeliveryDocument;
             if(doc == null)

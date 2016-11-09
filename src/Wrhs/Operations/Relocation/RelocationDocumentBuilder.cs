@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
@@ -14,6 +15,14 @@ namespace Wrhs.Operations.Relocation
             : base(addLineValidator)
         {
             this.productRepository = productRepository;
+        }
+
+         public RelocationDocumentBuilder(IRepository<Product> productRepository,
+            IValidator<RelocDocAddLineCmd> addLineValidator, RelocationDocument baseDocument)
+            : base(addLineValidator)
+        {
+            this.productRepository = productRepository; todo
+            this.lines = baseDocument.Lines.ToList();
         }
 
         public override RelocationDocument Build()
