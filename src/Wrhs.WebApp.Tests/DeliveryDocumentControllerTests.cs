@@ -24,7 +24,7 @@ namespace Wrhs.WebApp.Tests
 
         Mock<IRepository<Product>> prodRepository;
 
-        Mock<IValidator<IDocAddLineCmd>> validator;
+        Mock<IValidator<DocAddLineCmd>> validator;
 
         Mock<IDocumentRegistrator<DeliveryDocument>> registrator;
 
@@ -36,7 +36,7 @@ namespace Wrhs.WebApp.Tests
             repository = new Mock<IRepository<DeliveryDocument>>();
             cache = new Mock<ICache>();
             prodRepository = new Mock<IRepository<Product>>();
-            validator = new Mock<IValidator<IDocAddLineCmd>>();
+            validator = new Mock<IValidator<DocAddLineCmd>>();
             registrator = new Mock<IDocumentRegistrator<DeliveryDocument>>();
             controller = new DeliveryDocumentController(repository.Object);
         }
@@ -255,7 +255,7 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnBadRequestWithErrorsOnUpdateLineWhenFail()
         {
             var line = new DeliveryDocumentLine(){Product = new Product{Id = 1, Code="PROD1", Name="Product 1"}, Quantity = 100};
-            validator.Setup(m=>m.Validate(It.IsAny<IDocAddLineCmd>()))
+            validator.Setup(m=>m.Validate(It.IsAny<DocAddLineCmd>()))
                 .Returns(new List<ValidationResult>(){new ValidationResult()});
             var document = new DeliveryDocument(); 
             cache.Setup(m=>m.GetValue(It.IsAny<string>()))

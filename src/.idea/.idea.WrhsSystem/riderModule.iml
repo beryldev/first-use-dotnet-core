@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.Data" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.Data.Tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.Tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests.Integration" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Data.Tests/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Data.Tests/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Data/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Data/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Tests/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.Tests/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests.Integration/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests.Integration/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp.Tests/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs.WebApp/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Wrhs/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../packages" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

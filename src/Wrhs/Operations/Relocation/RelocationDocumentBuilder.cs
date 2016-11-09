@@ -21,7 +21,7 @@ namespace Wrhs.Operations.Relocation
             IValidator<RelocDocAddLineCmd> addLineValidator, RelocationDocument baseDocument)
             : base(addLineValidator)
         {
-            this.productRepository = productRepository; todo
+            this.productRepository = productRepository; //todo
             this.lines = baseDocument.Lines.ToList();
         }
 

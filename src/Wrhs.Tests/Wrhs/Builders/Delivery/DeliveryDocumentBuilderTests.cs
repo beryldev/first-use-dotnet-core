@@ -24,7 +24,7 @@ namespace Wrhs.Tests
         public void BuilderCanBeBasedOnPassedDeliveryDocument()
         {
             var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<IDocAddLineCmd>>(); 
+            var addLineValidMock = new Mock<IValidator<DocAddLineCmd>>();
             var document = new DeliveryDocument();
             document.Lines.Add(new DeliveryDocumentLine
             {
@@ -48,7 +48,7 @@ namespace Wrhs.Tests
         {
             var repo = MakeProductRepository();
             var document = new DeliveryDocument();
-            var addLineValidMock = new Mock<IValidator<IDocAddLineCmd>>(); 
+            var addLineValidMock = new Mock<IValidator<DocAddLineCmd>>();
             document.Lines.Add(new DeliveryDocumentLine
             {
                 Product = repo.GetById(1),
@@ -73,7 +73,7 @@ namespace Wrhs.Tests
         public DeliveryDocumentBuilder MakeBuilder()
         {
             var repo = MakeProductRepository();
-            var addLineValidMock = new Mock<IValidator<IDocAddLineCmd>>();
+            var addLineValidMock = new Mock<IValidator<DocAddLineCmd>>();
 
             var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object);
             return builder;

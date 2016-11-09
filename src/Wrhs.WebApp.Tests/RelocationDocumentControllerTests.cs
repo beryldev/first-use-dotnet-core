@@ -14,27 +14,24 @@ namespace Wrhs.WebApp.Tests
 {
     public class RelocationDocumentControllerTests
     {
-        string guid;
-
-        Mock<IRepository<RelocationDocument>> repository;
+        readonly Mock<IRepository<RelocationDocument>> repository;
 
         Mock<ICache> cache;
 
         Mock<IRepository<Product>> prodRepository;
 
-        Mock<IValidator<IDocAddLineCmd>> validator;
+        Mock<IValidator<DocAddLineCmd>> validator;
 
         Mock<IDocumentRegistrator<RelocationDocument>> registrator;
 
-        RelocationDocumentController controller;
+        readonly RelocationDocumentController controller;
 
         public RelocationDocumentControllerTests()
         {
-            guid = "someguid";
             repository = new Mock<IRepository<RelocationDocument>>();
             cache = new Mock<ICache>();
             prodRepository = new Mock<IRepository<Product>>();
-            validator = new Mock<IValidator<IDocAddLineCmd>>();
+            validator = new Mock<IValidator<DocAddLineCmd>>();
             registrator = new Mock<IDocumentRegistrator<RelocationDocument>>();
             controller = new RelocationDocumentController(repository.Object);
         }
@@ -72,17 +69,6 @@ namespace Wrhs.WebApp.Tests
             var result = controller.Get(issueDate: DateTime.Today);
 
             Assert.IsType<PaginateResult<RelocationDocument>>(result);
-        }
-
-        [Fact]
-        public void ShouldReturnTempDocUidOnNewDocument()
-        {
-            repository.Setup(m=>m.Get()).Returns(new List<RelocationDocument>());
-            
-            var result = controller.NewDocument(cache.Object, prodRepository.Object, validator.Object);
-
-            Assert.IsType<string>(result);
-            Assert.NotEqual(String.Empty, result);
         }
     }
 }
