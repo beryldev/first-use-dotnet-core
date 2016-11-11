@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -116,7 +115,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShoudReturnOkRequestOnSuccessWhenCreateProduct()
+        public void ShouldReturnOkRequestOnSuccessWhenCreateProduct()
         {
             var repository = RepositoryFactory<Product>.Make();
             var cmd = new CreateProductCommand();
@@ -131,7 +130,7 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShoudBadRequestWithErrorsRequestOnFailWhenCreateProduct()
+        public void ShouldBadRequestWithErrorsRequestOnFailWhenCreateProduct()
         {
             var repository = RepositoryFactory<Product>.Make();
             var cmd = new CreateProductCommand();

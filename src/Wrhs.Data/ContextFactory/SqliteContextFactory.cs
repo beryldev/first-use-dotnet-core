@@ -8,7 +8,7 @@ namespace Wrhs.Data.ContextFactory
         public static WrhsContext Create(string connectionstring)
         {
             var serviceProvider = new ServiceCollection()
-                .AddEntityFrameworkInMemoryDatabase()
+                .AddEntityFrameworkSqlite()
                 .BuildServiceProvider();
 
             var optionsBuilder = new DbContextOptionsBuilder<WrhsContext>();

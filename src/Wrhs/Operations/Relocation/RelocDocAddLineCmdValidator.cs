@@ -18,7 +18,7 @@ namespace Wrhs.Operations.Relocation
 
         public IEnumerable<ValidationResult> Validate(RelocDocAddLineCmd command)
         {
-            var result = (List<ValidationResult>)base.Validate((IDocAddLineCmd)command);
+            var result = (List<ValidationResult>)base.Validate((DocAddLineCmd)command);
 
             if(String.IsNullOrWhiteSpace(command.From))
                 result.Add(new ValidationResult("From", "From address can't be empty."));
@@ -42,7 +42,7 @@ namespace Wrhs.Operations.Relocation
                 .Where(s=>s.Location.Equals(command.From, StringComparison.OrdinalIgnoreCase))
                 .Sum(s=>s.Quantity);
             if(command.Quantity > quantity)
-                result.Add(new ValidationResult("Quantity", "Ivalid quantity. Try relocate more than at current location."));
+                result.Add(new ValidationResult("Quantity", "Invalid quantity. Try relocate more than at current location."));
 
             return result;
         }

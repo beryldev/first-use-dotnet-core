@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
@@ -10,7 +11,8 @@ namespace Wrhs.WebApp.Controllers
     public class RelocationDocBuilderController
         : DocBuilderController<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd>
     {
-        public RelocationDocBuilderController(ICache cache, IRepository<Product> productRepo, IValidator<RelocDocAddLineCmd> validator) 
+        public RelocationDocBuilderController(ICache cache, IRepository<Product> productRepo, 
+            IValidator<RelocDocAddLineCmd> validator) 
             : base(cache, productRepo, validator)
         {
         }

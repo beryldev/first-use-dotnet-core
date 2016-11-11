@@ -5,8 +5,6 @@ namespace Wrhs.Documents
 {
     public interface IDocument<TLine> where TLine : IDocumentLine
     {
-        string FullNumber { get; set; }
-
         DateTime IssueDate { get; set; }
 
         List<TLine> Lines { get; }
@@ -28,5 +26,7 @@ namespace Wrhs.Documents
         string FullNumber { get; set; }
 
         int Number { get; set; }
+
+        string Remarks { get; set; }
     }
 }

@@ -17,5 +17,7 @@ namespace Wrhs.Documents
 
         public virtual List<TLine> Lines { get; } = new List<TLine>();
 
+        public virtual string Remarks { get; set; } = String.Empty;
+
     }
 }

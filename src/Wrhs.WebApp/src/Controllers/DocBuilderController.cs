@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
@@ -18,8 +20,7 @@ namespace Wrhs.WebApp.Controllers
 
         protected IValidator<TCmd> validator;
 
-        public DocBuilderController(ICache cache, IRepository<Product> productRepo, 
-            IValidator<TCmd> validator)
+        public DocBuilderController(ICache cache, IRepository<Product> productRepo, IValidator<TCmd> validator)
         {
             this.cache = cache;
             this.productRepo = productRepo;
@@ -117,15 +118,18 @@ namespace Wrhs.WebApp.Controllers
         }  
 
         [HttpPost("new/{guid}")]
-        public IActionResult Register(string guid, [FromServices]IDocumentRegistrator<TDoc> registrator)
+        public IActionResult Register(string guid, [FromServices]IDocumentRegistrator<TDoc> registrator,
+            [FromBody]TDoc doc = null)
         {
-            var doc = cache.GetValue(guid) as TDoc;
-            if(doc == null)
+            var document = cache.GetValue(guid) as TDoc;
+            if(document == null)
                 return NotFound();
 
-            registrator.Register(doc);
+            document.Remarks = doc?.Remarks;
 
-            return Ok(doc);
+            registrator.Register(document);
+
+            return Ok(document);
         }
 
         protected abstract DocumentBuilder<TDoc, TLine, TCmd> CreateDocBuilder();

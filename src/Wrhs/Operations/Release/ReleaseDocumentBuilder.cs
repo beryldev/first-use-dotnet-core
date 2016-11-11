@@ -1,3 +1,4 @@
+using System.Linq;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
@@ -13,6 +14,14 @@ namespace Wrhs.Operations.Release
             : base(addLineValidator)
         {
             this.productRepository = productRepository;
+        }
+
+         public ReleaseDocumentBuilder(IRepository<Product> productRepository,
+            IValidator<ReleaseDocAddLineCmd> addLineValidator, ReleaseDocument baseDocument)
+            : base(addLineValidator)
+        {
+            this.productRepository = productRepository;
+            this.lines = baseDocument.Lines.ToList();
         }
 
         public override ReleaseDocument Build()

@@ -13,8 +13,6 @@
     "Microsoft.EntityFrameworkCore.Sqlite": "1.0.0",
     "Microsoft.EntityFrameworkCore.InMemory": "1.0.0",
     "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
-    "MySql.Data.Core": "7.0.4-IR-191",
-    "MySql.Data.EntityFrameworkCore": "7.0.6-IR31",
     "Microsoft.EntityFrameworkCore.Design": {
       "version": "1.0.0-preview2-final",
       "type": "build" 

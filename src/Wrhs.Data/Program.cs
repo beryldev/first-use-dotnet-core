@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using Wrhs.Products;
-
 namespace Wrhs.Data
 {
     public class Program

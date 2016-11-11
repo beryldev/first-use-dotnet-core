@@ -1,12 +1,9 @@
 using System;
-using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Wrhs.Core;
@@ -16,6 +13,8 @@ using Wrhs.Data.Repository;
 using Wrhs.Documents;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
+using Wrhs.Operations.Release;
+using Wrhs.Operations.Relocation;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
 using Wrhs.WebApp.Utils;
@@ -98,6 +97,18 @@ namespace Wrhs.WebApp
                 return new DeliveryDocumentRepository(context);
             });
 
+            services.AddTransient(typeof(IRepository<RelocationDocument>), (IServiceProvider provider)=>
+            { 
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new RelocationDocumentRepository(context);
+            });
+
+            services.AddTransient(typeof(IRepository<ReleaseDocument>), (IServiceProvider provider)=>
+            { 
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new ReleaseDocumentRepository(context);
+            });
+
             services.AddTransient(typeof(IStockCache), (IServiceProvider provider)=>
             { 
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -129,10 +140,24 @@ namespace Wrhs.WebApp
                 return new CreateProductCommandHandler(productRepository);
             });
 
-            services.AddTransient(typeof(IValidator<IDocAddLineCmd>), (IServiceProvider provider) => 
+            services.AddTransient(typeof(IValidator<DocAddLineCmd>), (IServiceProvider provider) => 
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
-                return (new DocAddLineCmdValidator(productRepository));
+                return new DocAddLineCmdValidator(productRepository);
+            });
+
+            services.AddTransient(typeof(IValidator<RelocDocAddLineCmd>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                var warehouse = provider.GetService(typeof(IWarehouse)) as IWarehouse;
+                return new RelocDocAddLineCmdValidator(productRepository, warehouse);
+            });
+
+            services.AddTransient(typeof(IValidator<RelocDocAddLineCmd>), (IServiceProvider provider) => 
+            {
+                var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
+                var warehouse = provider.GetService(typeof(IWarehouse)) as IWarehouse;
+                return new ReleaseDocAddLineCmdValidator(productRepository, warehouse);
             });
 
             services.AddTransient(typeof(IValidator<UpdateProductCommand>), (IServiceProvider provider) => 
@@ -151,6 +176,18 @@ namespace Wrhs.WebApp
             {
                 var docRepository = provider.GetService(typeof(IRepository<DeliveryDocument>)) as IRepository<DeliveryDocument>;
                 return new DocumentRegistrator<DeliveryDocument>(docRepository, "DLV");
+            });
+
+            services.AddTransient(typeof(IDocumentRegistrator<RelocationDocument>), (IServiceProvider provider) => 
+            {
+                var docRepository = provider.GetService(typeof(IRepository<RelocationDocument>)) as IRepository<RelocationDocument>;
+                return new DocumentRegistrator<RelocationDocument>(docRepository, "RLC");
+            });
+
+            services.AddTransient(typeof(IDocumentRegistrator<ReleaseDocument>), (IServiceProvider provider) => 
+            {
+                var docRepository = provider.GetService(typeof(IRepository<ReleaseDocument>)) as IRepository<ReleaseDocument>;
+                return new DocumentRegistrator<ReleaseDocument>(docRepository, "RLS");
             });
         }
     }
