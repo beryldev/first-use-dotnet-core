@@ -69,6 +69,15 @@
                         controller: 'NewDeliveryDocCtrl as vm'
                     }
                 }
+            })
+            .state('documents.relocation', {
+                url: '/relocation',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/relocationDocList.html',
+                        controller: 'RelocationDocListCtrl as vm'
+                    }
+                }
             });
     }
 
