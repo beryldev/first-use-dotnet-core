@@ -1,9 +1,10 @@
 
+using Wrhs.Core;
 using Wrhs.Products;
 
 namespace Wrhs.Documents
 {
-    public class DocumentLine : IDocumentLine
+    public class DocumentLine : IDocumentLine, IEntity
     {
         public virtual int Id { get; set; } = 0;
 

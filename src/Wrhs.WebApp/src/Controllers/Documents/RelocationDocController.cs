@@ -5,9 +5,9 @@ using Wrhs.Operations.Relocation;
 namespace Wrhs.WebApp.Controllers.Documents
 {
     [Route("api/document/relocation")]
-    public class RelocationDocumentController : DocumentController<RelocationDocument, RelocationDocumentLine>
+    public class RelocationDocController : DocumentController<RelocationDocument, RelocationDocumentLine>
     {
-        public RelocationDocumentController(IRepository<RelocationDocument> docRepo) 
+        public RelocationDocController(IRepository<RelocationDocument> docRepo) 
             : base(docRepo) { }
 
     }
