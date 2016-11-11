@@ -1,6 +1,6 @@
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
-using Wrhs.WebApp.Controllers;
+using Wrhs.WebApp.Controllers.DocBuilders;
 
 namespace Wrhs.WebApp.Tests
 {

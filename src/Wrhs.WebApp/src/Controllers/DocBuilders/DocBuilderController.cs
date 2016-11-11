@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
 using Wrhs.WebApp.Utils;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.DocBuilders
 {
     public abstract class DocBuilderController<TDoc, TLine, TCmd> : BaseController
         where TDoc : class, IEntity, IDocument<TLine>, INumerableDocument

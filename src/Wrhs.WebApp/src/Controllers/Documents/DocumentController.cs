@@ -5,7 +5,7 @@ using Wrhs.Core.Search;
 using Wrhs.Core.Search.Interfaces;
 using Wrhs.Documents;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.Documents
 {
     public abstract class DocumentController<TDoc, TLine> : BaseController 
         where TDoc : IEntity, ISearchableDocument

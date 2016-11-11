@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Wrhs.Core;
+using Wrhs.Documents;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
 using Wrhs.WebApp.Utils;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.DocBuilders
 {
     [Route("api/document/relocation/new")]
     public class RelocationDocBuilderController
@@ -17,12 +17,12 @@ namespace Wrhs.WebApp.Controllers
         {
         }
 
-        protected override Documents.DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd> CreateDocBuilder()
+        protected override DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd> CreateDocBuilder()
         {
             return new RelocationDocumentBuilder(productRepo, validator);
         }
 
-        protected override Documents.DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd> CreateDocBuilder(RelocationDocument baseDoc)
+        protected override DocumentBuilder<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd> CreateDocBuilder(RelocationDocument baseDoc)
         {
             return new RelocationDocumentBuilder(productRepo, validator, baseDoc);
         }

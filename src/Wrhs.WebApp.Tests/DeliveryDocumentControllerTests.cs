@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Wrhs.Core;
 using Wrhs.Core.Search;
-using Wrhs.Documents;
 using Wrhs.Operations.Delivery;
-using Wrhs.Products;
-using Wrhs.WebApp.Controllers;
-using Wrhs.WebApp.Utils;
+using Wrhs.WebApp.Controllers.Documents;
 using Xunit;
 
 namespace Wrhs.WebApp.Tests
@@ -59,6 +54,26 @@ namespace Wrhs.WebApp.Tests
             var result = controller.Get(issueDate: DateTime.Today);
 
             Assert.IsType<PaginateResult<DeliveryDocument>>(result);
+        }
+
+        [Fact]
+        public void ShouldReturnRequestedPageOnGet()
+        {
+            repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
+
+            var result = controller.Get(page: 2);
+
+            Assert.Equal(2, result.Page);
+        }
+
+        [Fact]
+        public void ShouldReturnRequestedPageSize()
+        {
+            repository.Setup(m=>m.Get()).Returns(new List<DeliveryDocument>());
+
+            var result = controller.Get(perPage: 30);
+
+            Assert.Equal(30, result.PerPage);
         }
     }
 }

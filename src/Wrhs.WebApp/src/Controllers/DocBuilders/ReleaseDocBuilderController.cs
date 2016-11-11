@@ -4,7 +4,7 @@ using Wrhs.Operations.Release;
 using Wrhs.Products;
 using Wrhs.WebApp.Utils;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.DocBuilders
 {
     public class ReleaseDocBuilderController
         : DocBuilderController<ReleaseDocument, ReleaseDocumentLine, ReleaseDocAddLineCmd>

@@ -6,7 +6,7 @@ using Moq;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
-using Wrhs.WebApp.Controllers;
+using Wrhs.WebApp.Controllers.DocBuilders;
 using Wrhs.WebApp.Utils;
 using Xunit;
 

@@ -6,7 +6,7 @@ using Wrhs.Core.Search;
 using Wrhs.Documents;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
-using Wrhs.WebApp.Controllers;
+using Wrhs.WebApp.Controllers.Documents;
 using Wrhs.WebApp.Utils;
 using Xunit;
 

@@ -5,7 +5,7 @@ using Wrhs.Core.Search;
 using Wrhs.Core.Search.Interfaces;
 using Wrhs.Operations.Delivery;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.Documents
 {
     [Route("api/document/delivery")]
     public class DeliveryDocumentController : BaseController
@@ -18,13 +18,16 @@ namespace Wrhs.WebApp.Controllers
         }
         
         [HttpGet]
-        public IPaginateResult<DeliveryDocument> Get(string fullNumber="", DateTime? issueDate = null)
+        public IPaginateResult<DeliveryDocument> Get(string fullNumber="", DateTime? issueDate = null,
+            int page= 1, int perPage = 10)
         {
             var paginator = new Paginator<DeliveryDocument>();
             var search = new ResourceSearch<DeliveryDocument>(docRepository, paginator,
                 new DocumentSearchCriteriaFactory<DeliveryDocument>());
 
              var criteria = (DocumentSearchCriteria<DeliveryDocument>) search.MakeCriteria();
+             criteria.Page = page;
+             criteria.PerPage = perPage;
 
             if(!String.IsNullOrWhiteSpace(fullNumber))
                 criteria.WhereFullNumber(Condition.Contains, fullNumber);

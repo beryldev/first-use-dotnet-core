@@ -5,7 +5,7 @@ using Wrhs.Operations.Delivery;
 using Wrhs.Products;
 using Wrhs.WebApp.Utils;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.DocBuilders
 {
     [Route("api/document/delivery")]
     public class DeliveryDocBuilderController
