@@ -8,7 +8,7 @@ namespace Wrhs.Operations
     {
         public int Id { get; set; }
         
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
         
         public string Location { get; set; }
 

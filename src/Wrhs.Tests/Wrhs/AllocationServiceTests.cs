@@ -147,6 +147,36 @@ namespace Wrhs.Tests
         }
 
         [Test]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void ShouldReturnAllocationsByProductId(int productId)
+        {
+            var repo = RepositoryFactory<Allocation>.Make();
+            repo.Save(MakeAllocation("PROD1", id: 1));
+            repo.Save(MakeAllocation("PROD2", id: 2));
+            var service = MakeService(repo);
+
+            var result = service.GetAllocations(productId);
+
+            Assert.IsNotEmpty(result);
+        }
+
+        [Test]
+        [TestCase("PROD1")]
+        [TestCase("PROD2")]
+        public void ShouldReturnAllocationsByProductCode(string code)
+        {
+            var repo = RepositoryFactory<Allocation>.Make();
+            repo.Save(MakeAllocation("PROD1", id: 1));
+            repo.Save(MakeAllocation("PROD2", id: 2));
+            var service = MakeService(repo);
+
+            var result = service.GetAllocations(code);
+
+            Assert.IsNotEmpty(result);
+        }
+
+        [Test]
         public void GetAllocationsReturnRegisteredAllocation()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -236,13 +266,13 @@ namespace Wrhs.Tests
             Assert.AreEqual(1, repo.Get().Sum(item=>item.Quantity));
         }
 
-        protected Allocation MakeAllocation(string code, decimal quantity=1, string location="LOC-001-01")
+        protected Allocation MakeAllocation(string code, decimal quantity=1, string location="LOC-001-01", int id=1)
         {
             return new Allocation
             {
                 Quantity = quantity,
                 Location = location,
-                Product = new Product{ Code = code }
+                Product = new Product{ Id = id, Code = code }
             };
         }
 

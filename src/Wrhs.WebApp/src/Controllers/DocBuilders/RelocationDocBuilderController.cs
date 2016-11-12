@@ -7,7 +7,7 @@ using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp.Controllers.DocBuilders
 {
-    [Route("api/document/relocation/new")]
+    [Route("api/document/relocation")]
     public class RelocationDocBuilderController
         : DocBuilderController<RelocationDocument, RelocationDocumentLine, RelocDocAddLineCmd>
     {

@@ -10,6 +10,10 @@ namespace Wrhs.Operations
 
         IEnumerable<Allocation> GetAllocations();
 
+        IEnumerable<Allocation> GetAllocations(int productId);
+
+        IEnumerable<Allocation> GetAllocations(string code);
+
         void BeginTransaction();
 
         void CommitTransaction();

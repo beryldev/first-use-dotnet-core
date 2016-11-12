@@ -51,6 +51,20 @@ namespace Wrhs.Operations
             return repo.Get();
         }
 
+        public IEnumerable<Allocation> GetAllocations(int productId)
+        {
+            return repo.Get()
+                .Where(x => x.Product.Id == productId)
+                .ToList();
+        }
+
+        public IEnumerable<Allocation> GetAllocations(string code)
+        {
+            return repo.Get()
+                .Where(x => x.Product.Code == code)
+                .ToList();
+        }
+
         public void BeginTransaction()
         {
             if(isInTransaction)

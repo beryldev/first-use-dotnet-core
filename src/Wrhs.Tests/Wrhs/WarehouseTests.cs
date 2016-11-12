@@ -281,6 +281,12 @@ namespace Wrhs.Tests
                 
             mock.Setup(m=>m.GetAllocations())
                 .Returns(allocRepo.Get());
+
+             mock.Setup(m=>m.GetAllocations(It.IsAny<string>()))
+                .Returns((string code) => 
+                {
+                    return allocRepo.Get().Where(x=>x.Product.Code == code);
+                });
                 
             
             return mock.Object;

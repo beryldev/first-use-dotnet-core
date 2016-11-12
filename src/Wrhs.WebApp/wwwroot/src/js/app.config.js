@@ -25,7 +25,7 @@
                 url: '/products',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/productsList.html',
+                        templateUrl: 'templates/product/productsList.html',
                         controller: 'ProductsListCtrl as vm'
                     }
                 }
@@ -34,7 +34,7 @@
                 url: '/new',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/newProduct.html',
+                        templateUrl: 'templates/product/newProduct.html',
                         controller: 'NewProductCtrl as vm'
                     }
                 }
@@ -43,7 +43,7 @@
                 url: '/:id',
                 views: {
                     'wrapper@':{
-                        templateUrl: 'templates/productDetails.html',
+                        templateUrl: 'templates/product/productDetails.html',
                         controller: 'ProductDetailsCtrl as vm'
                     }
                 }
@@ -56,7 +56,7 @@
                 url: '/delivery',
                 views: {
                     'wrapper@':{
-                        templateUrl: 'templates/deliveryDocList.html',
+                        templateUrl: 'templates/delivery/deliveryDocList.html',
                         controller: 'DeliveryDocListCtrl as vm'
                     }
                 }
@@ -65,7 +65,7 @@
                 url: '/new',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/newDeliveryDoc.html',
+                        templateUrl: 'templates/delivery/newDeliveryDoc.html',
                         controller: 'NewDeliveryDocCtrl as vm'
                     }
                 }
@@ -74,8 +74,17 @@
                 url: '/relocation',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/relocationDocList.html',
+                        templateUrl: 'templates/relocation/relocationDocList.html',
                         controller: 'RelocationDocListCtrl as vm'
+                    }
+                }
+            })
+            .state('documents.relocation.new', {
+                url: '/new',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/relocation/newRelocationDoc.html',
+                        controller: 'NewRelocationDocCtrl as vm'
                     }
                 }
             });

@@ -1,13 +1,15 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Wrhs.Data;
 
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    [Migration("20161106194135_WrhsMigrations")]
-    partial class WrhsMigrations
+    [Migration("20161112181552_WrhsMigration")]
+    partial class WrhsMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -42,6 +44,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<DateTime>("IssueDate");
 
                     b.Property<int>("Number");
+
+                    b.Property<string>("Remarks");
 
                     b.HasKey("Id");
 
@@ -86,6 +90,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<DateTime>("IssueDate");
 
                     b.Property<int>("Number");
+
+                    b.Property<string>("Remarks");
 
                     b.HasKey("Id");
 
@@ -132,6 +138,8 @@ namespace Wrhs.Data.Migrations
                     b.Property<DateTime>("IssueDate");
 
                     b.Property<int>("Number");
+
+                    b.Property<string>("Remarks");
 
                     b.HasKey("Id");
 

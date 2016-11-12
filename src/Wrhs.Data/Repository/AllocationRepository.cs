@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Wrhs.Core;
 using Wrhs.Operations;
+using Wrhs.Products;
 
 namespace Wrhs.Data.Repository
 {
@@ -22,7 +24,7 @@ namespace Wrhs.Data.Repository
 
         public IEnumerable<Allocation> Get()
         {
-            return context.Allocations;
+            return context.Allocations.Include(x => x.Product);
         }
 
         public Allocation GetById(int id)

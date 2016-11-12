@@ -47,8 +47,7 @@ namespace Wrhs
 
         public List<Stock> CalculateStocks(string productCode)
         {
-            var items = allocService.GetAllocations()
-                .Where(m => m.Product.Code.Equals(productCode));
+            var items = allocService.GetAllocations(productCode);
 
             return Calculate(items);
         }

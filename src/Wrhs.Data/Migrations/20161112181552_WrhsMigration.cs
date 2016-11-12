@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Wrhs.Data.Migrations
 {
-    public partial class WrhsMigrations : Migration
+    public partial class WrhsMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +13,11 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     FullNumber = table.Column<string>(nullable: true),
                     IssueDate = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<int>(nullable: false)
+                    Number = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,10 +29,11 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     FullNumber = table.Column<string>(nullable: true),
                     IssueDate = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<int>(nullable: false)
+                    Number = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,10 +45,11 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     FullNumber = table.Column<string>(nullable: true),
                     IssueDate = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<int>(nullable: false)
+                    Number = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -57,7 +61,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     Code = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     EAN = table.Column<string>(nullable: true),
@@ -74,7 +78,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     Location = table.Column<string>(nullable: true),
                     ProductId = table.Column<int>(nullable: true),
                     Quantity = table.Column<decimal>(nullable: false)
@@ -95,7 +99,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     DocumentId = table.Column<int>(nullable: true),
                     EAN = table.Column<string>(nullable: true),
                     Lp = table.Column<int>(nullable: false),
@@ -126,7 +130,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     EAN = table.Column<string>(nullable: true),
                     Location = table.Column<string>(nullable: true),
                     Lp = table.Column<int>(nullable: false),
@@ -158,7 +162,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     EAN = table.Column<string>(nullable: true),
                     From = table.Column<string>(nullable: true),
                     Lp = table.Column<int>(nullable: false),
@@ -179,7 +183,7 @@ namespace Wrhs.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RelocDocumentLines_RelocDocuments_RelocDocumentId",
+                        name: "FK_RelocationDocumentLines_RelocationDocuments_RelocationDocumentId",
                         column: x => x.RelocationDocumentId,
                         principalTable: "RelocationDocuments",
                         principalColumn: "Id",
@@ -191,7 +195,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySQL:AutoIncrement", true),
+                        .Annotation("Autoincrement", true),
                     Location = table.Column<string>(nullable: true),
                     ProductId = table.Column<int>(nullable: true),
                     Quantity = table.Column<decimal>(nullable: false)

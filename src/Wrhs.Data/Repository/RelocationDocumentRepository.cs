@@ -27,7 +27,7 @@ namespace Wrhs.Data.Repository
 
         public IEnumerable<RelocationDocument> Get()
         {
-            throw new NotImplementedException();
+            return context.RelocationDocuments;
         }
 
         public RelocationDocument GetById(int id)
@@ -39,6 +39,7 @@ namespace Wrhs.Data.Repository
 
         public RelocationDocument Save(RelocationDocument item)
         {
+            item.Lines.ForEach(l=>l.Product = context.Products.Where(p=>p.Id==l.Product.Id).First());
             context.RelocationDocuments.Add(item);
             context.SaveChanges();
 

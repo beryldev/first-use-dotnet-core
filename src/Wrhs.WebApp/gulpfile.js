@@ -17,8 +17,9 @@ paths.appJs = [
   paths.webroot + 'src/js/message.service.js',
   paths.webroot + 'src/js/http-interceptor.service.js',
   paths.webroot + 'src/js/doc-list.service.js',
+  paths.webroot + 'src/js/new-document.service.js',
   paths.webroot + 'src/js/app.config.js',
-  paths.webroot + 'src/js/controllers/*.js'
+  paths.webroot + 'src/js/controllers/**/*.js'
 ]
 
 paths.appCss = paths.webroot + 'src/css/*.css';

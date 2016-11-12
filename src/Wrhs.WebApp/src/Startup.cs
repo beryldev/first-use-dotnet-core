@@ -157,7 +157,7 @@ namespace Wrhs.WebApp
             {
                 var productRepository = provider.GetService(typeof(IRepository<Product>)) as IRepository<Product>;
                 var warehouse = provider.GetService(typeof(IWarehouse)) as IWarehouse;
-                return new ReleaseDocAddLineCmdValidator(productRepository, warehouse);
+                return new RelocDocAddLineCmdValidator(productRepository, warehouse);
             });
 
             services.AddTransient(typeof(IValidator<UpdateProductCommand>), (IServiceProvider provider) => 
