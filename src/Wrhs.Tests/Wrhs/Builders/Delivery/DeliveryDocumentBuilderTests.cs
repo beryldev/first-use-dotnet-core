@@ -1,26 +1,25 @@
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Operations.Delivery;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class DeliveryDocumentBuilderTests : DocumentBuilderTestsBase
     {
-        [Test]
+        [Fact]
         public void OnBuildReturnsDeliveryDocument()
         {
             var builder = MakeBuilder();
 
             var document = builder.Build();
 
-            Assert.IsInstanceOf<DeliveryDocument>(document);
+            Assert.IsType<DeliveryDocument>(document);
         }
 
-        [Test]
+        [Fact]
         public void BuilderCanBeBasedOnPassedDeliveryDocument()
         {
             var repo = MakeProductRepository();
@@ -36,14 +35,14 @@ namespace Wrhs.Tests
             var builder = new DeliveryDocumentBuilder(repo, addLineValidMock.Object, document);
 
             var lines = builder.Lines;
-            Assert.AreEqual(1, lines.Count());
+            Assert.Equal(1, lines.Count());
             var line = builder.Lines.First();
-            Assert.AreEqual(1, line.Product.Id);
-            Assert.AreEqual(10, line.Quantity);
-            Assert.AreEqual("some line remarks", line.Remarks);
+            Assert.Equal(1, line.Product.Id);
+            Assert.Equal(10, line.Quantity);
+            Assert.Equal("some line remarks", line.Remarks);
         }
 
-        [Test]
+        [Fact]
         public void ShouldRemovePassedLineOnDelete()
         {
             var repo = MakeProductRepository();
@@ -66,8 +65,8 @@ namespace Wrhs.Tests
             };
             builder.RemoveLine(line);
 
-            Assert.IsEmpty(builder.Build().Lines);
-            Assert.IsEmpty(builder.Lines);
+            Assert.Empty(builder.Build().Lines);
+            Assert.Empty(builder.Lines);
         }
 
         public DeliveryDocumentBuilder MakeBuilder()

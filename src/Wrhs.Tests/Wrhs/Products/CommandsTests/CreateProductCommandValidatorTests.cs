@@ -115,7 +115,7 @@ namespace Wrhs.Tests.Products
             Assert.Equal("EAN", result.First().Field, true);
         }
 
-        [Fact]
+        [Theory]
         [InlineData("PROD1", "PROD1")]
         [InlineData("prod1", "PROD1")]
         [InlineData("PROD1", "prod1")]

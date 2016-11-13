@@ -73,7 +73,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Theory]
+        [Fact]
         public void RegisterSaveAllocationInRepository()
         {
             var repo = RepositoryFactory<Allocation>.Make();

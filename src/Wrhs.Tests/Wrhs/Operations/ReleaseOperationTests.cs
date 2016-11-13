@@ -2,17 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Release;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class ReleaseOperationTests
     {
-        [Test]
+        [Fact]
         public void OperationCanBasedOnReleaseDocument()
         {
             var document = MakeReleaseDocument();
@@ -20,10 +19,10 @@ namespace Wrhs.Tests
 
             operation.SetBaseDocument(document);
 
-            Assert.AreEqual(document, operation.BaseDocument);
+            Assert.Equal(document, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void CanAccessDirectlyToBaseReleaseDocument()
         {
             var document = MakeReleaseDocument();
@@ -31,10 +30,10 @@ namespace Wrhs.Tests
 
             operation.BaseReleaseDocument = document;
 
-            Assert.AreEqual(document, operation.BaseDocument);
+            Assert.Equal(document, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenPerformOperationWithoutBaseDocument()
         {
             var mock = new Mock<IAllocationService>();
@@ -46,7 +45,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void CanReleaseItem()
         {
             var document = MakeReleaseDocument();
@@ -54,10 +53,10 @@ namespace Wrhs.Tests
 
             operation.ReleaseItem(document.Lines[0].Product, "LOC-001-01", 1);
 
-            Assert.AreEqual(1, operation.PendingAllocations.Count);
+            Assert.Equal(1, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantReleaseAtOneTimeMoreThanOnBaseDocument()
         {
             var document = MakeReleaseDocument();
@@ -68,10 +67,10 @@ namespace Wrhs.Tests
                 operation.ReleaseItem(document.Lines[0].Product, "LOC-001-01", 2);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantReleaseCombinedMoreThanOnBaseDocument()
         {
             var document = MakeReleaseDocument();
@@ -84,10 +83,10 @@ namespace Wrhs.Tests
                 operation.ReleaseItem(document.Lines[0].Product, "LOC-001-01", 1);
             });
 
-            Assert.AreEqual(1, operation.PendingAllocations.Count);
+            Assert.Equal(1, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantReleaseResourceNonPresentOnDocument()
         {
             var document = MakeReleaseDocument();
@@ -99,10 +98,10 @@ namespace Wrhs.Tests
                 operation.ReleaseItem(product, "LOC-001-01", 1);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantReleaseFromLocationNonPresentAtDocument()
         {
             var document = MakeReleaseDocument();
@@ -113,14 +112,14 @@ namespace Wrhs.Tests
                 operation.ReleaseItem(document.Lines[0].Product, "LOC-001-004", 1);
             });
 
-             Assert.AreEqual(0, operation.PendingAllocations.Count);
+             Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(-1)]
-        [TestCase(-0.001)]
-        [TestCase(-100)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        [InlineData(-0.001)]
+        [InlineData(-100)]
         public void CantReleaseZeroOrLess(decimal quantity)
         {
             var document = MakeReleaseDocument();
@@ -131,10 +130,10 @@ namespace Wrhs.Tests
                 operation.ReleaseItem(document.Lines[0].Product, "LOC-001-01", quantity);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantPerformWhenExistsNonRelocatedItems()
         {
             var items = new List<Allocation>();
@@ -147,10 +146,10 @@ namespace Wrhs.Tests
                 operation.Perform(mock.Object);
             });
 
-            Assert.AreEqual(0, items.Count);
+            Assert.Equal(0, items.Count);
         }
 
-        [Test]
+        [Fact]
         public void PerformAddNegativeAllocationsStocks()
         {
             var product = MakeProduct();
@@ -162,8 +161,8 @@ namespace Wrhs.Tests
 
             operation.Perform(mock.Object);
 
-            Assert.AreEqual(2, items.Count);
-            Assert.AreEqual(1, items.Where(item=>item.Product.Code.Equals(product.Code) 
+            Assert.Equal(2, items.Count);
+            Assert.Equal(1, items.Where(item=>item.Product.Code.Equals(product.Code) 
                 && item.Location.Equals("LOC-001-01") 
                 && item.Quantity.Equals(-1))
                 .Count());

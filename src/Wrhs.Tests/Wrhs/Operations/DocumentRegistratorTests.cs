@@ -1,13 +1,13 @@
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Documents;
+using Xunit;
 
 namespace Wrhs.Tests
 {
     public abstract class DocumentRegistratorTests<T> where T : IEntity, INumerableDocument
     {
-        [Test]
+        [Fact]
         public void ShouldInsertDocumentToRepositoryWhenRegister()
         {
             var repository = RepositoryFactory<T>.Make();
@@ -16,10 +16,10 @@ namespace Wrhs.Tests
 
             registrator.Register(document);
 
-            Assert.AreEqual(1, repository.Get().Count());
+            Assert.Equal(1, repository.Get().Count());
         }
 
-        [Test]
+        [Fact]
         public void ShouldAssignNumberToDocumentWhenRegister()
         {
             var repository = RepositoryFactory<T>.Make();
@@ -28,10 +28,10 @@ namespace Wrhs.Tests
 
             registrator.Register(document);
 
-            Assert.AreNotEqual(0, document.Number);
+            Assert.NotEqual(0, document.Number);
         }
 
-        [Test]
+        [Fact]
         public void ShouldAssignFullNumberToDocumentWhenRegister()
         {
             var repository = RepositoryFactory<T>.Make();
@@ -40,11 +40,11 @@ namespace Wrhs.Tests
 
             registrator.Register(document);
 
-            Assert.IsNotNull(document.FullNumber);
-            Assert.IsNotEmpty(document.FullNumber);
+            Assert.NotNull(document.FullNumber);
+            Assert.NotEmpty(document.FullNumber);
         }
 
-        [Test]
+        [Fact]
         public void ShouldAssignFullNumberWithCorrectPefixToDocumentWhenRegister()
         {
             var repository = RepositoryFactory<T>.Make();
@@ -53,10 +53,10 @@ namespace Wrhs.Tests
 
             registrator.Register(document);
 
-            StringAssert.StartsWith(GetDocumentPrefix(), document.FullNumber);
+            Assert.StartsWith(GetDocumentPrefix(), document.FullNumber);
         }
 
-        [Test]
+        [Fact]
         public void ShouldAssignUniqueFullNumberToDocumentWhenRegister()
         {
             var repository = RepositoryFactory<T>.Make();
@@ -67,8 +67,8 @@ namespace Wrhs.Tests
             registrator.Register(document1);
             registrator.Register(document2);
 
-            Assert.AreEqual(2, repository.Get().Count());
-            Assert.AreNotEqual(document1.FullNumber, document2.FullNumber);
+            Assert.Equal(2, repository.Get().Count());
+            Assert.NotEqual(document1.FullNumber, document2.FullNumber);
         }
 
         protected abstract string GetDocumentPrefix();

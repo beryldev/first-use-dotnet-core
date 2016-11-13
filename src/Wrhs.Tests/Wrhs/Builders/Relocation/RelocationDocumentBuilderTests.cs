@@ -1,15 +1,14 @@
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class RelocationDocumentBuilderTests : DocumentBuilderTestsBase
     {
-        [Test]
+        [Fact]
         public void OnBuildReturnRelocationDocument()
         {
             var repo = MakeProductRepository();
@@ -19,10 +18,10 @@ namespace Wrhs.Tests
 
             var document = builder.Build();
 
-            Assert.IsInstanceOf<RelocationDocument>(document);
+            Assert.IsType<RelocationDocument>(document);
         }
 
-        [Test]
+        [Fact]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
@@ -31,14 +30,14 @@ namespace Wrhs.Tests
             builder.AddLine(command);
             var document = builder.Build();
 
-            Assert.AreEqual(1, document.Lines.Count);
-            Assert.AreEqual(1, document.Lines[0].Product.Id);
-            Assert.AreEqual(5, document.Lines[0].Quantity);
-            Assert.AreEqual("LOC-001-01", ((RelocationDocumentLine)document.Lines[0]).From);
-            Assert.AreEqual("LOC-001-02", ((RelocationDocumentLine)document.Lines[0]).To);
+            Assert.Equal(1, document.Lines.Count);
+            Assert.Equal(1, document.Lines[0].Product.Id);
+            Assert.Equal(5, document.Lines[0].Quantity);
+            Assert.Equal("LOC-001-01", ((RelocationDocumentLine)document.Lines[0]).From);
+            Assert.Equal("LOC-001-02", ((RelocationDocumentLine)document.Lines[0]).To);
         }
 
-        [Test]
+        [Fact]
         public void AfterUpdateLineBuildReturnDocumentWithUpdatedLine()
         {
             var builder = MakeBuilder();
@@ -59,9 +58,9 @@ namespace Wrhs.Tests
             builder.UpdateLine(line);
             var document = builder.Build();
 
-            Assert.AreEqual(1, document.Lines.Count);
-            Assert.AreEqual(20, document.Lines.First().Quantity);
-            Assert.AreEqual("LOC-001-03", ((RelocationDocumentLine)document.Lines.First()).To);
+            Assert.Equal(1, document.Lines.Count);
+            Assert.Equal(20, document.Lines.First().Quantity);
+            Assert.Equal("LOC-001-03", ((RelocationDocumentLine)document.Lines.First()).To);
         }
 
         RelocationDocumentBuilder MakeBuilder()

@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
 using Wrhs.Operations.Relocation;
 using Wrhs.Operations.Release;
-using Wrhs.Orders;
 using System;
 using Wrhs.Products;
 using Wrhs.Core;
@@ -156,7 +154,7 @@ namespace Wrhs.Tests
             stockCacheMock.Verify(m=>m.Read(), Times.Once());
         }
 
-        [Fact]
+        [Theory]
         [InlineData("PROD1", 2, 7)]
         [InlineData("PROD2", 1, 1)]
         public void ReadStocksByProductCode(string productCode, int count, decimal quantity)
@@ -178,7 +176,7 @@ namespace Wrhs.Tests
             Assert.Equal(quantity, stocks.Sum(item=>item.Quantity));
         }
 
-        [Fact]
+        [Theory]
         [InlineData("LOC-001-01", 2, 7)]
         [InlineData("LOC-001-02", 1, 1)]
         public void ReadStocksByLocation(string location, int count, decimal quantity)

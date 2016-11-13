@@ -1,18 +1,17 @@
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class DocumentAddLineCommandValidatorTests
     {
-        [Test]
-        [TestCase(0)]
-        [TestCase(-5)]
-        [TestCase(9021)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-5)]
+        [InlineData(9021)]
         public void WhenInvalidProductIdOnValidateNewLineReturnValidationFailResult(int productId)
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -22,14 +21,14 @@ namespace Wrhs.Tests
             
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("ProductId", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("ProductId", result.First().Field);
         }  
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(-0.1)]
-        [TestCase(-23)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-0.1)]
+        [InlineData(-23)]
         public void WhenInvalidQuantityOnAddLineReturnValidationFailResult(decimal quanitity) 
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -39,8 +38,8 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("Quantity", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("Quantity", result.First().Field);
         }
 
         void FillRepository(IRepository<Product> repo,  int count=20)

@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public abstract class DocumentBuilderTests : DocumentBuilderTestsBase
      {
-        [Test]
+        [Fact]
         public void AfterAddLineBuildReturnDocumentWithAddedLine()
         {
             var builder = MakeBuilder();
@@ -20,12 +19,12 @@ namespace Wrhs.Tests
             builder.AddLine(command);
             var document = builder.Build();
 
-            Assert.AreEqual(1, document.Lines.Count);
-            Assert.AreEqual(1, document.Lines[0].Product.Id);
-            Assert.AreEqual(5, document.Lines[0].Quantity);
+            Assert.Equal(1, document.Lines.Count);
+            Assert.Equal(1, document.Lines[0].Product.Id);
+            Assert.Equal(5, document.Lines[0].Quantity);
         }
 
-        [Test]
+        [Fact]
         public void AfterManyAddLineBuildReturnDocumentWithAddedLines()
         {
             var builder = MakeBuilder();
@@ -39,16 +38,16 @@ namespace Wrhs.Tests
 
             var document = builder.Build();
 
-            Assert.AreEqual(3, document.Lines.Count);
-            Assert.AreEqual(1, document.Lines[0].Product.Id);
-            Assert.AreEqual(5, document.Lines[0].Quantity);
-            Assert.AreEqual(3, document.Lines[1].Product.Id);
-            Assert.AreEqual(2, document.Lines[1].Quantity);
-            Assert.AreEqual(8, document.Lines[2].Product.Id);
-            Assert.AreEqual(9, document.Lines[2].Quantity);
+            Assert.Equal(3, document.Lines.Count);
+            Assert.Equal(1, document.Lines[0].Product.Id);
+            Assert.Equal(5, document.Lines[0].Quantity);
+            Assert.Equal(3, document.Lines[1].Product.Id);
+            Assert.Equal(2, document.Lines[1].Quantity);
+            Assert.Equal(8, document.Lines[2].Product.Id);
+            Assert.Equal(9, document.Lines[2].Quantity);
         }
 
-        [Test]
+        [Fact]
         public void AfterRemoveLineBuildReturnDocWithoutRemovedLine()
         {
             var builder = MakeBuilder();
@@ -62,10 +61,10 @@ namespace Wrhs.Tests
 
             var document = builder.Build();
 
-            CollectionAssert.IsEmpty(document.Lines);
+            Assert.Empty(document.Lines);
         }
 
-        [Test]
+        [Fact]
         public void WhenExistsMoreThanOneLineAfterRemoveLineBuildReturnDocWithoutOnlyRemovedLine()
         {
             var builder = MakeBuilder();
@@ -82,12 +81,12 @@ namespace Wrhs.Tests
 
             var document = builder.Build();
 
-            Assert.AreEqual(2, document.Lines.Count);
-            Assert.AreEqual(1, document.Lines[0].Product.Id);
-            Assert.AreEqual(8, document.Lines[1].Product.Id);
+            Assert.Equal(2, document.Lines.Count);
+            Assert.Equal(1, document.Lines[0].Product.Id);
+            Assert.Equal(8, document.Lines[1].Product.Id);
         }
 
-        [Test]
+        [Fact]
         public void AfterUpdateLineBuildReturnDocumentWithUpdatedLine()
         {
             var builder = MakeBuilder();
@@ -101,11 +100,11 @@ namespace Wrhs.Tests
             builder.UpdateLine(line);
             var document = builder.Build();
 
-            Assert.AreEqual(1, document.Lines.Count);
-            Assert.AreEqual(20, document.Lines.First().Quantity);
+            Assert.Equal(1, document.Lines.Count);
+            Assert.Equal(20, document.Lines.First().Quantity);
         }
 
-        [Test]
+        [Fact]
         public void WhenOnAddLineValidationFailBuildReturnDocWithUnchangedLines()
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -121,10 +120,10 @@ namespace Wrhs.Tests
 
             var document = builder.Build();
 
-            CollectionAssert.IsEmpty(document.Lines);
+            Assert.Empty(document.Lines);
         }
 
-        [Test]
+        [Fact]
         public void WhenOnAddLineValidationFailCallOnAddLineFail()
         {
             var onAddLineFailCalled = false;
@@ -140,10 +139,10 @@ namespace Wrhs.Tests
             var command = new DocAddLineCmd { ProductId = -34, Quantity = 5 };
             builder.AddLine(command);
 
-            Assert.IsTrue(onAddLineFailCalled);
+            Assert.True(onAddLineFailCalled);
         }
 
-        [Test]
+        [Fact]
         public void WhenAddLineEachLineHasUniqeId()
         {
             var builder = MakeBuilder();
@@ -156,7 +155,7 @@ namespace Wrhs.Tests
             builder.RemoveLine(line);
             builder.AddLine(command1);
 
-            Assert.AreEqual(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
+            Assert.Equal(2, builder.Lines.GroupBy(l=>l.Id).Select(l=>l).Count());
         }
 
         DocumentBuilderClassInTest MakeBuilder()

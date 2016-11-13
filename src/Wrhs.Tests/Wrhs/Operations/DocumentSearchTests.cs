@@ -1,19 +1,19 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Core.Search;
 using Wrhs.Documents;
+using Xunit;
 
 namespace Wrhs.Tests
 {
     public abstract class DocumentSearchTests<T> where T : ISearchableDocument, IEntity
     {
-        [Test]
-        [TestCase(5, 2)]
-        [TestCase(10, 5)]
-        [TestCase(20, 7)]
-        [TestCase(321, 30)]
+        [Theory]
+        [InlineData(5, 2)]
+        [InlineData(10, 5)]
+        [InlineData(20, 7)]
+        [InlineData(321, 30)]
         public void ShouldReturnAllDocumentsWhenSearchWithEmptyCriteria(int itemsCount, int pageSize)
         {
             var repo = CreateRepository(itemsCount);
@@ -23,14 +23,14 @@ namespace Wrhs.Tests
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(itemsCount, result.Total);
-            Assert.LessOrEqual(pageSize, result.Items.Count());
+            Assert.Equal(itemsCount, result.Total);
+            Assert.InRange(result.Items.Count(), 0, pageSize);
         }
 
-        [Test]
-        [TestCase("D/001/2016")]
-        [TestCase("D/0010/2016")]
-        [TestCase("D/007/2016")]
+        [Theory]
+        [InlineData("D/001/2016")]
+        [InlineData("D/0010/2016")]
+        [InlineData("D/007/2016")]
         public void ShouldReturnDocumentWhenSearchByFullNumber(string fullNumber)
         {
             var repo = CreateRepository(20);
@@ -40,15 +40,15 @@ namespace Wrhs.Tests
             criteria.WhereFullNumber(Condition.Equal, fullNumber);
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(1, result.Items.Count());
-            Assert.AreEqual(1, result.Total);
-            Assert.AreEqual(fullNumber, result.Items.First().FullNumber);
+            Assert.Equal(1, result.Items.Count());
+            Assert.Equal(1, result.Total);
+            Assert.Equal(fullNumber, result.Items.First().FullNumber);
         }
 
-        [Test]
-        [TestCase("2016", 20)]
-        [TestCase("D/006/2016", 1)]
-        [TestCase("D/001", 11)]
+        [Theory]
+        [InlineData("2016", 20)]
+        [InlineData("D/006/2016", 1)]
+        [InlineData("D/001", 11)]
         public void ShouldReturnDocumentsWhenSearchByContainsFullNumber(string fullNumber, int count)
         {
             var repo = CreateRepository(20);
@@ -58,13 +58,13 @@ namespace Wrhs.Tests
             criteria.WhereFullNumber(Condition.Contains, fullNumber);
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(count, result.Total);
+            Assert.Equal(count, result.Total);
         }
 
-        [Test]
-        [TestCase(20, 10)]
-        [TestCase(30, 20)]
-        [TestCase(5, 0)]
+        [Theory]
+        [InlineData(20, 10)]
+        [InlineData(30, 20)]
+        [InlineData(5, 0)]
         public void ShouldReturnDocumentsWhenSearchByIssueDate(int itemsCount, int shouldReturn)
         {
             var repo = CreateRepository(itemsCount);
@@ -74,7 +74,7 @@ namespace Wrhs.Tests
             criteria.WhereIssueDate(Condition.Equal, new DateTime(2016, 10, 24));
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(shouldReturn, result.Total);
+            Assert.Equal(shouldReturn, result.Total);
         }
 
         ResourceSearch<T> CreateSearch(IRepository<T> repo)

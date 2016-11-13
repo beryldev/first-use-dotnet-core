@@ -1,18 +1,16 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using Moq;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
-using Wrhs.Orders;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class DeliveryOperationTests
     { 
-        [Test]
+        [Fact]
         public void OperationCanBasedOnDeliveryDocument()
         {
             var document = new Operations.Delivery.DeliveryDocument();
@@ -20,10 +18,10 @@ namespace Wrhs.Tests
 
             operation.SetBaseDocument(document);
 
-            Assert.AreEqual(document, operation.BaseDocument);
+            Assert.Equal(document, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void CanAccessDirectlyToBaseDeliveryDocument()
         {
             var document = new Operations.Delivery.DeliveryDocument();
@@ -31,10 +29,10 @@ namespace Wrhs.Tests
 
             operation.BaseDeliveryDocument = document;
 
-            Assert.AreEqual(document, operation.BaseDocument);
+            Assert.Equal(document, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenPerformOperationWithoutBaseDocument()
         {
             var mock = new Mock<IAllocationService>();
@@ -46,7 +44,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void PerformOperationReturnOperationResult()
         {
             var mock = new Mock<IAllocationService>();
@@ -56,10 +54,10 @@ namespace Wrhs.Tests
             
             var result = operation.Perform(mock.Object);
 
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void PerformReturnResultWithErrorStatusWhenBaseDocumentIsEmpty()
         {
             var mock = new Mock<IAllocationService>();
@@ -69,10 +67,10 @@ namespace Wrhs.Tests
 
             var result = operation.Perform(mock.Object);
 
-            Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
+            Assert.Equal(OperationResult.ResultStatus.Error, result.Status);
         }
 
-        [Test]
+        [Fact]
         public void PerformReturnResultWithErrorMessageWhenBaseDocumentIsEmpty()
         {
             var mock = new Mock<IAllocationService>();
@@ -82,10 +80,10 @@ namespace Wrhs.Tests
 
             var result = operation.Perform(mock.Object);
 
-            CollectionAssert.Contains(result.ErrorMessages, "Base document is empty");
+            Assert.Contains("Base document is empty", result.ErrorMessages);
         }
 
-        [Test]
+        [Fact]
         public void CanAllocateItemFromBaseDocument()
         {
             var operation = new DeliveryOperation();
@@ -96,12 +94,12 @@ namespace Wrhs.Tests
             operation.AllocateItem(document.Lines.First(), quantity, location);
             var allocation = operation.PendingAllocations.First();
 
-            Assert.AreEqual(allocation.Product, document.Lines.First().Product);
-            Assert.AreEqual(allocation.Quantity, quantity);
-            Assert.AreEqual(allocation.Location, location);
+            Assert.Equal(allocation.Product, document.Lines.First().Product);
+            Assert.Equal(allocation.Quantity, quantity);
+            Assert.Equal(allocation.Location, location);
         }
 
-        [Test]
+        [Fact]
         public void WhenTryAllocateZeroQuantityThenNoEffect()
         {
             var operation = new DeliveryOperation();
@@ -111,10 +109,10 @@ namespace Wrhs.Tests
             var quantity = 0;
             operation.AllocateItem(document.Lines.First(), quantity, location);
 
-            CollectionAssert.IsEmpty(operation.PendingAllocations);
+            Assert.Empty(operation.PendingAllocations);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenTryAllocateToEmptyLocationAddress()
         {
             var operation = new DeliveryOperation();
@@ -129,7 +127,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenTryAllocateMoreThanOnDocument()
         {
             var operation = new DeliveryOperation();
@@ -148,7 +146,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void CantPerformOperationWhenExistsNonAllocatedItems()
         {
             var mock = new Mock<IAllocationService>();
@@ -158,11 +156,11 @@ namespace Wrhs.Tests
 
             var result = operation.Perform(mock.Object);
 
-            Assert.AreEqual(OperationResult.ResultStatus.Error, result.Status);
-            CollectionAssert.Contains(result.ErrorMessages, "Exists non allocated items");
+            Assert.Equal(OperationResult.ResultStatus.Error, result.Status);
+            Assert.Contains("Exists non allocated items", result.ErrorMessages);
         }
 
-        [Test]
+        [Fact]
         public void RegisterAllocationOnSuccessPerform()
         {
             var mock = new Mock<IAllocationService>();

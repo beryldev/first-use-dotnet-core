@@ -66,7 +66,7 @@ namespace Wrhs.Tests
             Assert.Equal(10, result.Items.Count());
         }
 
-        [Fact]
+        [Theory]
         [InlineData(20)]
         [InlineData(17)]
         [InlineData(10)]

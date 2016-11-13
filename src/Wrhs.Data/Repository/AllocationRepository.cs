@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Wrhs.Core;
 using Wrhs.Operations;
-using Wrhs.Products;
 
 namespace Wrhs.Data.Repository
 {

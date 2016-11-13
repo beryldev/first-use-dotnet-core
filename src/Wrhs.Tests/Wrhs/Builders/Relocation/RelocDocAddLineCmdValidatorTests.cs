@@ -1,20 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class RelocDocAddLineCmdValidatorTests
     {
-        [Test]
-        [TestCase(0)]
-        [TestCase(-5)]
-        [TestCase(9021)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-5)]
+        [InlineData(9021)]
         public void WhenInvalidProductIdOnValidateNewLineReturnValidationFailResult(int productId)
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -25,14 +24,14 @@ namespace Wrhs.Tests
             
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("ProductId", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("ProductId", result.First().Field);
         }  
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(-0.1)]
-        [TestCase(-23)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-0.1)]
+        [InlineData(-23)]
         public void WhenInvalidQuantityOnAddLineReturnValidationFailResult(decimal quanitity) 
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -43,15 +42,15 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("Quantity", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("Quantity", result.First().Field);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void WhenEmptyFromAddressOnAddLineReturnValidationFailResult(string from)
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -62,15 +61,15 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("From" ,result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("From" ,result.First().Field);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void WhenEmptyToAddressOnAddLineReturnValidationFailResult(string to)
         {
             var repo = RepositoryFactory<Product>.Make();
@@ -81,17 +80,17 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("To" ,result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("To" ,result.First().Field);
         }
 
-        [Test]
-        [TestCase("LOC-001-01", "LOC-001-01")]
-        [TestCase("LOC-001-01", "loc-001-01")]
-        [TestCase("loc-001-01", "LOC-001-01")]
-        [TestCase("loc-001-01", "loc-001-01")]
-        [TestCase("lOc-001-01", "LoC-001-01")]
-        public void WhenFromAddresAndToAddresAreEqualReturnValidationFailResult(string from, string to)
+        [Theory]
+        [InlineData("LOC-001-01", "LOC-001-01")]
+        [InlineData("LOC-001-01", "loc-001-01")]
+        [InlineData("loc-001-01", "LOC-001-01")]
+        [InlineData("loc-001-01", "loc-001-01")]
+        [InlineData("lOc-001-01", "LoC-001-01")]
+        public void WhenFromAddresAndToAddresEqualReturnValidationFailResult(string from, string to)
         {
             var repo = RepositoryFactory<Product>.Make();
             FillRepository(repo);
@@ -101,12 +100,12 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command).ToArray();
 
-            Assert.AreEqual(2, result.Length);
-            Assert.AreEqual("From",result[0].Field);
-            Assert.AreEqual("To",result[1].Field);
+            Assert.Equal(2, result.Length);
+            Assert.Equal("From",result[0].Field);
+            Assert.Equal("To",result[1].Field);
         }
 
-        [Test]
+        [Fact]
         public void WhenAtFromLocationNotEnoughQuantityReturnValidationFailResult()
         {
             
@@ -118,8 +117,8 @@ namespace Wrhs.Tests
 
             var result = validator.Validate(command).ToArray();
 
-            Assert.AreEqual(1, result.Length);
-            Assert.AreEqual("Quantity",result[0].Field);
+            Assert.Equal(1, result.Length);
+            Assert.Equal("Quantity",result[0].Field);
         }
 
         void FillRepository(IRepository<Product> repo,  int count=20)

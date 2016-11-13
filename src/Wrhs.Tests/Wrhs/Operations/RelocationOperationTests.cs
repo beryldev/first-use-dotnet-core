@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using Moq;
-using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class RelocationOperationTests
     {
-        [Test]
+        [Fact]
         public void OperationCanBasedOnRelocationDocument()
         {
             var relocationDoc = MakeRelocationDocument();
@@ -19,10 +18,10 @@ namespace Wrhs.Tests
 
             operation.SetBaseDocument(relocationDoc);
 
-            Assert.AreEqual(relocationDoc, operation.BaseDocument);
+            Assert.Equal(relocationDoc, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void CanAccessDirectlyToBaseRelocationDocument()
         {
             var relocDoc = MakeRelocationDocument();
@@ -30,10 +29,10 @@ namespace Wrhs.Tests
 
             operation.BaseRelocationDocument = relocDoc;
 
-            Assert.AreEqual(relocDoc, operation.BaseDocument);
+            Assert.Equal(relocDoc, operation.BaseDocument);
         }
 
-        [Test]
+        [Fact]
         public void ThrowsExceptionWhenPerformOperationWithoutBaseDocument()
         {
             var mock = new Mock<IAllocationService>();
@@ -45,17 +44,17 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void RelocateItem()
         {
             var operation = MakeRelocationOperation();
 
             operation.RelocateItem(operation.BaseDocument.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 1);
 
-            Assert.AreEqual(2, operation.PendingAllocations.Count);
+            Assert.Equal(2, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantRelocateMoreThanOnDocument()
         {
             var operation = MakeRelocationOperation();
@@ -65,10 +64,10 @@ namespace Wrhs.Tests
                 operation.RelocateItem(operation.BaseDocument.Lines[0].Product, "LOC-001-01-1", "LOC-001-01-2", 2);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantRelocateNonPresentOnDocProduct()
         {
             var product = new Product();
@@ -79,14 +78,14 @@ namespace Wrhs.Tests
                 operation.RelocateItem(product, "LOC-001-01-1", "LOC-001-01-2", 1);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(-0.01)]
-        [TestCase(-1)]
-        [TestCase(-9)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-0.01)]
+        [InlineData(-1)]
+        [InlineData(-9)]
         public void CantRelocateZeroOrLess(decimal quantity)
         {
             var operation = MakeRelocationOperation();
@@ -97,10 +96,10 @@ namespace Wrhs.Tests
                     "LOC-001-01-1", "LOC-001-01-2", quantity);
             });
 
-            Assert.AreEqual(0, operation.PendingAllocations.Count);
+            Assert.Equal(0, operation.PendingAllocations.Count);
         }
 
-        [Test]
+        [Fact]
         public void CantPerformWhenExistsNonRelocatedItems()
         {
             var mock = new Mock<IAllocationService>();
@@ -114,7 +113,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Fact]
         public void PerformRegisterAllocations()
         {
             var items = new List<Allocation>();
@@ -131,12 +130,12 @@ namespace Wrhs.Tests
 
             operation.Perform(mock.Object);
 
-            Assert.AreEqual(2, items.Count);
-            Assert.AreEqual(-1, items[0].Quantity);
-            Assert.AreEqual(1, items[1].Quantity);
+            Assert.Equal(2, items.Count);
+            Assert.Equal(-1, items[0].Quantity);
+            Assert.Equal(1, items[1].Quantity);
         }
 
-        [Test]
+        [Fact]
         public void SourceLocationCantBeDestination()
         {
             var operation = MakeRelocationOperation();
