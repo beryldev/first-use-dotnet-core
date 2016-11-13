@@ -1,21 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
-using Moq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class CreateProductCommandValidatorTests : ProductCommandTestsBase
     {
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnOneValidationFailMessageWhenOnlyProductCodeEmpty(string code)
         {
             var repo = MakeProductRepository();
@@ -29,15 +27,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            StringAssert.AreEqualIgnoringCase("code", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("code", result.First().Field, true);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnOneValidationFailMessageWhenOnlyProductNameEmpty(string name)
         {
             var repo = MakeProductRepository();
@@ -51,15 +49,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            StringAssert.AreEqualIgnoringCase("name", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("name", result.First().Field, true);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnTwoValidationFailMessagesWhenProductCodeAndNameEmpty(string value)
         {
             var repo = MakeProductRepository();
@@ -73,15 +71,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(2, result.Count());
+            Assert.Equal(2, result.Count());
         }
 
-        [Test]
-        [TestCase("PROD1", "PROD1")]
-        [TestCase("prod1", "PROD1")]
-        [TestCase("PROD1", "prod1")]
-        [TestCase("prod1", "prod1")]
-        [TestCase("pRoD1", "PrOd1")]
+        [Theory]
+        [InlineData("PROD1", "PROD1")]
+        [InlineData("prod1", "PROD1")]
+        [InlineData("PROD1", "prod1")]
+        [InlineData("prod1", "prod1")]
+        [InlineData("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessageWhenOnlyProducCodeDuplicated(string presentCode, string newCode)
         {
             var repo = MakeProductRepository(new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } });
@@ -95,11 +93,11 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            StringAssert.AreEqualIgnoringCase("code", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("code", result.First().Field, true);
         }
 
-        [Test]
+        [Fact]
         public void ReturnValidationFailMessageWhenOnlyProducEANDuplicated()
         {
             var repo = MakeProductRepository(new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789012" } });
@@ -113,16 +111,16 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            StringAssert.AreEqualIgnoringCase("EAN", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("EAN", result.First().Field, true);
         }
 
-        [Test]
-        [TestCase("PROD1", "PROD1")]
-        [TestCase("prod1", "PROD1")]
-        [TestCase("PROD1", "prod1")]
-        [TestCase("prod1", "prod1")]
-        [TestCase("pRoD1", "PrOd1")]
+        [Fact]
+        [InlineData("PROD1", "PROD1")]
+        [InlineData("prod1", "PROD1")]
+        [InlineData("PROD1", "prod1")]
+        [InlineData("prod1", "prod1")]
+        [InlineData("pRoD1", "PrOd1")]
         public void ReturnValidationFailMessagesWhenEANAndCodeDuplicated(string presentCode, string newCode)
         {
             var repo = MakeProductRepository(new List<Product>{ new Product { Code=presentCode.ToUpper(), Name="Product 1", EAN="123456789012" } });
@@ -136,7 +134,7 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(2, result.Count());
+            Assert.Equal(2, result.Count());
         }
 
         protected IRepository<Product> MakeProductRepository()

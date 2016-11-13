@@ -1,17 +1,16 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core;
 using Wrhs.Products.Commands;
 using Wrhs.Tests;
+using Xunit;
 
 namespace Wrhs.Products.Tests.Products
 {
-    [TestFixture]
     public class ProductServiceTests
     {
-        [Test]
+        [Fact]
         public void CanCreateNewProduct()
         {
             var items = new List<Product>();
@@ -29,15 +28,15 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
 
-            Assert.AreEqual(1, repo.Get().Count());
-            Assert.AreEqual("PROD1", repo.Get().First().Code);
+            Assert.Equal(1, repo.Get().Count());
+            Assert.Equal("PROD1", repo.Get().First().Code);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void CantCreateProductWithEmptyCode(string code)
         {
             var items = new List<Product>();
@@ -55,14 +54,14 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
         
-            CollectionAssert.IsEmpty(items);
+            Assert.Empty(items);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void CantCreateProductWithEmptyName(string name)
         {
             var items = new List<Product>();
@@ -80,10 +79,10 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
         
-            CollectionAssert.IsEmpty(items);
+            Assert.Empty(items);
         }
 
-        [Test]
+        [Fact]
         public void CantCreateProductWithExistingCode()
         {
             var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789011" } };
@@ -101,10 +100,10 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
         
-            Assert.AreEqual(1, repo.Get().Count());
+            Assert.Equal(1, repo.Get().Count());
         }
 
-        [Test]
+        [Fact]
         public void CantCreateProductWithExistingEAN()
         {
             var items = new List<Product>{ new Product { Code="PROD1", Name="Product 1", EAN="123456789011" } };
@@ -122,7 +121,7 @@ namespace Wrhs.Products.Tests.Products
 
             service.Handle(command);
         
-            Assert.AreEqual(1, repo.Get().Count());
+            Assert.Equal(1, repo.Get().Count());
         }
 
         protected IRepository<Product> MakeProductRepo(List<Product> items)

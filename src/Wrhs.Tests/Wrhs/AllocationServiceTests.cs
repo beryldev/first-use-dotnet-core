@@ -1,22 +1,19 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using Moq;
-using NUnit.Framework;
 using Wrhs.Operations;
 using Wrhs.Core;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class AllocationServiceTests
     {
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ThrowsExceptionWhenTryRegisterAllocationWithEmptyLocationName(string location)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -28,11 +25,11 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ThrowsExceptionWhenTryRegisterAllocationWithoutProductCode(string code)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -44,11 +41,11 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ThrowsExceptionWhenTryRegisterDeallocationWithEmptyLocationName(string location)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -60,11 +57,11 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ThrowsExceptionWhenTryRegisterDeallocationWithoutProductCode(string code)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -76,7 +73,7 @@ namespace Wrhs.Tests
             });
         }
 
-        [Test]
+        [Theory]
         public void RegisterSaveAllocationInRepository()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -85,10 +82,10 @@ namespace Wrhs.Tests
 
             service.RegisterAllocation(allocation);
 
-            CollectionAssert.Contains(repo.Get().ToArray(), allocation);
+            Assert.Contains(allocation, repo.Get().ToArray());
         }
 
-        [Test]
+        [Fact]
         public void RegisterSaveDeallocationInRepository()
         {
             var alloc = MakeAllocation("PROD1");
@@ -99,10 +96,10 @@ namespace Wrhs.Tests
 
             service.RegisterDeallocation(deallocation);
 
-            CollectionAssert.Contains(repo.Get().ToArray(), deallocation);
+            Assert.Contains( deallocation, repo.Get().ToArray());
         }
 
-        [Test]
+        [Fact]
         public void CantRegisterAllocationWithNegativeQuantity()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -114,10 +111,10 @@ namespace Wrhs.Tests
                 service.RegisterAllocation(allocation);
             });
 
-            CollectionAssert.IsEmpty(repo.Get().ToArray());
+            Assert.Empty(repo.Get().ToArray());
         }
 
-        [Test]
+        [Fact]
         public void CantRegisterDeallocationWithPositiveQuantity()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -129,10 +126,10 @@ namespace Wrhs.Tests
                 service.RegisterDeallocation(allocation);
             });
 
-            CollectionAssert.IsEmpty(repo.Get().ToArray());
+            Assert.Empty(repo.Get().ToArray());
         }
 
-        [Test]
+        [Fact]
         public void GetAllocationsReturnAllocations()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -142,13 +139,13 @@ namespace Wrhs.Tests
 
             var result = service.GetAllocations();
 
-            Assert.AreEqual(repo.Get().Count(), result.Count());
-            CollectionAssert.AreEquivalent(repo.Get().ToArray(), result);
+            Assert.Equal(repo.Get().Count(), result.Count());
+            Assert.Equal(repo.Get().ToArray(), result);
         }
 
-        [Test]
-        [TestCase(1)]
-        [TestCase(2)]
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
         public void ShouldReturnAllocationsByProductId(int productId)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -158,12 +155,12 @@ namespace Wrhs.Tests
 
             var result = service.GetAllocations(productId);
 
-            Assert.IsNotEmpty(result);
+            Assert.NotEmpty(result);
         }
 
-        [Test]
-        [TestCase("PROD1")]
-        [TestCase("PROD2")]
+        [Theory]
+        [InlineData("PROD1")]
+        [InlineData("PROD2")]
         public void ShouldReturnAllocationsByProductCode(string code)
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -173,10 +170,10 @@ namespace Wrhs.Tests
 
             var result = service.GetAllocations(code);
 
-            Assert.IsNotEmpty(result);
+            Assert.NotEmpty(result);
         }
 
-        [Test]
+        [Fact]
         public void GetAllocationsReturnRegisteredAllocation()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -188,10 +185,10 @@ namespace Wrhs.Tests
             service.RegisterAllocation(allocation);
             var result = service.GetAllocations();
 
-            CollectionAssert.Contains(result, allocation);
+            Assert.Contains(allocation, result);
         }
 
-        [Test]
+        [Fact]
         public void CantRegisterDeallocationWhenResourceNotExistsOnLocation()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -204,10 +201,10 @@ namespace Wrhs.Tests
             {
                 service.RegisterDeallocation(dealloc);
             });
-            Assert.AreEqual(1, repo.Get().Count());
+            Assert.Equal(1, repo.Get().Count());
         }
 
-        [Test]
+        [Fact]
         public void TransactionalRegisterAllocations()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -218,11 +215,11 @@ namespace Wrhs.Tests
             service.RegisterAllocation(MakeAllocation("PROD1", 2));
             service.CommitTransaction();
             
-            Assert.AreEqual(2, repo.Get().Count());
-            Assert.AreEqual(3, repo.Get().Sum(item=>item.Quantity));
+            Assert.Equal(2, repo.Get().Count());
+            Assert.Equal(3, repo.Get().Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void TransactionalRegisterDeallocations()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -233,11 +230,11 @@ namespace Wrhs.Tests
             service.RegisterDeallocation(MakeAllocation("PROD1", -1));
             service.CommitTransaction();
             
-            Assert.AreEqual(2, repo.Get().Count());
-            Assert.AreEqual(0, repo.Get().Sum(item=>item.Quantity));
+            Assert.Equal(2, repo.Get().Count());
+            Assert.Equal(0, repo.Get().Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void UncomittedTransactionNotChangeRepo()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -247,11 +244,11 @@ namespace Wrhs.Tests
             service.BeginTransaction();
             service.RegisterAllocation(MakeAllocation("PROD1", 2));
             
-            Assert.AreEqual(1, repo.Get().Count());
-            Assert.AreEqual(1, repo.Get().Sum(item=>item.Quantity));
+            Assert.Equal(1, repo.Get().Count());
+            Assert.Equal(1, repo.Get().Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void RolledbackTransactionNotChangeRepo()
         {
             var repo = RepositoryFactory<Allocation>.Make();
@@ -262,8 +259,8 @@ namespace Wrhs.Tests
             service.RegisterAllocation(MakeAllocation("PROD1", 2));
             service.RollbackTransaction();
             
-            Assert.AreEqual(1, repo.Get().Count());
-            Assert.AreEqual(1, repo.Get().Sum(item=>item.Quantity));
+            Assert.Equal(1, repo.Get().Count());
+            Assert.Equal(1, repo.Get().Sum(item=>item.Quantity));
         }
 
         protected Allocation MakeAllocation(string code, decimal quantity=1, string location="LOC-001-01", int id=1)

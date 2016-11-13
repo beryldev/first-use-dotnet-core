@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class DeleteProductCommandValidatorTests : ProductCommandTestsBase
     {
-        [Test]
-        [TestCase(-1)]
-        [TestCase(-103)]
-        [TestCase(-82)]
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-103)]
+        [InlineData(-82)]
         public void ReturnValidationFailMessageWhenPasedProductIdIsNegative(int id)
         {
             var repo = MakeProductRepository(new List<Product>());
@@ -24,14 +23,14 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("ProductId", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("ProductId", result.First().Field);
         }
 
-        [Test]
-        [TestCase(-1)]
-        [TestCase(-132)]
-        [TestCase(-83)]
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-132)]
+        [InlineData(-83)]
         public void ReturnValidationFailMessageWhenProductDoesNotExists(int id)
         {
             var repo = MakeProductRepository(new List<Product>());
@@ -43,11 +42,11 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("ProductId", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("ProductId", result.First().Field);
         }
 
-        [Test]
+        [Fact]
         public void ReturnNoValidationFailMessageWhenCommandIsValid()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -59,7 +58,7 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            CollectionAssert.IsEmpty(result);
+            Assert.Empty(result);
         }
     }
 }

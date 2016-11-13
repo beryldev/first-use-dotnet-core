@@ -10,17 +10,17 @@ using Wrhs.Orders;
 using System;
 using Wrhs.Products;
 using Wrhs.Core;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class WarehouseTests
     {
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
-        [TestCase(99)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(99)]
         public void WarehouseCalculateStocks(int total)
         {
             var items = PrepareAllocations(total);
@@ -28,14 +28,14 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.CalculateStocks();
 
-            Assert.AreEqual(total, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(total, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(10)]
-        [TestCase(99)]
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(10)]
+        [InlineData(99)]
         public void CalculateStocksByProductCode(int total)
         {
             var items = PrepareAllocations(total);
@@ -44,10 +44,10 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.CalculateStocks("SPROD");
 
-            Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(5, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void WarehouseConsumeIOperation()
         {
             var mock = new Mock<IOperation>();
@@ -59,7 +59,7 @@ namespace Wrhs.Tests
             mock.Verify(m=>m.Perform(allocService), Times.Once());
         }
 
-        [Test]
+        [Fact]
         public void ProcessDeliveryOperationChangesStocks()
         {
             var items = PrepareAllocations(0);
@@ -68,15 +68,15 @@ namespace Wrhs.Tests
             var warehouse = PrepareWarehouse(allocService);
             
             var stocksBefore = warehouse.CalculateStocks("SPROD");
-            Assert.AreEqual(0, stocksBefore.Sum(item=>item.Quantity));
+            Assert.Equal(0, stocksBefore.Sum(item=>item.Quantity));
 
             warehouse.ProcessOperation(operation);
 
             var stocks = warehouse.CalculateStocks("SPROD");
-            Assert.AreEqual(5, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(5, stocks.Sum(item=>item.Quantity));
         }
         
-        [Test]
+        [Fact]
         public void ProcessRelocationOperationNotChangesStocks()
         {
             var items = PrepareAllocations(2);
@@ -85,15 +85,15 @@ namespace Wrhs.Tests
             var warehouse = PrepareWarehouse(allocService);
 
             var stocksBefore = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(2, stocksBefore.Sum(item=>item.Quantity));
+            Assert.Equal(2, stocksBefore.Sum(item=>item.Quantity));
 
             warehouse.ProcessOperation(operation);
 
             var stocks = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(2, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(2, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void ProcessRelocationOperationChangeLocation()
         {
             var items = PrepareAllocations(2);
@@ -102,21 +102,21 @@ namespace Wrhs.Tests
             var warehouse = PrepareWarehouse(allocService);
 
             var stockBefore = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(2, 
+            Assert.Equal(2, 
                 stockBefore.Where(item=>item.Location.Equals("LOC-001-01")).Sum(item=>item.Quantity));
-            Assert.AreEqual(0, 
+            Assert.Equal(0, 
                 stockBefore.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
 
             warehouse.ProcessOperation(operation);
 
             var stockAfter = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(0, 
+            Assert.Equal(0, 
                 stockAfter.Where(item=>item.Location.Equals("LOC-001-01")).Sum(item=>item.Quantity));
-            Assert.AreEqual(2, 
+            Assert.Equal(2, 
                 stockAfter.Where(item=>item.Location.Equals("LOC-001-02")).Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void ProcessReleaseOperationChangesStocks()
         {
             var items = PrepareAllocations(2);
@@ -125,15 +125,15 @@ namespace Wrhs.Tests
             var warehouse = PrepareWarehouse(allocService);
 
             var stockBefore = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(2, stockBefore.Sum(item=>item.Quantity));
+            Assert.Equal(2, stockBefore.Sum(item=>item.Quantity));
 
             warehouse.ProcessOperation(operation);
 
             var stockAfter = warehouse.CalculateStocks("PROD1");
-            Assert.AreEqual(1, stockAfter.Sum(item=>item.Quantity));
+            Assert.Equal(1, stockAfter.Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void ReadStocksReturnsStocksList()
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
@@ -141,10 +141,10 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.ReadStocks();
 
-            Assert.AreEqual(0, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(0, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void ReadStocksFromCachedStocks()
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
@@ -156,9 +156,9 @@ namespace Wrhs.Tests
             stockCacheMock.Verify(m=>m.Read(), Times.Once());
         }
 
-        [Test]
-        [TestCase("PROD1", 2, 7)]
-        [TestCase("PROD2", 1, 1)]
+        [Fact]
+        [InlineData("PROD1", 2, 7)]
+        [InlineData("PROD2", 1, 1)]
         public void ReadStocksByProductCode(string productCode, int count, decimal quantity)
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
@@ -174,13 +174,13 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.ReadStocksByProductCode(productCode);
 
-            Assert.AreEqual(count, stocks.Count);
-            Assert.AreEqual(quantity, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(count, stocks.Count);
+            Assert.Equal(quantity, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
-        [TestCase("LOC-001-01", 2, 7)]
-        [TestCase("LOC-001-02", 1, 1)]
+        [Fact]
+        [InlineData("LOC-001-01", 2, 7)]
+        [InlineData("LOC-001-02", 1, 1)]
         public void ReadStocksByLocation(string location, int count, decimal quantity)
         {
             var allocService = PrepareAllocService(SetupAllocationRepository());
@@ -196,11 +196,11 @@ namespace Wrhs.Tests
 
             var stocks = warehouse.ReadStocksByLocation(location);
 
-            Assert.AreEqual(count, stocks.Count);
-            Assert.AreEqual(quantity, stocks.Sum(item=>item.Quantity));
+            Assert.Equal(count, stocks.Count);
+            Assert.Equal(quantity, stocks.Sum(item=>item.Quantity));
         }
 
-        [Test]
+        [Fact]
         public void AfterProcessDeliveryOperationRefreshStockCache()
         {
             var cache = new List<Stock>();
@@ -223,11 +223,11 @@ namespace Wrhs.Tests
             warehouse.ProcessOperation(operation);
 
             stockCacheMock.Verify(m=>m.Refresh(warehouse), Times.Once());
-            Assert.AreEqual(warehouse.CalculateStocks().Count, warehouse.ReadStocks().Count);
-            CollectionAssert.AreEquivalent(warehouse.CalculateStocks(), warehouse.ReadStocks());
+            Assert.Equal(warehouse.CalculateStocks().Count, warehouse.ReadStocks().Count);
+            Assert.Equal(warehouse.CalculateStocks(), warehouse.ReadStocks());
         }
 
-        [Test]
+        [Fact]
         public void WhenProcessOperationFailStockAreInBerforeProcessState()
         {
             var items = new List<Allocation>
@@ -261,8 +261,8 @@ namespace Wrhs.Tests
                 warehouse.ProcessOperation(operationMock.Object);
             });
 
-            Assert.AreEqual(1, items.Count);
-            Assert.AreEqual(1, warehouse.CalculateStocks("PROD1").Sum(s=>s.Quantity));
+            Assert.Equal(1, items.Count);
+            Assert.Equal(1, warehouse.CalculateStocks("PROD1").Sum(s=>s.Quantity));
         }
         
         protected IAllocationService PrepareAllocService(IRepository<Allocation> allocRepo)

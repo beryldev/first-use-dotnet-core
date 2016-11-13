@@ -1,14 +1,13 @@
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class UpdateProductCommandValidatorTests : ProductCommandTestsBase
     {
-        [Test]
+        [Fact]
         public void ReturnValidationFailMessageWhenProductDoesNotExists()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -22,15 +21,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("ProductId", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("ProductId", result.First().Field);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnValidationFailMessageWhenNewCodeIsEmpty(string code)
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -44,15 +43,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("Code", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("Code", result.First().Field);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnValidationFailMessageWhenNewNameIsEmpty(string name)
         {
             var repo = MakeProductRepository( MakeProductList());
@@ -66,15 +65,15 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("Name", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("Name", result.First().Field);
         }
 
-        [Test]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("\n")]
-        [TestCase(null)]
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData(null)]
         public void ReturnValidationFailMessagesWhenNewCodeAndNameAreEmpty(string value)
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -88,12 +87,12 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(2, result.Count());
-            CollectionAssert.Contains(result.Select(item=>item.Field), "Code");
-            CollectionAssert.Contains(result.Select(item=>item.Field), "Name");
+            Assert.Equal(2, result.Count());
+            Assert.Contains("Code", result.Select(item=>item.Field));
+            Assert.Contains("Name", result.Select(item=>item.Field));
         }
 
-        [Test]
+        [Fact]
         public void ReturnValidationFailMessageWhenNewCodeDuplicated()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -109,11 +108,11 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("Code", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("Code", result.First().Field);
         }
 
-        [Test]
+        [Fact]
         public void ReturnNoValidationFailMessageWhenCodeAreNotChanged()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -129,10 +128,10 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            CollectionAssert.IsEmpty(result);
+            Assert.Empty(result);
         }
 
-         [Test]
+        [Fact]
         public void ReturnValidationFailMessageWhenNewEANDuplicated()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -148,11 +147,11 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("EAN", result.First().Field);
+            Assert.Equal(1, result.Count());
+            Assert.Equal("EAN", result.First().Field);
         }
 
-        [Test]
+        [Fact]
         public void ReturnNoValidationFailMessageWhenEANAreNotChanged()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -168,7 +167,7 @@ namespace Wrhs.Tests.Products
 
             var result = validator.Validate(command);
 
-            CollectionAssert.IsEmpty(result);
+            Assert.Empty(result);
         }
 
     }

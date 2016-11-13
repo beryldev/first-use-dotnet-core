@@ -1,14 +1,13 @@
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class DeleteProductCommandHandlerTests : ProductCommandTestsBase
     {
-        [Test]
+        [Fact]
         public void OnHandleRemoveProductFromRepository()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -20,10 +19,10 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            CollectionAssert.IsEmpty(repo.Get());
+            Assert.Empty(repo.Get());
         }
 
-        [Test]
+        [Fact]
         public void OnHandleRemoveUnexistedProductRepositoryInUnchaged()
         {
             var repo = MakeProductRepository(MakeProductList());
@@ -35,8 +34,8 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            Assert.AreEqual(1, repo.Get().Count());
-            Assert.AreEqual("PROD1", repo.Get().First().Code);
+            Assert.Equal(1, repo.Get().Count());
+            Assert.Equal("PROD1", repo.Get().First().Code);
         }
     }
 }

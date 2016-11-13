@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class UpdateProductCommandHandlerTests : ProductCommandTestsBase
     {
-        [Test]
+        [Fact]
         public void OnHandleUpdateExistingProduct()
         {
             var repo = MakeProductRepository(MakeSingleItemList());
@@ -26,17 +25,17 @@ namespace Wrhs.Tests.Products
             handler.Handle(command);
 
             var prod = repo.Get().First();
-            Assert.AreEqual("NPROD1", prod.Code);
-            Assert.AreEqual("New name product 1", prod.Name);
-            Assert.AreEqual("New desc", prod.Description);
-            Assert.AreEqual("222333444555", prod.EAN);
+            Assert.Equal("NPROD1", prod.Code);
+            Assert.Equal("New name product 1", prod.Name);
+            Assert.Equal("New desc", prod.Description);
+            Assert.Equal("222333444555", prod.EAN);
         }
 
-        [Test]
-        [TestCase("NPROD1")]
-        [TestCase("nprod1")]
-        [TestCase("nPrOd1")]
-        [TestCase("NpRoD1")]
+        [Theory]
+        [InlineData("NPROD1")]
+        [InlineData("nprod1")]
+        [InlineData("nPrOd1")]
+        [InlineData("NpRoD1")]
         public void OnHandleAlwaysUppercaseProductCode(string newCode)
         {
             var repo = MakeProductRepository(MakeSingleItemList());
@@ -53,7 +52,7 @@ namespace Wrhs.Tests.Products
             handler.Handle(command);
 
             var prod = repo.Get().First();
-            Assert.AreEqual("NPROD1", prod.Code);
+            Assert.Equal("NPROD1", prod.Code);
         }
 
         protected List<Product> MakeSingleItemList()

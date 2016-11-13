@@ -1,17 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using Moq;
-using NUnit.Framework;
-using Wrhs.Core;
 using Wrhs.Products;
 using Wrhs.Products.Commands;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class CreateProductCommandHandlerTests : ProductCommandTestsBase
     {
-        [Test]
+        [Fact]
         public void OnHandleCreateAndSaveNewProduct()
         {
             var repo = MakeProductRepository(new List<Product>());
@@ -26,15 +23,15 @@ namespace Wrhs.Tests.Products
             };
             handler.Handle(command);
 
-            Assert.AreEqual(1, repo.Get().Count());
-            Assert.AreEqual("PROD1", repo.Get().First().Code);
+            Assert.Equal(1, repo.Get().Count());
+            Assert.Equal("PROD1", repo.Get().First().Code);
         }
 
-        [Test]
-        [TestCase("PROD1")]
-        [TestCase("prod1")]
-        [TestCase("pRoD1")]
-        [TestCase("PrOd1")]
+        [Theory]
+        [InlineData("PROD1")]
+        [InlineData("prod1")]
+        [InlineData("pRoD1")]
+        [InlineData("PrOd1")]
         public void OnHandleAlwaysUppercaseProductCode(string code)
         {
             var repo = MakeProductRepository(new List<Product>());
@@ -49,7 +46,7 @@ namespace Wrhs.Tests.Products
             
             handler.Handle(command);
 
-            Assert.AreEqual("PROD1", repo.Get().First().Code);
+            Assert.Equal("PROD1", repo.Get().First().Code);
         }
     }
 }

@@ -1,19 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core.Search;
 using Wrhs.Products;
+using Xunit;
 
 namespace Wrhs.Tests.Products
 {
-    [TestFixture]
     public class ProductSearchTests: ProductCommandTestsBase
     {
-        [Test]
-        [TestCase(5, 2)]
-        [TestCase(10, 5)]
-        [TestCase(20, 7)]
-        [TestCase(321, 30)]
+        [Theory]
+        [InlineData(5, 2)]
+        [InlineData(10, 5)]
+        [InlineData(20, 7)]
+        [InlineData(321, 30)]
         public void OnSearchWithEmptyCriteriaReturnAllProducts(int itemsCount, int pageSize)
         {
             var items = MakeItems(itemsCount);
@@ -25,14 +24,14 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(itemsCount, result.Total);
-            Assert.LessOrEqual(pageSize, result.Items.Count());
+            Assert.Equal(itemsCount, result.Total);
+            Assert.InRange<int>(result.Items.Count(), 0, pageSize);
         }
 
-        [Test]
-        [TestCase("Product 1")]
-        [TestCase("Product 6")]
-        [TestCase("Product 20")]
+        [Theory]
+        [InlineData("Product 1")]
+        [InlineData("Product 6")]
+        [InlineData("Product 20")]
         public void OnSerachReturnProductsByName(string productName)
         {
             var items = MakeItems(20);
@@ -44,16 +43,16 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(1, result.Items.Count());
-            Assert.AreEqual(1, result.Total);
-            Assert.AreEqual(productName, result.Items.First().Name);
+            Assert.Equal(1, result.Items.Count());
+            Assert.Equal(1, result.Total);
+            Assert.Equal(productName, result.Items.First().Name);
         }
 
-        [Test]
-        [TestCase("Product", 20)]
-        [TestCase("Product 6", 1)]
-        [TestCase("Product 1", 11)]
-        [TestCase("product 1", 11)]
+        [Theory]
+        [InlineData("Product", 20)]
+        [InlineData("Product 6", 1)]
+        [InlineData("Product 1", 11)]
+        [InlineData("product 1", 11)]
         public void OnSerachReturnProductsByNameContainsString(string productName, int count)
         {
             var items = MakeItems(20);
@@ -65,13 +64,13 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(count, result.Total);
+            Assert.Equal(count, result.Total);
         }
 
-        [Test]
-        [TestCase("PROD1")]
-        [TestCase("PROD6")]
-        [TestCase("PROD20")]
+        [Theory]
+        [InlineData("PROD1")]
+        [InlineData("PROD6")]
+        [InlineData("PROD20")]
         public void OnSerachReturnProductsByCode(string productCode)
         {
             var items = MakeItems(20);
@@ -83,16 +82,16 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(1, result.Items.Count());
-            Assert.AreEqual(1, result.Total);
-            Assert.AreEqual(productCode, result.Items.First().Code);
+            Assert.Equal(1, result.Items.Count());
+            Assert.Equal(1, result.Total);
+            Assert.Equal(productCode, result.Items.First().Code);
         }
 
-        [Test]
-        [TestCase("PROD", 20)]
-        [TestCase("PROD6", 1)]
-        [TestCase("PROD1", 11)]
-        [TestCase("prod1", 11)]
+        [Theory]
+        [InlineData("PROD", 20)]
+        [InlineData("PROD6", 1)]
+        [InlineData("PROD1", 11)]
+        [InlineData("prod1", 11)]
         public void OnSerachReturnProductsByCodeContainsString(string productCode, int count)
         {
             var items = MakeItems(20);
@@ -104,13 +103,13 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(count, result.Total);
+            Assert.Equal(count, result.Total);
         }
 
-        [Test]
-        [TestCase("0001")]
-        [TestCase("00012")]
-        [TestCase("00020")]
+        [Theory]
+        [InlineData("0001")]
+        [InlineData("00012")]
+        [InlineData("00020")]
         public void OnSerachReturnProductsByEAN(string ean)
         {
             var items = MakeItems(20);
@@ -122,15 +121,15 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(1, result.Items.Count());
-            Assert.AreEqual(1, result.Total);
-            Assert.AreEqual(ean, result.Items.First().EAN);
+            Assert.Equal(1, result.Items.Count());
+            Assert.Equal(1, result.Total);
+            Assert.Equal(ean, result.Items.First().EAN);
         }
 
-        [Test]
-        [TestCase("000", 20)]
-        [TestCase("0006", 1)]
-        [TestCase("0001", 11)]
+        [Theory]
+        [InlineData("000", 20)]
+        [InlineData("0006", 1)]
+        [InlineData("0001", 11)]
         public void OnSerachReturnProductsByEANContainsString(string ean, int count)
         {
             var items = MakeItems(20);
@@ -142,7 +141,7 @@ namespace Wrhs.Tests.Products
 
             var result = search.Exec(criteria);
 
-            Assert.AreEqual(count, result.Total);
+            Assert.Equal(count, result.Total);
         }
 
         protected List<Product> MakeItems(int count)

@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using Wrhs.Core.Search;
+using Xunit;
 
 namespace Wrhs.Tests
 {
-    [TestFixture]
     public class PaginatorTests
     {
-        [Test]
+        [Fact]
         public void OnDefaultPaginateReturnFirstPage()
         {
             var paginator = new Paginator<object>();
@@ -17,10 +16,10 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items);
 
-            Assert.AreEqual(1, result.Page);
+            Assert.Equal(1, result.Page);
         }
 
-        [Test]
+        [Fact]
         public void OnDefaultPageSizeIsTenItems()
         {
             var paginator = new Paginator<object>();
@@ -28,10 +27,10 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items);
 
-            Assert.AreEqual(10, result.PerPage);
+            Assert.Equal(10, result.PerPage);
         }
 
-        [Test]
+        [Fact]
         public void OnPaginateReturnTotalCount()
         {
             var paginator = new Paginator<object>();
@@ -39,10 +38,10 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items);
 
-            Assert.AreEqual(items.Count, result.Total);
+            Assert.Equal(items.Count, result.Total);
         }
 
-        [Test]
+        [Fact]
         public void OnPaginateDivideItemsToPages()
         {
             var paginator = new Paginator<object>();
@@ -50,12 +49,12 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items);
 
-            Assert.AreEqual(10, result.Items.Count());
+            Assert.Equal(10, result.Items.Count());
         }
 
-        [Test]
-        [TestCase(1)]
-        [TestCase(2)]
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
         public void OnPaginateReturnDesiredPage(int page)
         {
             var paginator = new Paginator<object>();
@@ -63,15 +62,15 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items, page);
 
-            Assert.AreEqual(page, result.Page);
-            Assert.AreEqual(10, result.Items.Count());
+            Assert.Equal(page, result.Page);
+            Assert.Equal(10, result.Items.Count());
         }
 
-        [Test]
-        [TestCase(20)]
-        [TestCase(17)]
-        [TestCase(10)]
-        [TestCase(3)]
+        [Fact]
+        [InlineData(20)]
+        [InlineData(17)]
+        [InlineData(10)]
+        [InlineData(3)]
         public void OnPaginateReturnDesiredPageSize(int size)
         {
             var paginator = new Paginator<object>();
@@ -79,13 +78,13 @@ namespace Wrhs.Tests
 
             var result = paginator.Paginate(items, 1, size);
             
-            Assert.AreEqual(size, result.Items.Count());
+            Assert.Equal(size, result.Items.Count());
         }
 
-        [Test]
-        [TestCase(-1)]
-        [TestCase(-99)]
-        [TestCase(-1000)]
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-99)]
+        [InlineData(-1000)]
         public void OnPassNegativeOrZeroPageThrowArgumentException(int page)
         {
             var paginator = new Paginator<object>();
@@ -97,10 +96,10 @@ namespace Wrhs.Tests
             }); 
         }
 
-        [Test]
-        [TestCase(-1)]
-        [TestCase(-99)]
-        [TestCase(-1000)]
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-99)]
+        [InlineData(-1000)]
         public void OnPassNegativePageSizeThrowArgumentException(int size)
         {
             var paginator = new Paginator<object>();
