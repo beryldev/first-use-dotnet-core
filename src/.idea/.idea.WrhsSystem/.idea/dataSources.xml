@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="1907876672">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - wrhs.db" uuid="3a36dda9-99e0-4c31-bb8c-d8b84c67bea3">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../../Wrhs.WebApp/bin/Debug/netcoreapp1.0/wrhs.db</jdbc-url>
+    </data-source>
+  </component>
+</project>

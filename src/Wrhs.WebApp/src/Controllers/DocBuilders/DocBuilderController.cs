@@ -18,7 +18,7 @@ namespace Wrhs.WebApp.Controllers.DocBuilders
 
         protected IValidator<TCmd> validator;
 
-        public DocBuilderController(ICache cache, IRepository<Product> productRepo, IValidator<TCmd> validator)
+        protected DocBuilderController(ICache cache, IRepository<Product> productRepo, IValidator<TCmd> validator)
         {
             this.cache = cache;
             this.productRepo = productRepo;
