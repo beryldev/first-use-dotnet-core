@@ -7,9 +7,9 @@ namespace Wrhs
 {
     public class Warehouse : IWarehouse
     {
-        IAllocationService allocService;
+        readonly IAllocationService allocService;
 
-        IStockCache cache;
+        readonly IStockCache cache;
 
         public Warehouse(IAllocationService allocService, IStockCache cache)
         {

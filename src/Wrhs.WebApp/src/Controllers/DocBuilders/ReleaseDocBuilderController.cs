@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Wrhs.Core;
 using Wrhs.Documents;
 using Wrhs.Operations.Release;
@@ -6,6 +7,7 @@ using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp.Controllers.DocBuilders
 {
+    [Route("api/document/release")]
     public class ReleaseDocBuilderController
         : DocBuilderController<ReleaseDocument, ReleaseDocumentLine, ReleaseDocAddLineCmd>
     {

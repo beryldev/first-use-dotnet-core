@@ -69,5 +69,7 @@
         function saveDocument(){
             vm.service.save('documents.relocation');
         }
+
     }
+    
 })();

@@ -87,6 +87,24 @@
                         controller: 'NewRelocationDocCtrl as vm'
                     }
                 }
+            })
+            .state('documents.release', {
+                url: '/release',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/release/releaseDocList.html',
+                        controller: 'ReleaseDocListCtrl as vm'
+                    }
+                }
+            })
+            .state('documents.release.new', {
+                url: '/new',
+                views: { 
+                    'wrapper@': {
+                        templateUrl: 'templates/release/newReleaseDoc.html',
+                        controller: 'NewReleaseDocCtrl as vm'
+                    }
+                }
             });
     }
 

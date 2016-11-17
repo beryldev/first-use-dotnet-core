@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b0f37564-5fca-4c4d-a568-e7cf88bb57e5" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Wrhs.Data.Tests/Wrhs.Data.Tests.nuget.props" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Wrhs.Tests/Wrhs.Tests.nuget.props" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Wrhs.WebApp.Tests.Integration/Wrhs.WebApp.Tests.Integration.nuget.props" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/Wrhs.WebApp.Tests.nuget.props" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilders/DocBuilderController.cs" afterPath="$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilders/DocBuilderController.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Wrhs.Data/project.json" afterPath="$PROJECT_DIR$/../../Wrhs.Data/project.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DocTests/ReleaseDocumentControllerTests.cs" afterPath="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DocTests/ReleaseDocumentControllerTests.cs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Wrhs.WebApp/Wrhs.WebApp.xproj" afterPath="$PROJECT_DIR$/../../Wrhs.WebApp/Wrhs.WebApp.xproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Wrhs/Warehouse.cs" afterPath="$PROJECT_DIR$/../../Wrhs/Warehouse.cs" />
     </list>
     <ignored path="WrhsSystem.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,24 +39,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ProductController.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/ProductController.cs">
+      <file leaf-file-name="new-relocation-doc.controller.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/wwwroot/src/js/controllers/relocation/new-relocation-doc.controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-241">
-              <caret line="14" column="35" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
-              <folding>
-                <marker date="1478626913528" expanded="true" signature="6:206" ph="..." />
-                <marker date="1478626913528" expanded="true" signature="241:3443" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="327:3441" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="463:538" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="676:1393" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="1465:1643" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="1874:1987" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="2230:2363" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="2603:2736" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="2872:3079" ph="{...}" />
-                <marker date="1478626913528" expanded="true" signature="3236:3435" ph="{...}" />
-              </folding>
+            <state relative-caret-position="523">
+              <caret line="32" column="38" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,7 +57,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/../../Wrhs/Warehouse.cs" />
         <option value="$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Delivery/DeliveryDocumentBuilderTests.cs" />
         <option value="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DeliveryDocumentControllerTests.cs" />
         <option value="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/RelocationDocumentControllerTests.cs" />
@@ -71,14 +65,38 @@
         <option value="$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/RelocationDocBuilderController.cs" />
         <option value="$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilders/DocBuilderController.cs" />
         <option value="$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/ProductController.cs" />
+        <option value="$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Release/ReleaseDocumentBuilderTests.cs" />
+        <option value="$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Release/ReleaseDocAddLineCmdValidatorTests.cs" />
+        <option value="$PROJECT_DIR$/../../Wrhs.Data/project.json" />
+        <option value="$PROJECT_DIR$/../../Wrhs/Warehouse.cs" />
+        <option value="$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DocTests/ReleaseDocumentControllerTests.cs" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="28" />
-    <option name="width" value="1282" />
-    <option name="height" value="739" />
+    <option name="x" value="65" />
+    <option name="y" value="-6" />
+    <option name="width" value="1855" />
+    <option name="height" value="1206" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>General</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -117,6 +135,164 @@
               <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp.Tests" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wwwroot" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wwwroot" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wwwroot" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wwwroot" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="relocation" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WrhsSystem (7 projects)" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Wrhs.WebApp" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wwwroot" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.jetbrains.resharper.projectView.solutionExplorer.SolutionExplorerNodeRider" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
         <option name="show-file-system" value="false" />
         <option name="show-all-items" value="false" />
@@ -125,12 +301,22 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Wrhs.WebApp.Tests.Integration/Wrhs.WebApp.Tests.Integration.xproj" />
-    <property name="settings.editor.selected.configurable" value="preferences.dotNetCore" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="SearchEverywhereHistoryKey" value="Relocbui&#9;FILE&#9;file:///home/sebastian/Projekty/first-use-dotnet-core/src/Wrhs.WebApp/src/Controllers/RelocationDocBuilderController.cs&#10;IWare&#9;null&#9;null" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="Sqlite (Xerial)" />
   </component>
-  <component name="RunManager" selected=".NET Project.Default">
+  <component name="RunManager" selected=".NET Project.Wrhs.WebApp">
+    <configuration default="false" name="Wrhs.WebApp" type="DotNetProject" factoryName=".NET Project" temporary="true">
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../Wrhs.WebApp/Wrhs.WebApp.xproj" />
+      <option name="PROJECT_KIND" value="DotNetCore" />
+      <option name="EXE_PATH" value="$PROJECT_DIR$/../../Wrhs.WebApp/bin/Debug/netcoreapp1.0/Wrhs.WebApp.dll" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../Wrhs.WebApp" />
+      <option name="USE_MONO" value="0" />
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="DotNetProject" factoryName=".NET Project">
       <option name="PROJECT_PATH" value="" />
       <option name="PROJECT_KIND" value="None" />
@@ -151,9 +337,15 @@
       <envs />
       <method />
     </configuration>
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue=".NET Project.Default" />
+      <item index="1" class="java.lang.String" itemvalue=".NET Project.Wrhs.WebApp" />
     </list>
+    <recent_temporary>
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue=".NET Project.Wrhs.WebApp" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -174,6 +366,8 @@
       <workItem from="1478817504831" duration="361000" />
       <workItem from="1478979597241" duration="624000" />
       <workItem from="1478982374665" duration="1469000" />
+      <workItem from="1479069504017" duration="2036000" />
+      <workItem from="1479236310471" duration="1598000" />
     </task>
     <task id="LOCAL-00001" summary="rider, reloc doc builder&#10;">
       <created>1478726103715</created>
@@ -186,7 +380,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4756000" />
+    <option name="totallyTimeSpent" value="8390000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -198,24 +392,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="28" width="1282" height="739" extended-state="6" />
+    <frame x="65" y="-6" width="1855" height="1206" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962447" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931355" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Errors in solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962447" sideWeight="0.199187" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282572" sideWeight="0.800813" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994923" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="UnitTesting" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.8796875" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32962447" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32745826" sideWeight="0.800813" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931355" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="UnitTesting" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931355" sideWeight="0.8796875" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931355" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931355" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Change Signature" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3081301" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21890548" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32970026" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.328911" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2495935" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39981446" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -259,6 +453,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/ProductController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DeliveryDocumentControllerTests.cs" />
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/RelocationDocumentControllerTests.cs" />
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilderController.cs" />
@@ -278,13 +479,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Wrhs/Warehouse.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Wrhs/IWarehouse.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -292,28 +486,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/project.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Delivery/DeliveryDocumentBuilderTests.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="38" selection-start-line="37" selection-start-column="38" selection-end-line="37" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/RelocationDocController.cs" />
-    <entry file="file://$PROJECT_DIR$/../../Wrhs/Operations/Release/ReleaseDocumentBuilder.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="833">
-          <caret line="49" column="1" selection-start-line="49" selection-start-column="1" selection-end-line="49" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/RelocationDocBuilderController.cs" />
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilderController.cs" />
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/RelocationDocumentControllerTests.cs" />
@@ -330,7 +503,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2142">
           <caret line="24" column="15" selection-start-line="24" selection-start-column="15" selection-end-line="24" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -338,60 +510,193 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-844">
           <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
-          <folding>
-            <marker date="1478982864138" expanded="true" signature="6:150" ph="..." />
-            <marker date="1478982864138" expanded="true" signature="197:4279" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="428:4277" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="682:818" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="880:1080" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="1189:1771" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="1858:2121" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="2218:2457" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="2570:3174" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="3292:3643" ph="{...}" />
-            <marker date="1478982864138" expanded="true" signature="3823:4093" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3a36dda9-99e0-4c31-bb8c-d8b84c67bea3/console.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/85e72337/3a36dda9-99e0-4c31-bb8c-d8b84c67bea3/Products">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/3a36dda9-99e0-4c31-bb8c-d8b84c67bea3/console.sql" />
+    <entry file="dbDummy://dbtable:/85e72337/3a36dda9-99e0-4c31-bb8c-d8b84c67bea3/Products" />
     <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/ProductController.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-241">
+        <state relative-caret-position="17">
           <caret line="14" column="35" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/xunit.runner.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/project.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/project.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/PaginatorTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/AllocationServiceTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/DocumentBuiderTestsBase.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-344">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/DocumentAddLineCommandValidatorTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Delivery/DeliveryDocumentBuilderTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Release/ReleaseDocumentBuilderTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Tests/Wrhs/Builders/Release/ReleaseDocAddLineCmdValidatorTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.Data/project.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="26" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="26" />
           <folding>
-            <marker date="1478626913528" expanded="true" signature="6:206" ph="..." />
-            <marker date="1478626913528" expanded="true" signature="241:3443" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="327:3441" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="463:538" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="676:1393" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="1465:1643" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="1874:1987" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="2230:2363" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="2603:2736" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="2872:3079" ph="{...}" />
-            <marker date="1478626913528" expanded="true" signature="3236:3435" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="0:806" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="48:86" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="109:545" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="165:239" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="465:539" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="566:645" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="593:639" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="663:710" ph="{...}" />
+            <marker date="1479070369686" expanded="true" signature="726:803" ph="{...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs/Warehouse.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="45" selection-start-line="9" selection-start-column="45" selection-end-line="9" selection-end-column="45" />
+          <folding>
+            <marker date="1479236535041" expanded="true" signature="6:89" ph="..." />
+            <marker date="1479236535041" expanded="true" signature="105:2242" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="147:2240" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="318:417" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="477:923" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="969:1082" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="1146:1270" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="1311:1373" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="1445:1594" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="1660:1802" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="1874:2234" ph="{...}" />
+            <marker date="1479236535041" expanded="true" signature="2031:2213" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/src/Controllers/DocBuilders/ReleaseDocBuilderController.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1479068104226" expanded="true" signature="6:115" ph="..." />
+            <marker date="1479068104226" expanded="true" signature="162:993" ph="{...}" />
+            <marker date="1479068104226" expanded="true" signature="300:991" ph="{...}" />
+            <marker date="1479068104226" expanded="true" signature="505:525" ph="{...}" />
+            <marker date="1479068104226" expanded="true" signature="648:739" ph="{...}" />
+            <marker date="1479068104226" expanded="true" signature="885:985" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs/Operations/Release/ReleaseDocumentBuilder.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1479068104230" expanded="true" signature="6:78" ph="..." />
+            <marker date="1479068104230" expanded="true" signature="113:1824" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="241:1822" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="471:547" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="757:887" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="936:1080" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="1180:1463" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="1250:1426" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="1567:1816" ph="{...}" />
+            <marker date="1479068104230" expanded="true" signature="1637:1780" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs/Operations/Release/ReleaseDocAddLineCmdValidator.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
+          <folding>
+            <marker date="1476989324202" expanded="true" signature="6:126" ph="..." />
+            <marker date="1476989324202" expanded="true" signature="161:1442" ph="{...}" />
+            <marker date="1476989324202" expanded="true" signature="269:1440" ph="{...}" />
+            <marker date="1476989324202" expanded="true" signature="452:512" ph="{...}" />
+            <marker date="1476989324202" expanded="true" signature="597:1434" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp.Tests/DocTests/ReleaseDocumentControllerTests.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+          <folding>
+            <marker date="1479236983961" expanded="true" signature="6:71" ph="..." />
+            <marker date="1479236983961" expanded="true" signature="100:467" ph="{...}" />
+            <marker date="1479236983961" expanded="true" signature="222:465" ph="{...}" />
+            <marker date="1479236983961" expanded="true" signature="334:459" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Wrhs.WebApp/wwwroot/src/js/controllers/relocation/new-relocation-doc.controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="523">
+          <caret line="32" column="38" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -9,7 +9,7 @@ namespace Wrhs.WebApp.Tests
         protected override DocumentController<ReleaseDocument, ReleaseDocumentLine> CreateDocController()
         {
             var controller = new ReleaseDocController(repository.Object);
-            return controller as DocumentController<ReleaseDocument, ReleaseDocumentLine>;
+            return controller;
         }
     }
 }
