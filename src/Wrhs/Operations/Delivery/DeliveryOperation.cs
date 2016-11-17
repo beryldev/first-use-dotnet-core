@@ -101,7 +101,23 @@ namespace Wrhs.Operations.Delivery
 
         public State ReadState()
         {
-            return new State(this);
+            if(BaseDocument == null)
+                return new State();
+                
+            var state = new State
+            {
+                BaseDocument = new DeliveryDocument
+                {
+                    Id = BaseDocument.Id,
+                    FullNumber = BaseDocument.FullNumber,
+                    Remarks = BaseDocument.Remarks,
+                    IssueDate = BaseDocument.IssueDate
+                },
+                PendingAllocations = PendingAllocations.ToArray()
+            };
+            state.BaseDocument.Lines.AddRange(BaseDocument.Lines);
+
+            return state;
         }
         
         protected bool CheckAllocations()
@@ -115,26 +131,9 @@ namespace Wrhs.Operations.Delivery
 
         public class State
         {
-            public DeliveryDocument BaseDocument { get; }
+            public DeliveryDocument BaseDocument { get; set; }
 
-            public IEnumerable<Allocation> PendingAllocations { get; }
-
-            public State(DeliveryOperation operation)
-            {
-                if(operation.BaseDocument == null)
-                    return;
-
-                BaseDocument = new DeliveryDocument
-                {
-                    Id = operation.BaseDocument.Id,
-                    FullNumber = operation.BaseDocument.FullNumber,
-                    Remarks = operation.BaseDocument.Remarks,
-                    IssueDate = operation.BaseDocument.IssueDate
-                };
-                BaseDocument.Lines.AddRange(operation.BaseDocument.Lines.ToList());
-
-                PendingAllocations = operation.PendingAllocations.ToArray();
-            }
+            public IEnumerable<Allocation> PendingAllocations { get; set; }
         }
     }
 }

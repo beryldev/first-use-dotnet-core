@@ -200,7 +200,7 @@ namespace Wrhs.Tests
         public void ShouldRecreateOperationFromState()
         {
             var operation = CreateSimpleDeliveryOperation();
-            var state = new DeliveryOperation.State(operation);
+            var state = operation.ReadState();
 
             var recreated = new DeliveryOperation(state);
 
