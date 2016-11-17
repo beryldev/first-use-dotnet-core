@@ -173,6 +173,57 @@ namespace Wrhs.Tests
             mock.Verify(m=>m.RegisterAllocation(It.IsAny<Allocation>()), Times.Once());
         }
 
+        [Fact]
+        public void ShouldReturnOperationStateOnReadStateAtFreshOperation()
+        {   
+            var operation = new DeliveryOperation();
+
+            var state = operation.ReadState();
+
+            Assert.IsType<DeliveryOperation.State>(state);
+        }
+
+        [Fact]
+        public void ShouldReturnOperationStateOnReadState()
+        {           
+            var operation = CreateSimpleDeliveryOperation();
+
+            var state = operation.ReadState();
+
+            Assert.IsType<DeliveryOperation.State>(state);
+            Assert.Equal(operation.BaseDocument.FullNumber, state.BaseDocument.FullNumber);
+            Assert.Equal(1, state.BaseDocument.Lines.Count());
+            Assert.Equal(1, state.PendingAllocations.Count());
+        }
+
+        [Fact]
+        public void ShouldRecreateOperationFromState()
+        {
+            var operation = CreateSimpleDeliveryOperation();
+            var state = new DeliveryOperation.State(operation);
+
+            var recreated = new DeliveryOperation(state);
+
+            Assert.Equal(state.BaseDocument.FullNumber, recreated.BaseDocument.FullNumber);
+        }
+
+        protected DeliveryOperation CreateSimpleDeliveryOperation()
+        {
+            var quantity = 1;
+            var location = "LOC-001-01";
+            var document = new DeliveryDocument(){ FullNumber = "DOC\001" };
+            document.Lines.Add(new DeliveryDocumentLine()
+            {
+                Product = new Product{Code = "PROD1", Name = "Product 1", Id = 1},
+                Quantity = 1
+            });
+            var operation = new DeliveryOperation();
+            operation.SetBaseDocument(document);
+            operation.AllocateItem(document.Lines.First(), quantity, location);
+
+            return operation;
+        }
+
         protected DeliveryDocument CreateDeliveryDocument()
         {
             var doc = new DeliveryDocument();

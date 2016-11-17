@@ -91,6 +91,11 @@ namespace Wrhs.Operations.Delivery
      
             pendingAllocations.Add(allocation);
         }
+
+        public State ReadState()
+        {
+            return new State(this);
+        }
         
         protected bool CheckAllocations()
         {
@@ -98,6 +103,31 @@ namespace Wrhs.Operations.Delivery
             var allocated = pendingAllocations.Sum(item=>item.Quantity);
 
             return toAllocate == allocated;
+        }
+
+
+        public class State
+        {
+            public DeliveryDocument BaseDocument { get; }
+
+            public IEnumerable<Allocation> PendingAllocations { get; }
+
+            public State(DeliveryOperation operation)
+            {
+                if(operation.BaseDocument == null)
+                    return;
+
+                BaseDocument = new DeliveryDocument
+                {
+                    Id = operation.BaseDocument.Id,
+                    FullNumber = operation.BaseDocument.FullNumber,
+                    Remarks = operation.BaseDocument.Remarks,
+                    IssueDate = operation.BaseDocument.IssueDate
+                };
+                BaseDocument.Lines.AddRange(operation.BaseDocument.Lines.ToList());
+
+                PendingAllocations = operation.PendingAllocations.ToArray();
+            }
         }
     }
 }
