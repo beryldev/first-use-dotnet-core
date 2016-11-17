@@ -27,6 +27,13 @@ namespace Wrhs.Operations.Delivery
 
         DeliveryDocument baseDocument;
 
+        public DeliveryOperation() { }
+
+        public DeliveryOperation(DeliveryOperation.State state)
+        {
+            baseDocument = state.BaseDocument;
+        }
+
         public OperationResult Perform(IAllocationService allocService)
         {
             if(baseDocument == null)

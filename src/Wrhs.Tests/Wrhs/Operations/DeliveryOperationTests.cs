@@ -205,6 +205,7 @@ namespace Wrhs.Tests
             var recreated = new DeliveryOperation(state);
 
             Assert.Equal(state.BaseDocument.FullNumber, recreated.BaseDocument.FullNumber);
+            Assert.Equal(state.PendingAllocations.Count(), recreated.PendingAllocations.Count());
         }
 
         protected DeliveryOperation CreateSimpleDeliveryOperation()
