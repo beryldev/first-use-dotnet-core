@@ -34,6 +34,8 @@ namespace Wrhs.Data.Repository
         public DeliveryDocument GetById(int id)
         {
             return context.DeliveryDocuments
+                .Include(x => x.Lines)
+                    .ThenInclude(line => line.Product)
                 .Where(item=>item.Id==id)
                 .FirstOrDefault();
         }

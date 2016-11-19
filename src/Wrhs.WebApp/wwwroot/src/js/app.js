@@ -1,7 +1,7 @@
 (function(){
     'use strict'
 
-    angular.module('wrhs', [
+    var app = angular.module('wrhs', [
         'ngSanitize', 
         'ngAnimate',
         'ui.router', 
@@ -11,4 +11,18 @@
         'ui.grid.selection', 
         'ui.select'
     ]);
+
+    app.directive('focusMe', function() {
+    return {
+        scope: { trigger: '=focusMe' },
+        link: function(scope, element) {
+        scope.$watch('trigger', function(value) {
+            if(value === true) { 
+                element[0].focus();
+                scope.trigger = false;
+            }
+        });
+        }
+    };
+    });
 })();

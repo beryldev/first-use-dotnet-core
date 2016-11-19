@@ -16,7 +16,7 @@ namespace Wrhs.WebApp.Controllers.Operations
             this.cache = cache;
         }
 
-        [HttpGet("new")]
+        [HttpGet("new/{documentId}")]
         public IActionResult NewOperation(int documentId, [FromServices]IRepository<DeliveryDocument> documentRepository)
         {
             var document = documentRepository.GetById(documentId);

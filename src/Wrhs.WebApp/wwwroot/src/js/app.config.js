@@ -105,6 +105,19 @@
                         controller: 'NewReleaseDocCtrl as vm'
                     }
                 }
+            })
+            .state('operation', {
+                abstract: true,
+                url: '/operation'
+            })
+            .state('operation.delivery', {
+                url: '/delivery/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/delivery/operation.html',
+                        controller: 'DeliveryOperationCtrl as vm'
+                    }
+                }
             });
     }
 

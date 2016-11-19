@@ -1,0 +1,54 @@
+<h1 class="page-header">Delivery operation</h1>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h3>Document: {{ vm.state.baseDocument.fullNumber }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <th>Product</th>
+                <th>Code</th>
+                <th>EAN</th>
+                <th>Quantity</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="line in vm.state.baseDocument.lines">
+                    <td>{{ line.product.name }}</td>
+                    <td>{{ line.product.code }}</td>
+                    <td>{{ line.product.ean }}</td>
+                    <td>{{ line.quantity }}</td>
+                    <td style="width: 80px;"><button type="button" ng-click="vm.allocateLine(line)" class="btn btn-xs btn-default">Allocate</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-lg-6">
+        <h3>Allocation</h3>
+
+        <div class="form-group">
+            <label>Product name</label>
+            <input type="text" class="form-control" ng-model="vm.allocation.line.product.name">
+        </div>
+
+        <div class="form-group">
+            <label>Product EAN</label>
+            <input type="text" class="form-control" ng-model="vm.allocation.line.product.ean">
+        </div>
+
+        <div class="form-group">
+            <label>Quantity</label>
+            <input type="text" class="form-control" ng-model="vm.allocation.quantity" focus-me="vm.quantityFocus">
+        </div>
+
+        <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" ng-model="vm.allocation.location">
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" ng-click="vm.saveAllocation()">Register</button>
+        </div>
+     
+    </div>
+</div>
