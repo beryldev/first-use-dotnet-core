@@ -5,15 +5,16 @@
         .module('wrhs')
         .controller('DeliveryOperationCtrl', DeliveryOperationCtrl);
 
-    DeliveryOperationCtrl.$inject = ['$stateParams', '$http', '$scope'];
+    DeliveryOperationCtrl.$inject = ['$stateParams', '$http', '$scope', 'messageService'];
 
-    function DeliveryOperationCtrl($stateParams, $http, $scope){
+    function DeliveryOperationCtrl($stateParams, $http, $scope, messageService){
         var vm = this;
         vm.guid = '';
         vm.state = {};
         vm.allocation = {};
         vm.allocateLine = allocateLine;
         vm.saveAllocation = saveAllocation;
+        vm.confirmOperation = confirmOperation;
 
         init();
 
@@ -48,7 +49,24 @@
         }
 
         function saveAllocation(){
-            vm.quantityFocus = false;
+            $http.post('api/operation/delivery/'+vm.guid+'/allocation', vm.allocation)
+                .then(onSuccess);
+
+            function onSuccess(response){
+                vm.state = response.data;
+                vm.allocation = {};
+                vm.quantityFocus = false;
+                messageService.success('', 'Done');
+            }  
+        }
+
+        function confirmOperation(){
+            $http.post('api/operation/delivery/'+vm.guid)
+                .then(onSuccess);
+
+            function onSuccess(response){
+                messageService.success('Delivery operation confirmed', 'Success');
+            }
         }
     }
 

@@ -45,7 +45,7 @@ namespace Wrhs.WebApp.Controllers.Operations
         }
 
         [HttpPost("{guid}/allocation")]
-        public IActionResult AllocateItem(string guid, DeliveryDocumentLine line, decimal quantity, string location)
+        public IActionResult AllocateItem(string guid, [FromBody]AllocationRequest request)
         {
             var state = cache.GetValue(guid) as DeliveryOperation.State;
             if(state == null)
@@ -55,16 +55,16 @@ namespace Wrhs.WebApp.Controllers.Operations
 
             try
             {
-                operation.AllocateItem(line, quantity, location);
+                operation.AllocateItem(request.Line, request.Quantity, request.Location);
             }
             catch(ArgumentException e)
             {
-                var result = new ValidationResult("AllocateItem", e.Message);
+                var result = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
                 return BadRequest(result);
             }
             catch(InvalidOperationException e)
             {
-                var result = new ValidationResult("AllocateItem", e.Message);
+                var result = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
                 return BadRequest(result);
             }
             
@@ -76,7 +76,7 @@ namespace Wrhs.WebApp.Controllers.Operations
         }
 
         [HttpPost("{guid}")]
-        public IActionResult Perform(string guid, IWarehouse warehouse)
+        public IActionResult Perform(string guid, [FromServices]IWarehouse warehouse)
         {
             var state = cache.GetValue(guid) as DeliveryOperation.State;
             if(state == null)
@@ -90,15 +90,25 @@ namespace Wrhs.WebApp.Controllers.Operations
             }
             catch(InvalidOperationException e)
             {
-                return BadRequest(new ValidationResult("Perform", e.Message));
+                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                return BadRequest(result);
             }
             catch(ArgumentException e)
             {
-                return BadRequest(new ValidationResult("Perform", e.Message));
+                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                return BadRequest(result);
             }
             
-
             return Ok();
+        }
+
+        public class AllocationRequest
+        {
+            public DeliveryDocumentLine Line { get; set; }
+
+            public string Location { get; set; }
+
+            public decimal Quantity { get; set; }
         }
     }
 }

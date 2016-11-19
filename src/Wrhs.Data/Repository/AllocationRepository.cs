@@ -35,6 +35,7 @@ namespace Wrhs.Data.Repository
 
         public Allocation Save(Allocation item)
         {
+            item.Product = context.Products.Where(x => x.Id == item.Product.Id).FirstOrDefault();
             context.Allocations.Add(item);
             context.SaveChanges();
 

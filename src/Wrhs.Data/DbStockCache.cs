@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Wrhs.Data
 {
@@ -13,13 +15,15 @@ namespace Wrhs.Data
 
         public IEnumerable<Stock> Read()
         {
-            return context.StocksCache;
+            return context.StocksCache.Include(s => s.Product);
         }
 
         public void Refresh(IWarehouse warehouse)
         {
             context.StocksCache.RemoveRange(context.StocksCache);
-            context.StocksCache.AddRange(warehouse.CalculateStocks());
+            var stocks = warehouse.CalculateStocks();
+            stocks.ForEach(s => s.Product = context.Products.Where(p => p.Id == s.Product.Id).FirstOrDefault());
+            context.StocksCache.AddRange(stocks);
             context.SaveChanges();
         }
     }

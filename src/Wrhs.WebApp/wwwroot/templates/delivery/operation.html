@@ -21,6 +21,30 @@
                 </tr>
             </tbody>
         </table>
+        
+        <hr>
+
+        <h3>Registered allocations</h3>
+        <table class="table table-striped">
+            <thead>
+                <th>Product</th>
+                <th>Code</th>
+                <th>EAN</th>
+                <th>Quantity</th>
+                <th>Location</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in vm.state.pendingAllocations">
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.code }}</td>
+                    <td>{{ item.product.ean }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.location }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-primary" ng-click="vm.confirmOperation()">Confirm operation</button>
     </div>
 
     <div class="col-lg-6">

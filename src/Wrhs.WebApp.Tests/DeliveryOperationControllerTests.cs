@@ -108,15 +108,19 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithOperationStateOnAllocateItem()
         {
-            var quantity = 1;
-            var location = "LOC-001-01";
             var line = new DeliveryDocumentLine
             {
                 Product = new Product { Id = 1, Name = "Product 1", Code = "PROD1"},
                 Quantity = 5
             };
 
-            var result = controller.AllocateItem(OPERATION_GUID_OK ,line, quantity, location);
+            var request = new DeliveryOperationController.AllocationRequest
+            {
+                Line = line,
+                Quantity = 1,
+                Location = "LOC-001-01"
+            };
+            var result = controller.AllocateItem(OPERATION_GUID_OK, request);
 
             result.Should().BeOfType<OkObjectResult>();
             var state = (result as OkObjectResult).Value as DeliveryOperation.State;
@@ -124,22 +128,26 @@ namespace Wrhs.WebApp.Tests
             state.PendingAllocations.Should().NotBeEmpty();
             var allocation = state.PendingAllocations.First();
             allocation.Product.Code.Should().Be("PROD1");
-            allocation.Quantity.Should().Be(quantity);
-            allocation.Location.Should().Be(location);
+            allocation.Quantity.Should().Be(request.Quantity);
+            allocation.Location.Should().Be(request.Location);
         }
 
         [Fact]
         public void ShouldReturnNotFoundOnAllocateItemWhenOperationNotExists()
         {
-            var quantity = 1;
-            var location = "LOC-001-01";
             var line = new DeliveryDocumentLine
             {
                 Product = new Product { Id = 1, Name = "Product 1", Code = "PROD1"},
                 Quantity = 5
             };
 
-            var result = controller.AllocateItem(OPERATION_GUID_BAD, line, quantity, location);
+            var request = new DeliveryOperationController.AllocationRequest
+            {
+                Line = line,
+                Quantity = 1,
+                Location = "LOC-001-01"
+            };
+            var result = controller.AllocateItem(OPERATION_GUID_BAD, request);
 
             result.Should().BeOfType<NotFoundResult>();
         }
@@ -148,34 +156,44 @@ namespace Wrhs.WebApp.Tests
         [InlineData(10, "PROD1")]
         [InlineData(1, "PROD4")]
         [InlineData(10, "PROD1")]
-        public void ShouldReturnBadRequestWithValidationResultOnAllocateItemWhenAllocationError(decimal quantity, string productCode)
+        public void ShouldReturnBadRequestWithValidationResultsOnAllocateItemWhenAllocationError(decimal quantity, string productCode)
         {
-            var location = "LOC-001-01";
             var line = new DeliveryDocumentLine
             {
                 Product = new Product { Id = 1, Name = "Product 1", Code = productCode},
                 Quantity = 5
             };
 
-            var result = controller.AllocateItem(OPERATION_GUID_OK, line, quantity, location);
+            var request = new DeliveryOperationController.AllocationRequest
+            {
+                Line = line,
+                Quantity = quantity,
+                Location = "LOC-001-01"
+            };
+            var result = controller.AllocateItem(OPERATION_GUID_OK, request);
 
             result.Should().BeOfType<BadRequestObjectResult>();
-            var validationResult = (result as BadRequestObjectResult).Value as ValidationResult;
-            validationResult.Message.Should().NotBeNullOrWhiteSpace();
+            var validationResult = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            validationResult.Should().NotBeEmpty();
+            validationResult.First().Message.Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]
         public void ShouldStoreBackToCacheStateOnAllocateItemWhenSuccess()
         {
-            var quantity = 1;
-            var location = "LOC-001-01";
             var line = new DeliveryDocumentLine
             {
                 Product = new Product { Id = 1, Name = "Product 1", Code = "PROD1"},
                 Quantity = 5
             };
 
-            var result = controller.AllocateItem(OPERATION_GUID_OK, line, quantity, location);
+            var request = new DeliveryOperationController.AllocationRequest
+            {
+                Line = line,
+                Quantity = 1,
+                Location = "LOC-001-01"
+            };
+            var result = controller.AllocateItem(OPERATION_GUID_OK, request);
 
             cacheMock.Verify(m => m.SetValue(OPERATION_GUID_OK, It.IsNotNull<DeliveryOperation.State>()), Times.Once());
         }
@@ -205,8 +223,9 @@ namespace Wrhs.WebApp.Tests
             var result = controller.Perform(OPERATION_GUID_OK, warehouseMock.Object);
 
             result.Should().BeOfType<BadRequestObjectResult>();
-            var validationResult = (result as BadRequestObjectResult).Value as ValidationResult;
-            validationResult.Message.Should().NotBeNullOrWhiteSpace();
+            var validationResult = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            validationResult.Should().NotBeEmpty();
+            validationResult.First().Message.Should().NotBeNullOrWhiteSpace();
         }
     }
 }
