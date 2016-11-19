@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FluentAssertions;
 using Moq;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
@@ -201,11 +202,14 @@ namespace Wrhs.Tests
         {
             var operation = CreateSimpleDeliveryOperation();
             var state = operation.ReadState();
-
+      
             var recreated = new DeliveryOperation(state);
 
-            Assert.Equal(state.BaseDocument.FullNumber, recreated.BaseDocument.FullNumber);
-            Assert.Equal(state.PendingAllocations.Count(), recreated.PendingAllocations.Count());
+            recreated.BaseDocument.FullNumber.Should()
+                .Be(operation.BaseDocument.FullNumber);
+
+            recreated.PendingAllocations.Count().Should()
+                .Be(operation.PendingAllocations.Count());
         }
 
         protected DeliveryOperation CreateSimpleDeliveryOperation()

@@ -32,6 +32,8 @@ namespace Wrhs.Operations.Delivery
         public DeliveryOperation(DeliveryOperation.State state)
         {
             baseDocument = state.BaseDocument;
+            pendingAllocations = state.PendingAllocations.ToList();
+            state.BaseDocument = null;
         }
 
         public OperationResult Perform(IAllocationService allocService)
@@ -133,7 +135,7 @@ namespace Wrhs.Operations.Delivery
         {
             public DeliveryDocument BaseDocument { get; set; }
 
-            public IEnumerable<Allocation> PendingAllocations { get; set; }
+            public IEnumerable<Allocation> PendingAllocations { get; set; } = new List<Allocation>();
         }
     }
 }
