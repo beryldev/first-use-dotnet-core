@@ -23,7 +23,12 @@ namespace Wrhs
             try
             {
                 allocService.BeginTransaction();
-                operation.Perform(allocService);
+                var result = operation.Perform(allocService);
+                if(result != null && result.ErrorMessages.Count > 0)
+                {
+                    var message = String.Join(" ", result.ErrorMessages);
+                    throw new InvalidOperationException(message);
+                }
                 allocService.CommitTransaction();    
             }
             catch(Exception)

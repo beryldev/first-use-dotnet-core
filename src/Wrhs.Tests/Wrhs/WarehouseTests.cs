@@ -262,6 +262,22 @@ namespace Wrhs.Tests
             Assert.Equal(1, items.Count);
             Assert.Equal(1, warehouse.CalculateStocks("PROD1").Sum(s=>s.Quantity));
         }
+
+        [Fact]
+        public void ShouldThrowExceptionWhenPerformOperationFails()
+        {
+            var operationMock = new Mock<IOperation>();
+            operationMock.Setup(m => m.Perform(It.IsAny<IAllocationService>()))
+                .Returns(new OperationResult{ ErrorMessages = new List<string> { "Some error message" }});
+        
+            var allocationService = new Mock<IAllocationService>();
+            var warehouse = PrepareWarehouse(allocationService.Object);
+
+            Assert.Throws<InvalidOperationException>(()=> 
+            {
+                warehouse.ProcessOperation(operationMock.Object);
+            });
+        }
         
         protected IAllocationService PrepareAllocService(IRepository<Allocation> allocRepo)
         {
