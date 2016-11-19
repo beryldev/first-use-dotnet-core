@@ -98,6 +98,11 @@ namespace Wrhs.WebApp.Controllers.Operations
                 var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
                 return BadRequest(result);
             }
+            catch(Exception e)
+            {
+                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                return BadRequest(result);
+            }
             
             return Ok();
         }

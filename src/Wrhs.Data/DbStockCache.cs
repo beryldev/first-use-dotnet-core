@@ -20,6 +20,7 @@ namespace Wrhs.Data
 
         public void Refresh(IWarehouse warehouse)
         {
+            //TODO poprawić, zoptymalizować komunikację z bazą
             context.StocksCache.RemoveRange(context.StocksCache);
             var stocks = warehouse.CalculateStocks();
             stocks.ForEach(s => s.Product = context.Products.Where(p => p.Id == s.Product.Id).FirstOrDefault());

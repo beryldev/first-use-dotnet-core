@@ -5,9 +5,9 @@
         .module('wrhs')
         .controller('DeliveryOperationCtrl', DeliveryOperationCtrl);
 
-    DeliveryOperationCtrl.$inject = ['$stateParams', '$http', '$scope', 'messageService'];
+    DeliveryOperationCtrl.$inject = ['$stateParams', '$state', '$http', 'messageService'];
 
-    function DeliveryOperationCtrl($stateParams, $http, $scope, messageService){
+    function DeliveryOperationCtrl($stateParams, $state, $http, messageService){
         var vm = this;
         vm.guid = '';
         vm.state = {};
@@ -56,7 +56,7 @@
                 vm.state = response.data;
                 vm.allocation = {};
                 vm.quantityFocus = false;
-                messageService.success('', 'Done');
+                messageService.success('', 'Done');          
             }  
         }
 
@@ -66,6 +66,7 @@
 
             function onSuccess(response){
                 messageService.success('Delivery operation confirmed', 'Success');
+                $state.go('documents.delivery');
             }
         }
     }

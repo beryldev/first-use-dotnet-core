@@ -14,7 +14,7 @@
 
         return factory;
 
-        function createService($scope, documentUrl){
+        function createService($scope, documentUrl, onRowDoubleClick){
             var service = {
                 gridConfig: {},
                 filter: {},
@@ -26,8 +26,13 @@
             return service;
 
             function initService(){
+                $scope.myAppScopeProvider = {
+                    showInfo : function(row) {
+                        onRowDoubleClick(row);
+                    }
+                }
                 service.gridConfig = gridConfig();
-                service.filter = filter();
+                service.filter = filter();    
             }
 
             function loadData(){
@@ -40,6 +45,7 @@
                 }
             }
 
+           
             function gridConfig(){
                 return  {
                     data: service.loadData(),
@@ -81,8 +87,8 @@
                             service.loadData();
                         });
                     },
-                    //appScopeProvider: $scope.myAppScopeProvider,
-                    //rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
+                    appScopeProvider: $scope.myAppScopeProvider,
+                    rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
                 }
             }
 
