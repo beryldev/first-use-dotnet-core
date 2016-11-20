@@ -15,6 +15,7 @@
         vm.allocateLine = allocateLine;
         vm.saveAllocation = saveAllocation;
         vm.confirmOperation = confirmOperation;
+        vm.getState = getState;
 
         init();
 

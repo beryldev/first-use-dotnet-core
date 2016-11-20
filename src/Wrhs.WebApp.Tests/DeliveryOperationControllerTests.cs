@@ -126,6 +126,7 @@ namespace Wrhs.WebApp.Tests
             var state = (result as OkObjectResult).Value as DeliveryOperation.State;
             state.BaseDocument.FullNumber.Should().Be(DELIVERY_DOC_NUMBER);
             state.PendingAllocations.Should().NotBeEmpty();
+            
             var allocation = state.PendingAllocations.First();
             allocation.Product.Code.Should().Be("PROD1");
             allocation.Quantity.Should().Be(request.Quantity);

@@ -47,32 +47,34 @@ namespace Wrhs.WebApp.Controllers.Operations
         [HttpPost("{guid}/allocation")]
         public IActionResult AllocateItem(string guid, [FromBody]AllocationRequest request)
         {
+            IActionResult result;
             var state = cache.GetValue(guid) as DeliveryOperation.State;
             if(state == null)
                 return NotFound();
 
             var operation = new DeliveryOperation(state);
-
+            
             try
             {
                 operation.AllocateItem(request.Line, request.Quantity, request.Location);
+                result = Ok(operation.ReadState());
             }
             catch(ArgumentException e)
             {
-                var result = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
-                return BadRequest(result);
+                var results = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
+                result = BadRequest(results);
             }
             catch(InvalidOperationException e)
             {
-                var result = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
-                return BadRequest(result);
+                var results = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
+                result = BadRequest(results);
+            }
+            finally
+            {
+                cache.SetValue(guid, operation.ReadState());
             }
             
-
-            state = operation.ReadState();
-            cache.SetValue(guid, state);
-
-            return Ok(state);
+            return result;
         }
 
         [HttpPost("{guid}")]
@@ -113,7 +115,7 @@ namespace Wrhs.WebApp.Controllers.Operations
 
             public string Location { get; set; }
 
-            public decimal Quantity { get; set; }
+            public decimal Quantity { get; set; } = 0;
         }
     }
 }

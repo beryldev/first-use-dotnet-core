@@ -3,6 +3,7 @@
 <div class="row">
     <div class="col-lg-6">
         <h3>Document: {{ vm.state.baseDocument.fullNumber }}</h3>
+        <button type="button" class="btn btn-default btn-sm" ng-click="vm.getState()">Refresh</button>
         <table class="table table-striped">
             <thead>
                 <th>Product</th>
