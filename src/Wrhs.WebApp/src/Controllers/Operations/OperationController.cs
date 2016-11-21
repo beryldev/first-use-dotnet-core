@@ -5,7 +5,7 @@ using Wrhs.Core;
 using Wrhs.Operations;
 using Wrhs.WebApp.Utils;
 
-namespace Wrhs.WebApp.Controllers
+namespace Wrhs.WebApp.Controllers.Operations
 {
     public abstract class OperationController<TOper, TDoc, TRequest> : BaseController, IOperationController<TOper, TDoc, TRequest>
         where TOper : IOperation
