@@ -181,7 +181,7 @@ namespace Wrhs.Tests
 
             var state = operation.ReadState();
 
-            Assert.IsType<DeliveryOperation.State>(state);
+            Assert.IsType<OperationState<DeliveryDocument>>(state);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace Wrhs.Tests
 
             var state = operation.ReadState();
 
-            Assert.IsType<DeliveryOperation.State>(state);
+            Assert.IsType<OperationState<DeliveryDocument>>(state);
             Assert.Equal(operation.BaseDocument.FullNumber, state.BaseDocument.FullNumber);
             Assert.Equal(1, state.BaseDocument.Lines.Count());
             Assert.Equal(1, state.PendingAllocations.Count());

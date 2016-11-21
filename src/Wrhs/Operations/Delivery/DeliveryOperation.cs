@@ -29,7 +29,7 @@ namespace Wrhs.Operations.Delivery
 
         public DeliveryOperation() { }
 
-        public DeliveryOperation(DeliveryOperation.State state)
+        public DeliveryOperation(OperationState<DeliveryDocument> state)
         {
             baseDocument = state.BaseDocument;
             pendingAllocations = state.PendingAllocations.ToList();
@@ -101,12 +101,12 @@ namespace Wrhs.Operations.Delivery
             pendingAllocations.Add(allocation);
         }
 
-        public State ReadState()
+        public OperationState<DeliveryDocument> ReadState()
         {
             if(BaseDocument == null)
-                return new State();
+                return new OperationState<DeliveryDocument>();
                 
-            var state = new State
+            var state = new OperationState<DeliveryDocument>
             {
                 BaseDocument = new DeliveryDocument
                 {
@@ -129,13 +129,6 @@ namespace Wrhs.Operations.Delivery
 
             return toAllocate == allocated;
         }
-
-
-        public class State
-        {
-            public DeliveryDocument BaseDocument { get; set; }
-
-            public IEnumerable<Allocation> PendingAllocations { get; set; } = new List<Allocation>();
-        }
+ 
     }
 }

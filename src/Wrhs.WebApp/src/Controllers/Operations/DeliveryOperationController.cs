@@ -1,121 +1,48 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using Wrhs.Core;
+using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
 using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
     [Route("api/operation/delivery")]
-    public class DeliveryOperationController : BaseController
+    public class DeliveryOperationController 
+        : OperationController<DeliveryOperation, DeliveryDocument, AllocationRequest>
     {
-        readonly ICache cache;
     
         public DeliveryOperationController(ICache cache)
-        {
-            this.cache = cache;
-        }
+            : base(cache) { }
 
-        [HttpGet("new/{documentId}")]
-        public IActionResult NewOperation(int documentId, [FromServices]IRepository<DeliveryDocument> documentRepository)
+        protected override DeliveryOperation CreateOperation(DeliveryDocument baseDocument)
         {
-            var document = documentRepository.GetById(documentId);
-            if(document == null)
-                return NotFound();
-
             var operation = new DeliveryOperation();
-            operation.SetBaseDocument(document);
-
-            var state = operation.ReadState();
-            var guid = Guid.NewGuid().ToString();
-
-            cache.SetValue(guid, state);
-
-            return Ok(guid);
+            operation.SetBaseDocument(baseDocument);
+            return operation;
         }
 
-        [HttpGet("{guid}")]
-        public IActionResult GetOperation(string guid)
+        protected override DeliveryOperation CreateOperation(OperationState<DeliveryDocument> state)
         {
-            var state = cache.GetValue(guid);
-            if(state == null)
-                return NotFound();
-
-            return Ok(state);
+            return new DeliveryOperation(state);
         }
 
-        [HttpPost("{guid}/allocation")]
-        public IActionResult AllocateItem(string guid, [FromBody]AllocationRequest request)
+        protected override void DoStep(DeliveryOperation operation, AllocationRequest request)
         {
-            IActionResult result;
-            var state = cache.GetValue(guid) as DeliveryOperation.State;
-            if(state == null)
-                return NotFound();
-
-            var operation = new DeliveryOperation(state);
-            
-            try
-            {
-                operation.AllocateItem(request.Line, request.Quantity, request.Location);
-                result = Ok(operation.ReadState());
-            }
-            catch(ArgumentException e)
-            {
-                var results = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
-                result = BadRequest(results);
-            }
-            catch(InvalidOperationException e)
-            {
-                var results = new ValidationResult[] { new ValidationResult("AllocateItem", e.Message) };
-                result = BadRequest(results);
-            }
-            finally
-            {
-                cache.SetValue(guid, operation.ReadState());
-            }
-            
-            return result;
+            operation.AllocateItem(request.Line, request.Quantity, request.Location);
         }
 
-        [HttpPost("{guid}")]
-        public IActionResult Perform(string guid, [FromServices]IWarehouse warehouse)
+        protected override OperationState<DeliveryDocument> ReadOperationState(DeliveryOperation operation)
         {
-            var state = cache.GetValue(guid) as DeliveryOperation.State;
-            if(state == null)
-                return NotFound();
+           return operation.ReadState();
+        }       
+    }
 
-            var operation = new DeliveryOperation(state);
 
-            try
-            {
-                warehouse.ProcessOperation(operation);
-            }
-            catch(InvalidOperationException e)
-            {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
-                return BadRequest(result);
-            }
-            catch(ArgumentException e)
-            {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
-                return BadRequest(result);
-            }
-            catch(Exception e)
-            {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
-                return BadRequest(result);
-            }
-            
-            return Ok();
-        }
+    public class AllocationRequest
+    {
+        public DeliveryDocumentLine Line { get; set; }
 
-        public class AllocationRequest
-        {
-            public DeliveryDocumentLine Line { get; set; }
+        public string Location { get; set; }
 
-            public string Location { get; set; }
-
-            public decimal Quantity { get; set; } = 0;
-        }
+        public decimal Quantity { get; set; } = 0;
     }
 }
