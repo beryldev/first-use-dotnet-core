@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Operations;
 using Wrhs.Operations.Relocation;
@@ -16,28 +15,39 @@ namespace Wrhs.WebApp.Controllers.Operations
 
         protected override RelocationOperation CreateOperation(OperationState<RelocationDocument> state)
         {
-            throw new NotImplementedException();
+            return new RelocationOperation(state);
         }
 
         protected override RelocationOperation CreateOperation(RelocationDocument baseDocument)
         {
-            throw new NotImplementedException();
+            var operation = new RelocationOperation();
+            operation.SetBaseDocument(baseDocument);
+
+            return operation;
         }
 
         protected override void DoStep(RelocationOperation operation, RelocationRequest request)
         {
-            throw new NotImplementedException();
+            operation.RelocateItem(request.Line.Product, request.Line.From, request.Line.To, request.Quantity);
         }
 
         protected override OperationState<RelocationDocument> ReadOperationState(RelocationOperation operation)
         {
-            throw new NotImplementedException();
+            var state = new OperationState<RelocationDocument>
+            {
+                BaseDocument = operation.BaseDocument,
+                PendingAllocations = operation.PendingAllocations
+            };
+
+            return state;
         }
     }
 
 
     public class RelocationRequest
     {
-        
+        public RelocationDocumentLine Line { get; set; }
+
+        public decimal Quantity { get; set; }
     }
 }

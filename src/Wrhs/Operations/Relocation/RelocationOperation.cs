@@ -39,6 +39,17 @@ namespace Wrhs.Operations.Relocation
 
         List<Allocation> pendingDeallocations = new List<Allocation>();
 
+        public RelocationOperation() { }
+
+        public RelocationOperation(OperationState<RelocationDocument> state)
+        {
+            baseDocument = state.BaseDocument;
+            pendingAllocations = state.PendingAllocations.ToList();
+
+            state.BaseDocument = null;
+            state.PendingAllocations = null;
+        }
+
         public void SetBaseDocument(RelocationDocument doc)
         {
             baseDocument = doc;
@@ -69,7 +80,7 @@ namespace Wrhs.Operations.Relocation
             ValidateRelocation(product, quantity, from, to);
 
             var line = ((RelocationDocument)baseDocument).Lines
-                .Where(item=>item.Product.Equals(product)
+                .Where(item=>item.Product.Code == product.Code
                     && ((RelocationDocumentLine)item).From.Equals(from)
                     &&((RelocationDocumentLine)item).To.Equals(to))
                 .FirstOrDefault();
@@ -85,7 +96,7 @@ namespace Wrhs.Operations.Relocation
 
         protected void ValidateRelocation(Product product, decimal quantity, string from, string to)
         {
-            if(((RelocationDocument)baseDocument).Lines.Where(item => item.Product.Equals(product)).Count() == 0)
+            if(((RelocationDocument)baseDocument).Lines.Where(item => item.Product.Code == product.Code).Count() == 0)
                 throw new ArgumentException("Invalid product. Product not present on document.");
 
             if(quantity <= 0)

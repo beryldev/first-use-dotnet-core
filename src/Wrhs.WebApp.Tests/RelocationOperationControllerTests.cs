@@ -1,5 +1,6 @@
 using System;
 using Wrhs.Operations.Relocation;
+using Wrhs.Products;
 using Wrhs.WebApp.Controllers.Operations;
 using Wrhs.WebApp.Utils;
 
@@ -11,22 +12,32 @@ namespace Wrhs.WebApp.Tests
     {
         protected override RelocationOperationController CreateController(ICache cache)
         {
-            throw new NotImplementedException();
+            return new RelocationOperationController(cache);
         }
 
         protected override RelocationDocument CreateDocument()
         {
-            throw new NotImplementedException();
+            return new RelocationDocument() { FullNumber = DOC_NUMBER };
         }
 
         protected override RelocationDocumentLine CreateDocumentLine(string code = "PROD1")
         {
-            throw new NotImplementedException();
+             return new RelocationDocumentLine
+            {
+                Product = new Product { Id = 1, Name = "Product 1", Code = code},
+                Quantity = 5,
+                From = "LOC-001-01",
+                To = "LOC-001-02"
+            };
         }
 
         protected override RelocationRequest CreateRequest(RelocationDocumentLine line, decimal quantity = 1)
         {
-            throw new NotImplementedException();
+            return new RelocationRequest
+            {
+                Line = line,
+                Quantity = quantity
+            };
         }
     }
 }

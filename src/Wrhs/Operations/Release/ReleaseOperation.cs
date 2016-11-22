@@ -30,6 +30,17 @@ namespace Wrhs.Operations.Release
         List<Allocation> pendingAllocations = new List<Allocation>();
 
 
+        public ReleaseOperation() { }
+
+        public ReleaseOperation(OperationState<ReleaseDocument> state)
+        {
+            baseDocument = state.BaseDocument;
+            pendingAllocations = state.PendingAllocations.ToList();
+
+            state.BaseDocument = null;
+            state.PendingAllocations = null;
+        }
+
         public void ReleaseItem(Product product, string location, decimal quantity)
         {
 
@@ -73,7 +84,7 @@ namespace Wrhs.Operations.Release
                 throw new ArgumentException("Can't release zero or less");
                 
              var lines = baseDocument.Lines
-                .Where(item=>item.Product.Equals(product));
+                .Where(item=>item.Product.Code == product.Code);
             
             if(lines.Count() == 0)
                 throw new ArgumentException("Product not exists at document");
@@ -84,7 +95,7 @@ namespace Wrhs.Operations.Release
             if(line == null)
                 throw new ArgumentException("Location not exists at document");
 
-            quantity += pendingAllocations.Where(item=>item.Product.Equals(product) 
+            quantity += pendingAllocations.Where(item=>item.Product.Code == product.Code
                 && item.Location.Equals(location)).Sum(item=>item.Quantity);
 
 
