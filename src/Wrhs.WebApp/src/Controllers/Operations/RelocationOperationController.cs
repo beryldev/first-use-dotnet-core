@@ -28,7 +28,7 @@ namespace Wrhs.WebApp.Controllers.Operations
 
         protected override void DoStep(RelocationOperation operation, RelocationRequest request)
         {
-            operation.RelocateItem(request.Line.Product, request.Line.From, request.Line.To, request.Quantity);
+            operation.RelocateItem(request.Line.Product, request.From, request.To, request.Quantity);
         }
 
         protected override OperationState<RelocationDocument> ReadOperationState(RelocationOperation operation)
@@ -49,5 +49,9 @@ namespace Wrhs.WebApp.Controllers.Operations
         public RelocationDocumentLine Line { get; set; }
 
         public decimal Quantity { get; set; }
+
+        public string From { get; set; }
+
+        public string To { get; set; }
     }
 }

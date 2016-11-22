@@ -36,7 +36,9 @@ namespace Wrhs.WebApp.Tests
             return new RelocationRequest
             {
                 Line = line,
-                Quantity = quantity
+                Quantity = quantity,
+                From = "LOC-001-01",
+                To = "LOC-001-02"
             };
         }
     }
