@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wrhs.Operations;
 using Wrhs.Operations.Delivery;
 using Wrhs.WebApp.Utils;
@@ -10,11 +11,12 @@ namespace Wrhs.WebApp.Controllers.Operations
         : OperationController<DeliveryOperation, DeliveryDocument, AllocationRequest>
     {
     
-        public DeliveryOperationController(ICache cache)
-            : base(cache) { }
+        public DeliveryOperationController(ICache cache, ILogger<DeliveryOperationController> logger)
+            : base(cache, logger) { }
 
         protected override DeliveryOperation CreateOperation(DeliveryDocument baseDocument)
         {
+            
             var operation = new DeliveryOperation();
             operation.SetBaseDocument(baseDocument);
             return operation;

@@ -1,6 +1,7 @@
 
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wrhs.Core;
 using Wrhs.Operations;
 using Wrhs.WebApp.Utils;
@@ -12,6 +13,14 @@ namespace Wrhs.WebApp.Controllers.Operations
         where TDoc : class, IEntity  
     {
         protected readonly ICache cache;
+
+        protected readonly ILogger<object> logger;
+
+        public OperationController(ICache cache, ILogger<object> logger)
+        {
+            this.cache = cache;
+            this.logger = logger;
+        }
 
         public OperationController(ICache cache)
         {
@@ -36,7 +45,11 @@ namespace Wrhs.WebApp.Controllers.Operations
         {
             var document = documentRepository.GetById(documentId);
             if(document == null)
+            {
+                logger.LogWarning($"Document id: {documentId} not found.");
                 return NotFound();
+            }
+                
 
             var operation = CreateOperation(document);
 
@@ -53,7 +66,11 @@ namespace Wrhs.WebApp.Controllers.Operations
         {
             var state = cache.GetValue(guid);
             if(state == null)
+            {
+                logger.LogWarning($"State guid: {guid} not found.");
                 return NotFound();
+            }
+                
 
             return Ok(state);
         }
@@ -64,8 +81,11 @@ namespace Wrhs.WebApp.Controllers.Operations
             IActionResult result;
             var state = GetCachedState(guid);
             if(state == null)
+            {
+                logger.LogInformation($"State guid: {guid} not found.");
                 return NotFound();
-
+            }
+                
             var operation = CreateOperation(state);
             
             try

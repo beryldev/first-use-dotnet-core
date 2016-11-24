@@ -50,7 +50,7 @@
         }
 
         function saveAllocation(){
-            $http.post('api/operation/delivery/'+vm.guid+'/allocation', vm.allocation)
+            $http.post('api/operation/delivery/'+vm.guid+'/step', vm.allocation)
                 .then(onSuccess);
 
             function onSuccess(response){

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Wrhs.Operations;
 using Wrhs.Operations.Relocation;
 using Wrhs.WebApp.Utils;
@@ -9,7 +10,8 @@ namespace Wrhs.WebApp.Controllers.Operations
     public class RelocationOperationController
         : OperationController<RelocationOperation, RelocationDocument, RelocationRequest>
     {
-        public RelocationOperationController(ICache cache) : base(cache)
+        public RelocationOperationController(ICache cache, ILogger<RelocationOperationController> logger) 
+            : base(cache, logger)
         {
         }
 
