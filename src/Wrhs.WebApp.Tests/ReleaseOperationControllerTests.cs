@@ -1,4 +1,4 @@
-using System;
+using Microsoft.Extensions.Logging;
 using Wrhs.Operations.Release;
 using Wrhs.Products;
 using Wrhs.WebApp.Controllers.Operations;
@@ -10,9 +10,9 @@ namespace Wrhs.WebApp.Tests
         : BaseOperationControllerTests<ReleaseOperation, ReleaseDocument, ReleaseDocumentLine,
             ReleaseRequest, ReleaseOperationController>
     {
-        protected override ReleaseOperationController CreateController(ICache cache)
+        protected override ReleaseOperationController CreateController(ICache cache, ILogger<ReleaseOperation> logger)
         {
-            return new ReleaseOperationController(cache);
+            return new ReleaseOperationController(cache, logger);
         }
 
         protected override ReleaseDocument CreateDocument()

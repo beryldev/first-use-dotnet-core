@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Wrhs.Operations.Delivery;
 using Wrhs.Products;
 using Wrhs.WebApp.Controllers.Operations;
@@ -32,9 +33,9 @@ namespace Wrhs.WebApp.Tests
             };
         }
 
-        protected override DeliveryOperationController CreateController(ICache cache)
+        protected override DeliveryOperationController CreateController(ICache cache, ILogger<DeliveryOperation> logger)
         {
-            return new DeliveryOperationController(cache);
+            return new DeliveryOperationController(cache, logger);
         } 
     }
 }

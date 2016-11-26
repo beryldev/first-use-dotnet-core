@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Wrhs.Operations;
 using Wrhs.Operations.Release;
@@ -9,7 +8,7 @@ namespace Wrhs.WebApp.Controllers.Operations
     public class ReleaseOperationController
         : OperationController<ReleaseOperation, ReleaseDocument, ReleaseRequest>
     {
-        public ReleaseOperationController(ICache cache, ILogger<ReleaseOperationController> logger) 
+        public ReleaseOperationController(ICache cache, ILogger<ReleaseOperation> logger) 
             : base(cache, logger)
         {
         }

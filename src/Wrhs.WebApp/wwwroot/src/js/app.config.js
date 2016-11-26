@@ -118,6 +118,15 @@
                         controller: 'DeliveryOperationCtrl as vm'
                     }
                 }
+            })
+            .state('operation.relocation', {
+                url: '/relocation/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/relocation/operation.html',
+                        controller: 'RelocationOperationCtrl as vm'
+                    }
+                }
             });
     }
 

@@ -14,9 +14,9 @@ namespace Wrhs.WebApp.Controllers.Operations
     {
         protected readonly ICache cache;
 
-        protected readonly ILogger<object> logger;
+        protected readonly ILogger<TOper> logger;
 
-        public OperationController(ICache cache, ILogger<object> logger)
+        public OperationController(ICache cache, ILogger<TOper> logger)
         {
             this.cache = cache;
             this.logger = logger;
@@ -127,20 +127,28 @@ namespace Wrhs.WebApp.Controllers.Operations
             catch(InvalidOperationException e)
             {
                 var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                OnError(e, operation);
                 return BadRequest(result);
             }
             catch(ArgumentException e)
             {
                 var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                OnError(e, operation);
                 return BadRequest(result);
             }
             catch(Exception e)
             {
                 var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                OnError(e, operation);
                 return BadRequest(result);
             }
             
             return Ok();
+        }
+
+        protected virtual void OnError(Exception e, TOper operation)
+        {
+            logger.LogError(e.Message, operation);
         }
 
     }

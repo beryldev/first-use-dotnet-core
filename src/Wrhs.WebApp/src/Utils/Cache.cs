@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Wrhs.WebApp.Utils
@@ -18,7 +19,7 @@ namespace Wrhs.WebApp.Utils
 
         public void SetValue(string key, object value)
         {
-            memCache.Set(key, value);
+            memCache.Set(key, value, TimeSpan.FromMinutes(60));
         }
     }
 }

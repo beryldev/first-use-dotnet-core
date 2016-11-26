@@ -5,9 +5,9 @@
         .module('wrhs')
         .controller('RelocationDocListCtrl', RelocationDocListCtrl);
 
-    RelocationDocListCtrl.$inject = ['$scope', '$http', 'messageService', 'documentListFactory'];
+    RelocationDocListCtrl.$inject = ['$scope', '$http', '$state', 'messageService', 'documentListFactory'];
 
-    function RelocationDocListCtrl($scope, $http, messageService, documentListFactory){
+    function RelocationDocListCtrl($scope, $http, $state, messageService, documentListFactory){
         var vm = this;
         vm.filter = {};
         vm.gridConfig = {}
@@ -16,9 +16,13 @@
 
         function init(){
             console.log('RelocationDocListCtrl init');
-            var service = documentListFactory.createService($scope, 'api/document/relocation');
+            var service = documentListFactory.createService($scope, 'api/document/relocation', onRowDoubleClick);
             vm.filter = service.filter;
             vm.gridConfig = service.gridConfig;
+        }
+
+        function onRowDoubleClick(row){
+            $state.go('operation.relocation', {id: row.entity.id});
         }
     }
 })();

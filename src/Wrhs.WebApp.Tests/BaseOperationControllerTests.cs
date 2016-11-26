@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Wrhs.Core;
 using Wrhs.Documents;
@@ -33,29 +34,33 @@ namespace Wrhs.WebApp.Tests
 
         protected readonly Mock<IWarehouse> warehouseMock;
 
+        protected readonly Mock<ILogger<TOper>> loggerMock;
+
         protected abstract TDoc CreateDocument();
 
         protected abstract TLine CreateDocumentLine(string code = "PROD1");
 
         protected abstract TRequest CreateRequest(TLine line, decimal quantity=1);
 
-        protected abstract TCtrl CreateController(ICache cache);
+        protected abstract TCtrl CreateController(ICache cache, ILogger<TOper> logger);
 
         public BaseOperationControllerTests()
         {
             var state = new OperationState<TDoc>();
             state.BaseDocument = CreateDocument();
             state.BaseDocument.Lines.Add(CreateDocumentLine());
+            loggerMock = new Mock<ILogger<TOper>>();
             cacheMock = new Mock<ICache>();
             cacheMock.Setup(m => m.GetValue(It.IsAny<string>()))
                 .Returns((string guid) => { return guid == OPERATION_GUID_OK ? state : null; });
 
-            controller = CreateController(cacheMock.Object); 
+            controller = CreateController(cacheMock.Object, loggerMock.Object); 
             docRepoMock = new Mock<IRepository<TDoc>>();
             docRepoMock.Setup(m => m.GetById(It.IsAny<int>()))
                 .Returns(CreateDocument());
 
             warehouseMock = new Mock<IWarehouse>();
+            
         }
 
         [Fact]
@@ -199,6 +204,17 @@ namespace Wrhs.WebApp.Tests
             var validationResult = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
             validationResult.Should().NotBeEmpty();
             validationResult.First().Message.Should().NotBeNullOrWhiteSpace();
+        }
+
+        [Fact]
+        public void ShouldSaveToCacheOperationStateOnPerformWhenFail()
+        {
+             warehouseMock.Setup(m => m.ProcessOperation(It.IsAny<IOperation>()))
+                .Throws(new InvalidOperationException("Some exception"));
+
+            controller.Perform(OPERATION_GUID_OK, warehouseMock.Object);
+
+            cacheMock.Verify(m => m.SetValue(OPERATION_GUID_OK, It.IsAny<IOperation>()), Times.Once());
         }
     }
 }

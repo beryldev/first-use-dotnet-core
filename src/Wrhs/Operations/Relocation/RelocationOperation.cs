@@ -61,7 +61,7 @@ namespace Wrhs.Operations.Relocation
                 throw new InvalidOperationException("Must set base document");
 
             if(!CheckAllocations())
-                throw new InvalidOperationException("Exists non relocated items");
+                throw new InvalidOperationException("Exists non relocated items.");
 
             if(pendingAllocations.Count != pendingDeallocations.Count)
                 throw new InvalidOperationException("Pending allocations and pending deallocations integrity failed");

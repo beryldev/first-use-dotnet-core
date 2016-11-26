@@ -76,7 +76,8 @@ namespace Wrhs.WebApp
 
             services.AddTransient(typeof(ICache), (IServiceProvider provider)=>
             {
-                return new Cache(provider.GetService(typeof(IMemoryCache)) as IMemoryCache);
+                var memoryCache = provider.GetService(typeof(IMemoryCache)) as IMemoryCache;
+                return new Cache(memoryCache);
             });
             
             services.AddTransient(typeof(IRepository<Product>), (IServiceProvider provider)=>

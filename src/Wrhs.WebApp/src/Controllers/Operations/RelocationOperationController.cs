@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Wrhs.Operations;
@@ -10,7 +12,7 @@ namespace Wrhs.WebApp.Controllers.Operations
     public class RelocationOperationController
         : OperationController<RelocationOperation, RelocationDocument, RelocationRequest>
     {
-        public RelocationOperationController(ICache cache, ILogger<RelocationOperationController> logger) 
+        public RelocationOperationController(ICache cache, ILogger<RelocationOperation> logger) 
             : base(cache, logger)
         {
         }
@@ -38,10 +40,15 @@ namespace Wrhs.WebApp.Controllers.Operations
             var state = new OperationState<RelocationDocument>
             {
                 BaseDocument = operation.BaseDocument,
-                PendingAllocations = operation.PendingAllocations
+                PendingAllocations = operation.PendingAllocations.ToList()
             };
 
             return state;
+        }
+
+        protected override void OnError(Exception e, RelocationOperation operation)
+        {
+            logger.LogWarning(e.Message, operation.PendingAllocations.Count);
         }
     }
 

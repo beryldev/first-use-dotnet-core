@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Wrhs.Core;
 using Wrhs.Operations.Relocation;
 
@@ -32,6 +33,8 @@ namespace Wrhs.Data.Repository
         public RelocationDocument GetById(int id)
         {
             return context.RelocationDocuments
+                .Include(x => x.Lines)
+                    .ThenInclude( l => l.Product)
                 .Where(item=>item.Id == id)
                 .FirstOrDefault();
         }

@@ -1,4 +1,4 @@
-using System;
+using Microsoft.Extensions.Logging;
 using Wrhs.Operations.Relocation;
 using Wrhs.Products;
 using Wrhs.WebApp.Controllers.Operations;
@@ -10,9 +10,9 @@ namespace Wrhs.WebApp.Tests
         : BaseOperationControllerTests<RelocationOperation, RelocationDocument,
             RelocationDocumentLine, RelocationRequest, RelocationOperationController>
     {
-        protected override RelocationOperationController CreateController(ICache cache)
+        protected override RelocationOperationController CreateController(ICache cache, ILogger<RelocationOperation> logger)
         {
-            return new RelocationOperationController(cache);
+            return new RelocationOperationController(cache, logger);
         }
 
         protected override RelocationDocument CreateDocument()

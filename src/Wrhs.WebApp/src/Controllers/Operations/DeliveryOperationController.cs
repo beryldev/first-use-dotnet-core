@@ -11,7 +11,7 @@ namespace Wrhs.WebApp.Controllers.Operations
         : OperationController<DeliveryOperation, DeliveryDocument, AllocationRequest>
     {
     
-        public DeliveryOperationController(ICache cache, ILogger<DeliveryOperationController> logger)
+        public DeliveryOperationController(ICache cache, ILogger<DeliveryOperation> logger)
             : base(cache, logger) { }
 
         protected override DeliveryOperation CreateOperation(DeliveryDocument baseDocument)
