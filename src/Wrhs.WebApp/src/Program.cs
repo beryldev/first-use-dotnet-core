@@ -15,6 +15,7 @@ namespace Wrhs.WebApp
                 .Build();
             
             var host = new WebHostBuilder()
+                .UseUrls("http://*:5000")
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
