@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using Wrhs.Operations;
 using Wrhs.Operations.Relocation;
@@ -145,6 +146,36 @@ namespace Wrhs.Tests
                 operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
                     "LOC-001-01-1", "LOC-001-01-1", 1);
             });
+        }
+
+        [Fact]
+        public void ShouldRestoreValidOperationFromState()
+        {
+            var allocSrv = new Mock<IAllocationService>();
+            var product = new Product{Code="PROD1", Name="Product 1"};
+            var doc = new RelocationDocument{FullNumber = "RLC/001/2016"};
+            doc.Lines.Add(new RelocationDocumentLine
+            {
+                Product = product,
+                Quantity = 10,
+                From = "LOC-001-01",
+                To = "LOC-001-2"
+            });
+
+            var state = new OperationState<RelocationDocument>()
+            {
+                BaseDocument = doc,
+                PendingAllocations = new List<Allocation>
+                {
+                    new Allocation { Product = product, Location = "LOC-001-01", Quantity = -10},
+                    new Allocation { Product = product, Location = "LOC-001-02", Quantity = 10}
+                }
+            };
+
+            var operation = new RelocationOperation(state);
+
+            var result = operation.Perform(allocSrv.Object);
+            result.ErrorMessages.Should().BeEmpty();
         }
 
         protected RelocationOperation MakeRelocationOperation()

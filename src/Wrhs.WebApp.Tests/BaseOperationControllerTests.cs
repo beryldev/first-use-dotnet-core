@@ -209,12 +209,12 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldSaveToCacheOperationStateOnPerformWhenFail()
         {
-             warehouseMock.Setup(m => m.ProcessOperation(It.IsAny<IOperation>()))
+            warehouseMock.Setup(m => m.ProcessOperation(It.IsAny<IOperation>()))
                 .Throws(new InvalidOperationException("Some exception"));
 
             controller.Perform(OPERATION_GUID_OK, warehouseMock.Object);
 
-            cacheMock.Verify(m => m.SetValue(OPERATION_GUID_OK, It.IsAny<IOperation>()), Times.Once());
+            cacheMock.Verify(m => m.SetValue(OPERATION_GUID_OK, It.IsAny<OperationState<TDoc>>()), Times.Once());
         }
     }
 }

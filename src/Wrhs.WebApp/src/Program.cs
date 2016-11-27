@@ -13,9 +13,9 @@ namespace Wrhs.WebApp
                 .AddCommandLine(args)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
                 .Build();
-            
+    
             var host = new WebHostBuilder()
-                .UseUrls("http://*:5000")
+                .UseUrls("http://*:5000", "http://localhost:5001")
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())

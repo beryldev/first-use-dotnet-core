@@ -118,32 +118,37 @@ namespace Wrhs.WebApp.Controllers.Operations
             if(state == null)
                 return NotFound();
 
+            IActionResult result;
             var operation =  CreateOperation(state);
 
             try
             {
                 warehouse.ProcessOperation(operation);
+                result = Ok();
             }
             catch(InvalidOperationException e)
             {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                var validationResults = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
                 OnError(e, operation);
-                return BadRequest(result);
+                result = BadRequest(validationResults);
+                cache.SetValue(guid, ReadOperationState(operation));
             }
             catch(ArgumentException e)
             {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                var validationResults = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
                 OnError(e, operation);
-                return BadRequest(result);
+                result = BadRequest(validationResults);
+                cache.SetValue(guid, ReadOperationState(operation));
             }
             catch(Exception e)
             {
-                var result = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
+                var validationResults = new ValidationResult[] { new ValidationResult("Perform", e.Message) };
                 OnError(e, operation);
-                return BadRequest(result);
+                result = BadRequest(validationResults);
+                cache.SetValue(guid, ReadOperationState(operation));
             }
             
-            return Ok();
+            return result;
         }
 
         protected virtual void OnError(Exception e, TOper operation)

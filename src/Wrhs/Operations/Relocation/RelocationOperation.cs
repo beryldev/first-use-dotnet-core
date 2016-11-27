@@ -44,7 +44,8 @@ namespace Wrhs.Operations.Relocation
         public RelocationOperation(OperationState<RelocationDocument> state)
         {
             baseDocument = state.BaseDocument;
-            pendingAllocations = state.PendingAllocations.ToList();
+            pendingAllocations = state.PendingAllocations.Where(r => r.Quantity > 0).ToList();
+            pendingDeallocations = state.PendingAllocations.Where(r => r.Quantity < 0).ToList();
 
             state.BaseDocument = null;
             state.PendingAllocations = null;
@@ -61,7 +62,8 @@ namespace Wrhs.Operations.Relocation
                 throw new InvalidOperationException("Must set base document");
 
             if(!CheckAllocations())
-                throw new InvalidOperationException("Exists non relocated items.");
+                throw new InvalidOperationException($"Exists non relocated items.");
+                
 
             if(pendingAllocations.Count != pendingDeallocations.Count)
                 throw new InvalidOperationException("Pending allocations and pending deallocations integrity failed");
@@ -72,7 +74,7 @@ namespace Wrhs.Operations.Relocation
                 allocService.RegisterAllocation(pendingAllocations[i]);
             }
 
-            return null;
+            return new OperationResult();
         }
 
         public void RelocateItem(Product product, string from, string to, decimal quantity)
