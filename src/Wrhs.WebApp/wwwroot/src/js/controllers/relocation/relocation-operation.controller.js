@@ -14,18 +14,24 @@
         init();
 
         function init(){
-            var operationStep = {
-                line: {},
-                quantity: null,
-                from: '',
-                to: ''
-            };
-            var srv = operationServiceFactory
-                .create('api/operation/relocation', $stateParams.id, operationStep);
+            var serviceConfig = {
+                baseUrl: 'api/operation/relocation',
+                successConfirmMessage: 'Relocation operation confirmed',
+                successConfirmRedirect: 'documents.relocation',
+                documentId: $stateParams.id,
+                operationStep: {
+                    line: {},
+                    quantity: null,
+                    from: '',
+                    to: ''
+                }
+            }
+            var srv = operationServiceFactory.create(serviceConfig);
             
             srv.initOperation().then(function(){
                 vm.service = srv;
             });
+            
             console.log('RelocationOperationCtrl init');
         }
     }

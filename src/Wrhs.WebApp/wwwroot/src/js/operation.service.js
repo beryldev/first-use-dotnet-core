@@ -5,19 +5,19 @@
         .module('wrhs')
         .factory('operationServiceFactory', operationServiceFactory);
 
-    operationServiceFactory.$inject = ['$http', 'messageService'];
+    operationServiceFactory.$inject = ['$http', '$state', 'messageService'];
 
-    function operationServiceFactory($http, messageService){
+    function operationServiceFactory($http, $state, messageService){
         var factory = {
             create: create
         }
 
         return factory;
 
-        function create(baseUrl, documentId, operationStep){
+        function create(config){
             var service = {
-                documentId: documentId,
-                baseUrl: baseUrl,
+                documentId: config.documentId,
+                baseUrl: config.baseUrl,
                 guid: '',
                 state: {},
                 initOperation: initOperation,
@@ -36,7 +36,7 @@
                     .then(onSuccess);
 
                 function onSuccess(response){
-                    service.operationStep = operationStep;
+                    service.operationStep = config.operationStep;
                     service.guid = response.data;
                     return getState();
                 }
@@ -70,7 +70,8 @@
                     .then(onSuccess);
 
                 function onSuccess(response){
-                    messageService.success("", "Done");
+                    messageService.success(config.successConfirmMessage, "Done");
+                    $state.go(config.successConfirmRedirect);
                 }
             }
         }
