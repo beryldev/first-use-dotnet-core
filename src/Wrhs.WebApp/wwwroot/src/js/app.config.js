@@ -127,6 +127,15 @@
                         controller: 'RelocationOperationCtrl as vm'
                     }
                 }
+            })
+            .state('operation.release', {
+                url: '/release/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/release/operation.html',
+                        controller: 'ReleaseOperationCtrl as vm'
+                    }
+                }
             });
     }
 

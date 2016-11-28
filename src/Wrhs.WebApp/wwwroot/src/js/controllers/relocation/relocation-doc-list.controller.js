@@ -14,11 +14,11 @@
 
         init();
 
-        function init(){
-            console.log('RelocationDocListCtrl init');
+        function init(){        
             var service = documentListFactory.createService($scope, 'api/document/relocation', onRowDoubleClick);
             vm.filter = service.filter;
             vm.gridConfig = service.gridConfig;
+            console.log('RelocationDocListCtrl init');
         }
 
         function onRowDoubleClick(row){
