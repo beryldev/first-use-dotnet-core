@@ -12,6 +12,8 @@
 
 wwwroot/lib/
 wwwroot/build/
+!wwwroot/src/js/controllers/release
+!wwwroot/templates/release
 
 # Build results
 [Dd]ebug/
