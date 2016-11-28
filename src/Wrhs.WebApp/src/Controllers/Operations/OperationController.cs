@@ -85,6 +85,9 @@ namespace Wrhs.WebApp.Controllers.Operations
                 logger.LogInformation($"State guid: {guid} not found.");
                 return NotFound();
             }
+
+            if(request == null)
+                return BadRequest(new ValidationResult[]{new ValidationResult("request", "Invalid request data")});
                 
             var operation = CreateOperation(state);
             

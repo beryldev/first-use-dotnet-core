@@ -98,6 +98,12 @@ namespace Wrhs.Operations.Relocation
 
         protected void ValidateRelocation(Product product, decimal quantity, string from, string to)
         {
+            if(!baseDocument.Lines.Any(x => x.From == from))
+                throw new ArgumentException("Invalid from location");
+
+            if(!baseDocument.Lines.Any(x => x.To == to))
+                throw new ArgumentException("Invalid to location");
+
             if(((RelocationDocument)baseDocument).Lines.Where(item => item.Product.Code == product.Code).Count() == 0)
                 throw new ArgumentException("Invalid product. Product not present on document.");
 

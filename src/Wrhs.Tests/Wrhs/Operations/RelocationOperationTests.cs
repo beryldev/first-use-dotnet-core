@@ -178,6 +178,34 @@ namespace Wrhs.Tests
             result.ErrorMessages.Should().BeEmpty();
         }
 
+        [Fact]
+        public void ShouldThrowArgumentExceptionWhenTryMoveFromInvalidFromLocation()
+        {
+             var operation = MakeRelocationOperation();
+
+            Assert.Throws<ArgumentException>(()=>
+            {
+                operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
+                    "LOC-001-01-99", "LOC-001-01-2", 1);
+            });
+
+            Assert.Equal(0, operation.PendingAllocations.Count);
+        }
+
+        [Fact]
+        public void ShouldThrowArgumentExceptionWhenTryMoveFromInvalidToLocation()
+        {
+             var operation = MakeRelocationOperation();
+
+            Assert.Throws<ArgumentException>(()=>
+            {
+                operation.RelocateItem(operation.BaseDocument.Lines[0].Product, 
+                    "LOC-001-01-1", "LOC-001-01-99", 1);
+            });
+
+            Assert.Equal(0, operation.PendingAllocations.Count);
+        }
+
         protected RelocationOperation MakeRelocationOperation()
         {
             var document = MakeRelocationDocument();

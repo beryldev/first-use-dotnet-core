@@ -40,6 +40,6 @@ namespace Wrhs.WebApp.Tests
                 From = "LOC-001-01",
                 To = "LOC-001-02"
             };
-        }
+        } 
     }
 }

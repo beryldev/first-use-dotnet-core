@@ -19,6 +19,7 @@ namespace Wrhs.WebApp.Tests
         where TDoc : class, IEntity, IDocument<TLine>, ISearchableDocument
         where TLine : class, IEntity, IDocumentLine
         where TCtrl : IOperationController<TOper, TDoc, TRequest>
+        where TRequest : class
     {
         protected const string DOC_NUMBER = @"DOC\001\2016";
 
@@ -215,6 +216,16 @@ namespace Wrhs.WebApp.Tests
             controller.Perform(OPERATION_GUID_OK, warehouseMock.Object);
 
             cacheMock.Verify(m => m.SetValue(OPERATION_GUID_OK, It.IsAny<OperationState<TDoc>>()), Times.Once());
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestOnAddStepWhenInvalidRequestIsNull()
+        {
+            var result = controller.AddStep(OPERATION_GUID_OK, null as TRequest);
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var results = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            results.Should().NotBeEmpty();
         }
     }
 }
