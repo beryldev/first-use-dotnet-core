@@ -2,8 +2,8 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <h3>Document: {{ vm.state.baseDocument.fullNumber }}</h3>
-        <button type="button" class="btn btn-default btn-sm" ng-click="vm.getState()">Refresh</button>
+        <h3>Document: {{ vm.service.state.baseDocument.fullNumber }}</h3>
+        <button type="button" class="btn btn-default btn-sm" ng-click="vm.service.getState()">Refresh</button>
         <table class="table table-striped">
             <thead>
                 <th>Product</th>
@@ -13,12 +13,13 @@
                 <th></th>
             </thead>
             <tbody>
-                <tr ng-repeat="line in vm.state.baseDocument.lines">
+                <tr ng-repeat="line in vm.service.state.baseDocument.lines">
                     <td>{{ line.product.name }}</td>
                     <td>{{ line.product.code }}</td>
                     <td>{{ line.product.ean }}</td>
                     <td>{{ line.quantity }}</td>
-                    <td style="width: 80px;"><button type="button" ng-click="vm.allocateLine(line)" class="btn btn-xs btn-default">Allocate</button></td>
+                    <td style="width: 80px;"><button type="button" ng-click="vm.service.selectLine(line)" 
+                        class="btn btn-xs btn-default">Allocate</button></td>
                 </tr>
             </tbody>
         </table>
@@ -35,7 +36,7 @@
                 <th>Location</th>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.state.pendingAllocations">
+                <tr ng-repeat="item in vm.service.state.pendingAllocations">
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.product.code }}</td>
                     <td>{{ item.product.ean }}</td>
@@ -52,32 +53,32 @@
 
         <div class="form-group">
             <label>Product name</label>
-            <input type="text" class="form-control" ng-model="vm.allocation.line.product.name">
+            <input type="text" class="form-control" ng-model="vm.service.operationStep.line.product.name">
         </div>
 
         <div class="form-group">
             <label>Product EAN</label>
-            <input type="text" class="form-control" ng-model="vm.allocation.line.product.ean">
+            <input type="text" class="form-control" ng-model="vm.service.operationStep.line.product.ean">
         </div>
 
         <div class="form-group">
             <label>Quantity</label>
-            <input type="text" class="form-control" ng-model="vm.allocation.quantity" focus-me="vm.quantityFocus">
+            <input type="text" class="form-control" ng-model="vm.service.operationStep.quantity" focus-me="vm.service.quantityFocus">
         </div>
 
         <div class="form-group">
             <label>Location</label>
-            <input type="text" class="form-control" ng-model="vm.allocation.location">
+            <input type="text" class="form-control" ng-model="vm.service.operationStep.location">
         </div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-primary" ng-click="vm.saveAllocation()">Register</button>
+            <button type="button" class="btn btn-primary" ng-click="vm.service.addOperationStep()">Register</button>
         </div>
      
     </div>
 
     <div class="col-xs-12">
-        <button type="button" class="btn btn-primary" ng-click="vm.confirmOperation()">Confirm operation</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.service.confirmOperation()">Confirm operation</button>
         <a ui-sref="documents.delivery" class="btn btn-default">Cancel</a>
     </div>
 </div>

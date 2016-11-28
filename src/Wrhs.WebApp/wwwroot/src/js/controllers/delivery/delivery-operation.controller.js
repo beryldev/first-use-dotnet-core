@@ -5,70 +5,32 @@
         .module('wrhs')
         .controller('DeliveryOperationCtrl', DeliveryOperationCtrl);
 
-    DeliveryOperationCtrl.$inject = ['$stateParams', '$state', '$http', 'messageService'];
+    DeliveryOperationCtrl.$inject = ['$stateParams', 'operationServiceFactory'];
 
-    function DeliveryOperationCtrl($stateParams, $state, $http, messageService){
+    function DeliveryOperationCtrl($stateParams, operationServiceFactory){
         var vm = this;
-        vm.guid = '';
-        vm.state = {};
-        vm.allocation = {};
-        vm.allocateLine = allocateLine;
-        vm.saveAllocation = saveAllocation;
-        vm.confirmOperation = confirmOperation;
-        vm.getState = getState;
+        vm.service = null;
 
         init();
 
         function init(){
-            initState();
-            vm.quantityFocus = false;
+            var serviceConfig = {
+                baseUrl: 'api/operation/delivery',
+                successConfirmMessage: 'Delivery operation confirmed',
+                successConfirmRedirect: 'documents.delivery',
+                documentId: $stateParams.id,
+                operationStep: {
+                    line: {},
+                    quantity: null,
+                    location: ''
+                }
+            }
+            var srv = operationServiceFactory.create(serviceConfig);
+            srv.initOperation().then(function(){
+                vm.service = srv;
+            });
+
             console.log('DeliveryOperationCtrl init');
-        }
-
-        function initState(){
-            $http.get('api/operation/delivery/new/'+$stateParams.id)
-                .then(onSuccess)
-
-            function onSuccess(response){
-                vm.guid = response.data;
-                getState();
-            }
-        }
-
-        function getState(){
-            $http.get('api/operation/delivery/'+vm.guid)
-                .then(onSuccess);
-
-            function onSuccess(response){
-                vm.state = response.data;
-            }
-        }
-
-        function allocateLine(line){
-            vm.allocation.line = line;
-            vm.quantityFocus = true;
-        }
-
-        function saveAllocation(){
-            $http.post('api/operation/delivery/'+vm.guid+'/step', vm.allocation)
-                .then(onSuccess);
-
-            function onSuccess(response){
-                vm.state = response.data;
-                vm.allocation = {};
-                vm.quantityFocus = false;
-                messageService.success('', 'Done');          
-            }  
-        }
-
-        function confirmOperation(){
-            $http.post('api/operation/delivery/'+vm.guid)
-                .then(onSuccess);
-
-            function onSuccess(response){
-                messageService.success('Delivery operation confirmed', 'Success');
-                $state.go('documents.delivery');
-            }
         }
     }
 
