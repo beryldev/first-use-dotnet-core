@@ -37,6 +37,7 @@ namespace Wrhs.Data.Repository
 
         public ReleaseDocument Save(ReleaseDocument item)
         {
+            item.Lines.ForEach(l=>l.Product=context.Products.First(p=>p.Id==l.Product.Id));
             context.ReleaseDocuments.Add(item);
             context.SaveChanges();
 
