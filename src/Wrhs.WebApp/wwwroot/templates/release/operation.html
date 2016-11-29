@@ -1,4 +1,4 @@
-<h1 class="page-header">Relocation operation</h1>
+<h1 class="page-header">Release operation</h1>
 
 <div class="row">
     <div class="col-lg-6">
@@ -10,8 +10,7 @@
                 <th>Code</th>
                 <th>EAN</th>
                 <th>Quantity</th>
-                <th>From</th>
-                <th>To</th>
+                <th>Location</th>
                 <th></th>
             </thead>
             <tbody>
@@ -20,8 +19,7 @@
                     <td>{{ line.product.code }}</td>
                     <td>{{ line.product.ean }}</td>
                     <td>{{ line.quantity }}</td>
-                    <td>{{ line.from }}</td>
-                    <td>{{ line.to }}</td>
+                    <td>{{ line.location }}</td>
                     <td style="width: 80px;"><button type="button" ng-click="vm.service.selectLine(line)" 
                         class="btn btn-xs btn-default">Select</button></td>
                 </tr>
@@ -53,7 +51,7 @@
     </div>
 
     <div class="col-lg-6">
-        <h3>Relocation</h3>
+        <h3>Release</h3>
 
         <div class="form-group">
             <label>Product name</label>
@@ -71,13 +69,8 @@
         </div>
 
         <div class="form-group">
-            <label>From location</label>
-            <input type="text" class="form-control" ng-model="vm.service.operationStep.from">
-        </div>
-
-        <div class="form-group">
-            <label>To location</label>
-            <input type="text" class="form-control" ng-model="vm.service.operationStep.to">
+            <label>Location</label>
+            <input type="text" class="form-control" ng-model="vm.service.operationStep.location">
         </div>
 
         <div class="form-group">

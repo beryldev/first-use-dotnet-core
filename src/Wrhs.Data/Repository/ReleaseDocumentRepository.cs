@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Wrhs.Core;
 using Wrhs.Operations.Release;
 
@@ -32,6 +33,8 @@ namespace Wrhs.Data.Repository
         {
             return context.ReleaseDocuments
                 .Where(item=>item.Id == id)
+                .Include(d=>d.Lines)
+                    .ThenInclude(l=>l.Product)
                 .FirstOrDefault();
         }
 

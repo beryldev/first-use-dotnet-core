@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Wrhs.Operations;
 using Wrhs.Operations.Release;
@@ -5,6 +6,7 @@ using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
+    [Route("api/operation/release")]
     public class ReleaseOperationController
         : OperationController<ReleaseOperation, ReleaseDocument, ReleaseRequest>
     {
