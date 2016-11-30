@@ -9,18 +9,9 @@
 
     function config($stateProvider, $urlRouterProvider, $locationProvider){
 
-        $urlRouterProvider.otherwise('/start');
+        $urlRouterProvider.otherwise('/stocks');
 
         $stateProvider
-            .state('start', {
-                url: '/start',
-                views: {
-                    'wrapper@': {
-                        templateUrl: 'templates/start.html',
-                        controller: 'StartCtrl as vm'
-                    }
-                }
-            })
             .state('products', {
                 url: '/products',
                 views: {
