@@ -136,6 +136,15 @@
                         controller: 'ReleaseOperationCtrl as vm'
                     }
                 }
+            })
+            .state('stocks', {
+                url: '/stocks',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/stocksList.html',
+                        controller: 'StocksListCtrl as vm'
+                    }
+                }
             });
     }
 

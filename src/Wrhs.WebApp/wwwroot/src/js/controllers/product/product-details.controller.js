@@ -12,7 +12,7 @@
         vm.product = {};
         vm.update = updateProduct;
         vm.stocksSelect = stocksSelect;
-         vm.gridConfig = {
+        vm.gridConfig = {
             data: loadData(), 
             enableFiltering: false,
             columnDefs: [
