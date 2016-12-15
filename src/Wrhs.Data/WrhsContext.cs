@@ -1,50 +1,28 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Wrhs.Data.ContextFactory;
-using Wrhs.Operations;
-using Wrhs.Operations.Delivery;
-using Wrhs.Operations.Release;
-using Wrhs.Operations.Relocation;
+using Wrhs.Common;
 using Wrhs.Products;
 
 namespace Wrhs.Data
 {
     public class WrhsContext : DbContext
     {
-        public DbSet<Product> Products { get; set; }
-
-        public DbSet<Allocation> Allocations { get; set; }
-
-        public DbSet<DeliveryDocument> DeliveryDocuments { get; set; }
-
-        public DbSet<DeliveryDocumentLine> DeliveryDocumentLines { get; set; }
-
-        public DbSet<RelocationDocument> RelocationDocuments { get; set; }
-
-        public DbSet<RelocationDocumentLine> RelocationDocumentLines { get; set; }
-
-        public DbSet<ReleaseDocument> ReleaseDocuments { get; set; }
-
-        public DbSet<ReleaseDocumentLine> ReleaseDocumentLines { get; set; }
-
-        public DbSet<Stock> StocksCache { get; set; }
-
-        public WrhsContext(DbContextOptions<WrhsContext> options)
-            : base(options){ }      
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public WrhsContext() { }
+        
+        public WrhsContext(DbContextOptions options) : base(options)
         {
-            modelBuilder.Entity<DeliveryDocumentLine>()
-                .HasOne(p => p.Product);
         }
-    }
 
-    public class WrhsContextFactory : IDbContextFactory<WrhsContext>
-    {
-        public WrhsContext Create(DbContextFactoryOptions options)
+
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentLine> DocumentLines { get; set; }
+        public DbSet<Operation> Operations { get; set; }
+        public DbSet<Shift> Shifts { get; set; }
+        
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            return SqliteContextFactory.Create("Filename=./wrhs.db");
+            optionsBuilder.UseSqlServer("Server=192.168.5.15;Database=wrhs;User Id=SA;Password=Password123;");
         }
     }
 }

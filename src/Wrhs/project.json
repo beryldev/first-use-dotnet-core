@@ -2,29 +2,16 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-     "Microsoft.NETCore.App": {
-        "type": "platform",
-        "version": "1.1.0"
-      }
+    "NETStandard.Library": "1.6.0"
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+    "netstandard1.6": {
+      "imports": "dnxcore50"
     }
   },
 
   "tooling": {
     "defaultNamespace": "Wrhs"
-  },
-
-  "runtimes": {
-     "centos.7-x64": {
-            "#import": [ "centos.7", "centos-x64", "rhel.7-x64" ]
-      }
   }
-  
 }

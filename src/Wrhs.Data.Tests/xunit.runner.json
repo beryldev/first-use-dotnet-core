@@ -2,5 +2,4 @@
     "diagnosticMessages": false,
     "methodDisplay": "classAndMethod",
     "parallelizeTestCollections": false
-
 }

@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Wrhs.Data.Migrations
 {
@@ -10,62 +10,36 @@ namespace Wrhs.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.0-rtm-21431");
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("Wrhs.Operations.Allocation", b =>
+            modelBuilder.Entity("Wrhs.Common.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Location");
+                    b.Property<int>("State");
 
-                    b.Property<int?>("ProductId");
-
-                    b.Property<decimal>("Quantity");
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Allocations");
+                    b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("Wrhs.Operations.Delivery.DeliveryDocument", b =>
+            modelBuilder.Entity("Wrhs.Common.DocumentLine", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FullNumber");
+                    b.Property<int>("DocumentId");
 
-                    b.Property<DateTime>("IssueDate");
+                    b.Property<string>("DstLocation");
 
-                    b.Property<int>("Number");
-
-                    b.Property<string>("Remarks");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeliveryDocuments");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Delivery.DeliveryDocumentLine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("DocumentId");
-
-                    b.Property<string>("EAN");
-
-                    b.Property<int>("Lp");
-
-                    b.Property<int?>("ProductId");
+                    b.Property<int>("ProductId");
 
                     b.Property<decimal>("Quantity");
 
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SKU");
+                    b.Property<string>("SrcLocation");
 
                     b.HasKey("Id");
 
@@ -73,105 +47,51 @@ namespace Wrhs.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("DeliveryDocumentLines");
+                    b.ToTable("DocumentLines");
                 });
 
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocument", b =>
+            modelBuilder.Entity("Wrhs.Common.Operation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FullNumber");
+                    b.Property<int>("DocumentId");
 
-                    b.Property<DateTime>("IssueDate");
+                    b.Property<string>("OperationGuid");
 
-                    b.Property<int>("Number");
+                    b.Property<int>("Status");
 
-                    b.Property<string>("Remarks");
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReleaseDocuments");
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("Operations");
                 });
 
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocumentLine", b =>
+            modelBuilder.Entity("Wrhs.Common.Shift", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("EAN");
+                    b.Property<bool>("Confirmed");
 
                     b.Property<string>("Location");
 
-                    b.Property<int>("Lp");
+                    b.Property<int>("OperationId");
 
-                    b.Property<int?>("ProductId");
-
-                    b.Property<decimal>("Quantity");
-
-                    b.Property<int?>("ReleaseDocumentId");
-
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SKU");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ReleaseDocumentId");
-
-                    b.ToTable("ReleaseDocumentLines");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Relocation.RelocationDocument", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FullNumber");
-
-                    b.Property<DateTime>("IssueDate");
-
-                    b.Property<int>("Number");
-
-                    b.Property<string>("Remarks");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RelocationDocuments");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Relocation.RelocationDocumentLine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("EAN");
-
-                    b.Property<string>("From");
-
-                    b.Property<int>("Lp");
-
-                    b.Property<int?>("ProductId");
+                    b.Property<int>("ProductId");
 
                     b.Property<decimal>("Quantity");
 
-                    b.Property<int?>("RelocationDocumentId");
-
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SKU");
-
-                    b.Property<string>("To");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("OperationId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("RelocationDocumentId");
-
-                    b.ToTable("RelocationDocumentLines");
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("Wrhs.Products.Product", b =>
@@ -183,80 +103,45 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("EAN");
-
                     b.Property<string>("Name");
-
-                    b.Property<string>("SKU");
 
                     b.HasKey("Id");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Wrhs.Stock", b =>
+            modelBuilder.Entity("Wrhs.Common.DocumentLine", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Location");
-
-                    b.Property<int?>("ProductId");
-
-                    b.Property<decimal>("Quantity");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("StocksCache");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Allocation", b =>
-                {
-                    b.HasOne("Wrhs.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-                });
-
-            modelBuilder.Entity("Wrhs.Operations.Delivery.DeliveryDocumentLine", b =>
-                {
-                    b.HasOne("Wrhs.Operations.Delivery.DeliveryDocument", "Document")
+                    b.HasOne("Wrhs.Common.Document", "Document")
                         .WithMany("Lines")
-                        .HasForeignKey("DocumentId");
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Wrhs.Products.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Wrhs.Operations.Release.ReleaseDocumentLine", b =>
+            modelBuilder.Entity("Wrhs.Common.Operation", b =>
                 {
-                    b.HasOne("Wrhs.Products.Product", "Product")
+                    b.HasOne("Wrhs.Common.Document", "Document")
                         .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Wrhs.Operations.Release.ReleaseDocument")
-                        .WithMany("Lines")
-                        .HasForeignKey("ReleaseDocumentId");
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Wrhs.Operations.Relocation.RelocationDocumentLine", b =>
+            modelBuilder.Entity("Wrhs.Common.Shift", b =>
                 {
+                    b.HasOne("Wrhs.Common.Operation", "Operation")
+                        .WithMany("Shifts")
+                        .HasForeignKey("OperationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Wrhs.Products.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("Wrhs.Operations.Relocation.RelocationDocument")
-                        .WithMany("Lines")
-                        .HasForeignKey("RelocationDocumentId");
-                });
-
-            modelBuilder.Entity("Wrhs.Stock", b =>
-                {
-                    b.HasOne("Wrhs.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
         }
     }

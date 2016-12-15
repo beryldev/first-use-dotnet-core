@@ -1,14 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
+using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Operations.Delivery;
 
 namespace Wrhs.WebApp.Controllers.Documents
 {
     [Route("api/document/delivery")]
-    public class DeliveryDocController : DocumentController<DeliveryDocument, DeliveryDocumentLine>
+    public class DeliveryDocController : DocumentController
     {
-        public DeliveryDocController(IRepository<DeliveryDocument> docRepo) : base(docRepo)
+        public DeliveryDocController(IDocumentService documentSrv) : base(documentSrv)
         {
+        }
+
+        public override ResultPage<Document> Get()
+        {
+            return null;
         }
     }
 }

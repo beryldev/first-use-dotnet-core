@@ -1,15 +1,12 @@
-using Wrhs.Operations.Delivery;
 using Wrhs.WebApp.Controllers.Documents;
 
 namespace Wrhs.WebApp.Tests
 {
-    public class DeliveryDocumentControllerTests
-        : DocumentControllerTests<DeliveryDocument, DeliveryDocumentLine>
+    public class DeliveryDocumentControllerTests : DocumentControllerTests
     {
-        protected override DocumentController<DeliveryDocument, DeliveryDocumentLine> CreateDocController()
+        protected override DocumentController CreateDocController()
         {
-            var controller = new DeliveryDocController(repository.Object);
-            return controller as DocumentController<DeliveryDocument, DeliveryDocumentLine>;
+            return new DeliveryDocController(documentSrv.Object);
         }
     }
 }

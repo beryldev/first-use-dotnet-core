@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Wrhs.Core
 {
-    public interface IValidator<TCommand>
+    public interface IValidator<T>
     {
-        IEnumerable<ValidationResult> Validate(TCommand command);
+         IEnumerable<ValidationResult> Validate(T command);
     }
 }

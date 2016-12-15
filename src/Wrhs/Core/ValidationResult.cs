@@ -1,13 +1,10 @@
-
 namespace Wrhs.Core
-{ 
+{
     public class ValidationResult
     {
-        public string Field { get; set; }
+        public string Field { get; }
 
-        public string Message { get; set; }
-
-        public ValidationResult() { }
+        public string Message { get; }
 
         public ValidationResult(string field, string message)
         {
