@@ -22,9 +22,19 @@ namespace Wrhs.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("FullNumber");
+
+                    b.Property<int>("Month");
+
+                    b.Property<int>("Number");
+
                     b.Property<int>("State");
 
                     b.Property<int>("Type");
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 

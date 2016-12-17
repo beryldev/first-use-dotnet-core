@@ -9,7 +9,7 @@ using Wrhs.Common;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    [Migration("20161217124235_initial")]
+    [Migration("20161217152045_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,9 +23,19 @@ namespace Wrhs.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("FullNumber");
+
+                    b.Property<int>("Month");
+
+                    b.Property<int>("Number");
+
                     b.Property<int>("State");
 
                     b.Property<int>("Type");
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 

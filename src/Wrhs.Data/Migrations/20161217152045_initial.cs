@@ -15,8 +15,13 @@ namespace Wrhs.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    FullNumber = table.Column<string>(nullable: true),
+                    Month = table.Column<int>(nullable: false),
+                    Number = table.Column<int>(nullable: false),
                     State = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false)
+                    Type = table.Column<int>(nullable: false),
+                    Year = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
