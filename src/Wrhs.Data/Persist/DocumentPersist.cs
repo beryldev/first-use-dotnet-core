@@ -16,7 +16,7 @@ namespace Wrhs.Data.Persist
 
         public int Save(Document document)
         {
-            document.CreatedAt = DateTime.Now;
+            document.IssueDate = DateTime.Now;
             document = docNumerator.AssignNumber(document);
             context.Documents.Add(document);
             context.SaveChanges();

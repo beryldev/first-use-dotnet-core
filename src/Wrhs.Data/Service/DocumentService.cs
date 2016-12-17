@@ -72,6 +72,7 @@ namespace Wrhs.Data.Service
             var mapping = new Dictionary<string, Func<Document, object, bool>>
             {
                 {"fullnumber", (Document p, object val) => p.FullNumber.Contains(val as string) },
+                {"issuedate", (Document p, object val) => p.IssueDate == (DateTime)val },
             };
 
             return mapping;

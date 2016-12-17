@@ -65,8 +65,8 @@ namespace Wrhs.Data.Service
         {
             var mapping = new Dictionary<string, Func<Product, object, bool>>
             {
-                {"name", (Product p, object val) => p.Name.Contains(val as string) },
-                {"code", (Product p, object val) => p.Code.Contains(val as string) },
+                {"name", (Product p, object val) => p.Name != null && p.Name.Contains(val as string) },
+                {"code", (Product p, object val) => p.Code != null && p.Code.Contains(val as string) },
             };
 
             return mapping;

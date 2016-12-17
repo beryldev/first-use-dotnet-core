@@ -19,8 +19,8 @@ namespace Wrhs.Data
         {
             document.FullNumber = "number";
             document.Number = GetNextNumber(document);
-            document.Month = document.CreatedAt.Month;
-            document.Year = document.CreatedAt.Year;
+            document.Month = document.IssueDate.Month;
+            document.Year = document.IssueDate.Year;
 
             return document;
         }
@@ -33,8 +33,8 @@ namespace Wrhs.Data
         private int GetNextNumber(Document  document)
         {
             var query = context.Documents.Where(d => d.Type == document.Type
-                    && d.Year == document.CreatedAt.Year
-                    && d.Month == document.CreatedAt.Month);
+                    && d.Year == document.IssueDate.Year
+                    && d.Month == document.IssueDate.Month);
 
             if(!query.Any())
                 return 1;

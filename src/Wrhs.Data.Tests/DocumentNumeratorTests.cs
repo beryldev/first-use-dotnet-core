@@ -30,7 +30,7 @@ namespace Wrhs.Data.Tests
         public void ShouldAssignFirstNumberWhenNoDocsInContext(DocumentType type)
         {
             var date = new DateTime(2016, 1, 1);
-            var document = new Document { Type = type, CreatedAt=date};
+            var document = new Document { Type = type, IssueDate=date};
 
             var result = numerator.AssignNumber(document);
 
@@ -49,7 +49,7 @@ namespace Wrhs.Data.Tests
             context.Documents.Add(new Document{ Type = type, Number = 1, Month = 1, Year=2016});
             context.Documents.Add(new Document{ Type = type, Number = 2, Month = 1, Year=2016});
             context.SaveChanges();
-            var document = new Document { Type = type, CreatedAt=new DateTime(2016, 1, 1)};
+            var document = new Document { Type = type, IssueDate=new DateTime(2016, 1, 1)};
 
             var result = numerator.AssignNumber(document);
 
@@ -71,7 +71,7 @@ namespace Wrhs.Data.Tests
             context.Documents.Add(new Document{ Type = other, Number = 2, Month=1, Year=2016});
             context.Documents.Add(new Document{ Type = other, Number = 3, Month=1, Year=2016});
             context.SaveChanges();
-            var document = new Document { Type = type, CreatedAt=new DateTime(2016, 1, 1)};
+            var document = new Document { Type = type, IssueDate=new DateTime(2016, 1, 1)};
 
             var result = numerator.AssignNumber(document);
 

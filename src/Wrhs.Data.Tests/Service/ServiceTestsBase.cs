@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Wrhs.Data.Service;
+using Wrhs.Products;
 using Xunit;
 
 namespace Wrhs.Data.Tests.Service

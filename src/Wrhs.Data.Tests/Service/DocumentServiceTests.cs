@@ -109,16 +109,18 @@ namespace Wrhs.Data.Tests.Service
         [InlineData(1, 2, 2)]
         public void ShouldReturnRequestedPageAndPageSizeOnFilterDocuments(int page, int pageSize, int expected)
         {
-            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-1"});
-            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-2"});
-            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-3"});
-            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-1"});
-            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-12"});
-            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-22"});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-1", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-2", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-3", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-1", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-12",IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-22", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
             context.SaveChanges();
 
             var filter = new Dictionary<string, object>();
             filter.Add("FullNumber", "DLV-1");
+            filter.Add("IssueDate", new DateTime(2016, 12, 1));
 
             var result = service.FilterDocuments(DocumentType.Delivery, filter, page, pageSize);
 
@@ -129,6 +131,9 @@ namespace Wrhs.Data.Tests.Service
 
         protected override Document CreateEntity(int i)
         {
+            context.Products.Add(new Product());
+            context.SaveChanges();
+            
             return new Document
             {
                 Type = DocumentType.Delivery,
