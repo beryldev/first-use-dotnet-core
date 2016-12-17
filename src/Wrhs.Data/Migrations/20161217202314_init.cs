@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Wrhs.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,9 +13,9 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                        .Annotation("Sqlite:Autoincrement", true),
                     FullNumber = table.Column<string>(nullable: true),
+                    IssueDate = table.Column<DateTime>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Number = table.Column<int>(nullable: false),
                     State = table.Column<int>(nullable: false),
@@ -33,7 +32,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Code = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
@@ -48,7 +47,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     DocumentId = table.Column<int>(nullable: false),
                     OperationGuid = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
@@ -70,7 +69,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     DocumentId = table.Column<int>(nullable: false),
                     DstLocation = table.Column<string>(nullable: true),
                     ProductId = table.Column<int>(nullable: false),
@@ -99,7 +98,7 @@ namespace Wrhs.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Confirmed = table.Column<bool>(nullable: false),
                     Location = table.Column<string>(nullable: true),
                     OperationId = table.Column<int>(nullable: false),

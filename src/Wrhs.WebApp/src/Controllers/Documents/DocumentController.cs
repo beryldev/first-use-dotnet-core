@@ -25,7 +25,7 @@ namespace Wrhs.WebApp.src.Controllers.Documents
 
             try
             {
-                commandBus.Send(command);
+                commandBus.Send(command ?? new CreateDeliveryDocumentCommand());
                 result = Ok();
             }
             catch(CommandValidationException e)

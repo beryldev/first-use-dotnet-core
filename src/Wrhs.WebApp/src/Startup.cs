@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -6,8 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Wrhs.Common;
+using Wrhs.Core;
 using Wrhs.Data;
 using Wrhs.Data.ContextFactory;
+using Wrhs.Data.Persist;
+using Wrhs.Data.Service;
+using Wrhs.Delivery;
+using Wrhs.Services;
 using Wrhs.WebApp.Utils;
 
 namespace Wrhs.WebApp
@@ -69,6 +76,56 @@ namespace Wrhs.WebApp
             {
                 var memoryCache = provider.GetService(typeof(IMemoryCache)) as IMemoryCache;
                 return new Cache(memoryCache);
+            });
+
+            services.AddTransient(typeof(IProductService), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new ProductService(context);
+            });
+
+            services.AddTransient(typeof(IDocumentService), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new DocumentService(context);
+            });
+
+            services.AddTransient(typeof(IDocumentPersist), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                var numerator = new DocumentNumerator(new Dictionary<DocumentType, string>
+                {
+                    {DocumentType.Delivery, "DLV"},
+                    {DocumentType.Relocation, "RLC"},
+                    {DocumentType.Release, "RLS"}
+                });
+                return new DocumentPersist(context, numerator);
+            });
+
+            services.AddTransient(typeof(IEventBus), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new EventBus((Type type)=>{return new List<IEventHandler>();});
+            });
+
+            services.AddTransient(typeof(ICommandBus), (IServiceProvider provider)=>
+            {
+                var productSrv = provider.GetService(typeof(IProductService)) as IProductService;
+                var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
+                var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
+                var commands = new Dictionary<Type, Func<ICommandHandler>>
+                {
+                    {typeof(CreateDeliveryDocumentCommand), ()=>{
+                        var validator = new CreateDeliveryDocumentCommandValidator(productSrv);
+                        return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docPersist);
+                    }}
+                };
+
+                var commandBus = new CommandBus((Type type)=>{
+                    return commands[type].Invoke();
+                });
+
+                return commandBus;
             });
         }
     }

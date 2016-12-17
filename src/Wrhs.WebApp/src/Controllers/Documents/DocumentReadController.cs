@@ -25,7 +25,7 @@ namespace Wrhs.WebApp.Controllers.Documents
                 
             return Ok(result);
         }
-]
+
         [HttpGet("relocation")]
         public IActionResult GetRelocationDocuments(DateTime? issueDate, string fullNumber="",
             int page=1, int pageSize=20)
