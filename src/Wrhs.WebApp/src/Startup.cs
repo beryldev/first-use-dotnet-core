@@ -14,6 +14,8 @@ using Wrhs.Data.ContextFactory;
 using Wrhs.Data.Persist;
 using Wrhs.Data.Service;
 using Wrhs.Delivery;
+using Wrhs.Release;
+using Wrhs.Relocation;
 using Wrhs.Services;
 using Wrhs.WebApp.Utils;
 
@@ -102,6 +104,12 @@ namespace Wrhs.WebApp
                 return new DocumentPersist(context, numerator);
             });
 
+            services.AddTransient(typeof(IStockService), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new StockService(context);
+            });
+
             services.AddTransient(typeof(IEventBus), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -111,13 +119,22 @@ namespace Wrhs.WebApp
             services.AddTransient(typeof(ICommandBus), (IServiceProvider provider)=>
             {
                 var productSrv = provider.GetService(typeof(IProductService)) as IProductService;
+                var stockSrv = provider.GetService(typeof(IStockService)) as IStockService;
                 var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
                 var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
                 var commands = new Dictionary<Type, Func<ICommandHandler>>
                 {
-                    {typeof(CreateDeliveryDocumentCommand), ()=>{
+                    { typeof(CreateDeliveryDocumentCommand), ()=>{
                         var validator = new CreateDeliveryDocumentCommandValidator(productSrv);
                         return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docPersist);
+                    }},
+                    { typeof(CreateRelocationDocumentCommand), ()=>{
+                        var validator = new CreateRelocationDocumentCommandValidator(productSrv, stockSrv);
+                        return new CreateRelocationDocumentCommandHandler(validator, eventBus, docPersist);
+                    }},
+                    { typeof(CreateReleaseDocumentCommand), ()=>{
+                        var validator = new CreateReleaseDocumentCommandValidator(productSrv, stockSrv);
+                        return new CreateReleaseDocumentCommandHandler(validator, eventBus, docPersist);
                     }}
                 };
 
