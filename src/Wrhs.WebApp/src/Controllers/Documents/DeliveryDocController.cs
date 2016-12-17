@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
-using Wrhs.Core;
 
 namespace Wrhs.WebApp.Controllers.Documents
 {
@@ -11,9 +10,9 @@ namespace Wrhs.WebApp.Controllers.Documents
         {
         }
 
-        public override ResultPage<Document> Get()
+        protected override DocumentType GetDocumentType()
         {
-            return null;
+            return DocumentType.Delivery;
         }
     }
 }

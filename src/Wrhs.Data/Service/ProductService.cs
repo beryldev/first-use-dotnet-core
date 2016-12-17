@@ -51,28 +51,25 @@ namespace Wrhs.Data.Service
 
         public ResultPage<Product> FilterProducts(Dictionary<string, object> filter, int page, int pageSize)
         {
+            var query = context.Products.AsQueryable();
+            
+            return Filter(query, filter, page, pageSize);
+        }
+
+        protected override IQueryable<Product> GetQuery()
+        {
+            return context.Products;
+        }
+
+        protected override Dictionary<string, Func<Product, object, bool>> GetFilterMapping()
+        {
             var mapping = new Dictionary<string, Func<Product, object, bool>>
             {
                 {"name", (Product p, object val) => p.Name.Contains(val as string) },
                 {"code", (Product p, object val) => p.Code.Contains(val as string) },
             };
 
-            var query = context.Products.AsQueryable();
-            foreach(var cond in filter)
-            {
-                var key = cond.Key.ToLower();
-                if(mapping.ContainsKey(key))
-                    query = query.Where(p => mapping[key].Invoke(p, cond.Value));
-            }  
-
-            var items = query.Skip((page-1)*pageSize).Take(pageSize).ToList();
-
-            return new ResultPage<Product>(items, page, pageSize);
-        }
-
-        protected override IQueryable<Product> GetQuery()
-        {
-            return context.Products;
+            return mapping;
         }
     }
 }

@@ -103,11 +103,36 @@ namespace Wrhs.Data.Tests.Service
             result.PageSize.Should().Be(pageSize);
         }
 
+        [Theory]
+        [InlineData(1, 1, 1)]
+        [InlineData(2, 1, 1)]
+        [InlineData(1, 2, 2)]
+        public void ShouldReturnRequestedPageAndPageSizeOnFilterDocuments(int page, int pageSize, int expected)
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-1"});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-2"});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, FullNumber="RLS-3"});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-1"});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-12"});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-22"});
+            context.SaveChanges();
+
+            var filter = new Dictionary<string, object>();
+            filter.Add("FullNumber", "DLV-1");
+
+            var result = service.FilterDocuments(DocumentType.Delivery, filter, page, pageSize);
+
+            result.Page.Should().Be(page);
+            result.PageSize.Should().Be(pageSize);
+            result.Items.Should().HaveCount(expected);
+        }
+
         protected override Document CreateEntity(int i)
         {
             return new Document
             {
                 Type = DocumentType.Delivery,
+                FullNumber = "some-number",
                 Lines = new List<DocumentLine>
                 {
                     new DocumentLine{ProductId=1},

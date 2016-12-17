@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Wrhs.Common;
@@ -27,8 +29,7 @@ namespace Wrhs.Data.Service
 
         public ResultPage<Document> GetDocuments()
         {
-            var items = context.Documents.ToList();
-            return new ResultPage<Document>(items, 0, 0);
+            return PaginateQuery(context.Documents, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
         }
 
         public ResultPage<Document> GetDocuments(DocumentType type)
@@ -45,6 +46,35 @@ namespace Wrhs.Data.Service
         {
             var query = context.Documents.Where(d => d.Type == type);
             return PaginateQuery(query, page, pageSize);
+        }
+
+         public ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter)
+        {
+            return FilterDocuments(type, filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
+        }
+
+        public ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter, int page)
+        {
+            return FilterDocuments(type, filter, page, DEFAULT_PAGE_SIZE);
+        }
+
+        public ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter, int page, int pageSize)
+        {
+            var query = context.Documents.Where(d => d.Type == type);
+            return Filter(query, filter, page, pageSize);
+        }
+
+        protected override Dictionary<string, Func<Document, object, bool>> GetFilterMapping()
+        {
+            var mapping = new Dictionary<string, Func<Document, object, bool>>
+            {
+                {"fullnumber", (Document p, object val) => p.FullNumber.Contains(val as string) },
+            };
+
+            return mapping;
         }
 
         protected override IQueryable<Document> GetQuery()

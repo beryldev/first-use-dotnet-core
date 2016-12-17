@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Wrhs.Core;
 
 namespace Wrhs.Common
@@ -9,5 +10,16 @@ namespace Wrhs.Common
          Document GetDocumentById(int id);
 
          ResultPage<Document> GetDocuments();
+
+         ResultPage<Document> GetDocuments(DocumentType type);
+
+         ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter);
+
+         ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter, int page);
+
+         ResultPage<Document> FilterDocuments(DocumentType type,
+            Dictionary<string, object> filter, int page, int pageSize);
     }
 }

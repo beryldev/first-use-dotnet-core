@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using Moq;
 using Wrhs.Common;
 using Wrhs.Data.Persist;
 using Wrhs.Products;
@@ -13,9 +14,17 @@ namespace Wrhs.Data.Tests.Persist
     {
         private readonly DocumentPersist documentPersist;
 
+        private readonly Mock<IDocumentNumerator> docNumeratorMock;
+
         public DocumentPersistTests() : base()
         {
-            documentPersist = new DocumentPersist(context);
+            docNumeratorMock = new Mock<IDocumentNumerator>();
+            docNumeratorMock.Setup(m=>m.AssignNumber(It.IsNotNull<Document>()))
+                .Returns((Document doc)=>{ 
+                    doc.FullNumber = "some-number";
+                    return doc;
+                 });
+            documentPersist = new DocumentPersist(context, docNumeratorMock.Object);
         }
 
         [Fact]
@@ -43,6 +52,17 @@ namespace Wrhs.Data.Tests.Persist
                 .Be(DocumentType.Delivery);
             context.Documents.First().State.Should()
                 .Be(DocumentState.Confirmed);
+        }
+
+        [Fact]
+        public void ShouldAssignNumberToDocumentOnSave()
+        {
+            var document = new Document { Type = DocumentType.Delivery};
+
+            documentPersist.Save(document);
+
+            var saved = context.Documents.First();
+            saved.FullNumber.Should().NotBeNullOrEmpty();
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Moq;
 using Wrhs.Common;
 using Wrhs.Core;
@@ -9,13 +10,13 @@ namespace Wrhs.WebApp.Tests
 {
     public abstract class DocumentControllerTests : IDisposable
     {
-        protected Mock<IDocumentService> documentSrv;
+        protected Mock<IDocumentService> documentSrvMock;
 
         protected DocumentController controller;
 
         public DocumentControllerTests()
         {
-            documentSrv = CreateDocService();
+            documentSrvMock = CreateDocService();
             controller = CreateDocController();
         }
 
@@ -37,17 +38,17 @@ namespace Wrhs.WebApp.Tests
             var result = controller.Get();
 
             Assert.IsType<ResultPage<Document>>(result);
+            result.Items.Should().NotBeEmpty();
         }
 
-        // [Fact]
-        // public void ShouldReturnDocumentsOnGetWithFullNumberParameter()
-        // {
-        //     repository.Setup(m=>m.Get()).Returns(new List<TDoc>());
+        [Fact]
+        public void ShouldReturnDocumentsOnGetWithFullNumberParameter()
+        {
+            var result = controller.Get(fullNumber: "some-number");
 
-        //     var result = controller.Get(fullNumber: "D/001/2016");
-
-        //     Assert.IsType<PaginateResult<TDoc>>(result);
-        // }
+            Assert.IsType<ResultPage<Document>>(result);
+            result.Items.Should().NotBeEmpty();
+        }
 
         // [Fact]
         // public void ShouldReturnDocumentsOnGetWithIssueDateParameter()
@@ -59,24 +60,22 @@ namespace Wrhs.WebApp.Tests
         //     Assert.IsType<PaginateResult<TDoc>>(result);
         // }
 
-        // [Fact]
-        // public void ShouldReturnRequestedPageOnGet()
-        // {
-        //     repository.Setup(m=>m.Get()).Returns(new List<TDoc>());
+        [Fact]
+        public void ShouldReturnRequestedPageOnGet()
+        {
+            var result = controller.Get(page: 2);
 
-        //     var result = controller.Get(page: 2);
+            Assert.IsType<ResultPage<Document>>(result);
+            result.Items.Should().NotBeEmpty();
+        }
 
-        //     Assert.Equal(2, result.Page);
-        // }
+        [Fact]
+        public void ShouldReturnRequestedPageSize()
+        {
+            var result = controller.Get(pageSize: 30);
 
-        // [Fact]
-        // public void ShouldReturnRequestedPageSize()
-        // {
-        //     repository.Setup(m=>m.Get()).Returns(new List<TDoc>());
-
-        //     var result = controller.Get(perPage: 30);
-
-        //     Assert.Equal(30, result.PerPage);
-        // }
+            Assert.IsType<ResultPage<Document>>(result);
+            result.Items.Should().NotBeEmpty();
+        }
     }
 }

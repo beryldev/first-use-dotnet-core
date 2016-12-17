@@ -1,16 +1,23 @@
+using System;
 using Wrhs.Common;
 
 namespace Wrhs.Data.Persist
 {
     public class DocumentPersist : BaseData, IDocumentPersist
     {
-        public DocumentPersist(WrhsContext context) : base(context)
+        private readonly IDocumentNumerator docNumerator;
+
+        public DocumentPersist(WrhsContext context, IDocumentNumerator docNumerator) 
+            : base(context)
         {
-            
+            this.docNumerator = docNumerator;
+            this.docNumerator.SetContext(context);
         }
 
         public int Save(Document document)
         {
+            document.CreatedAt = DateTime.Now;
+            document = docNumerator.AssignNumber(document);
             context.Documents.Add(document);
             context.SaveChanges();
 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
 using Wrhs.Core;
 
@@ -5,14 +7,28 @@ namespace Wrhs.WebApp.Controllers.Documents
 {
     public abstract class DocumentController : BaseController 
     {
-        IDocumentService documentSrv;
+        protected readonly IDocumentService documentSrv;
 
         public DocumentController(IDocumentService documentSrv)
         {
             this.documentSrv = documentSrv;
         }
 
-        public abstract ResultPage<Document> Get();
+        [HttpGet]
+        public ResultPage<Document> Get(string fullNumber="", int page=1, int pageSize=20)
+        {
+            page = page < 1 ? 1 : page;
+            pageSize = (pageSize < 1 || pageSize > 100) ? 20 : pageSize; 
+
+            var filter = new Dictionary<string, object>
+            {
+                {"fullNumber", fullNumber}
+            };
+
+            return documentSrv.FilterDocuments(GetDocumentType(), filter, page, pageSize);
+        }
+
+        protected abstract DocumentType GetDocumentType();
 
         // [HttpGet]
         // public IPaginateResult<TDoc> Get(string fullNumber="", DateTime? issueDate = null,
