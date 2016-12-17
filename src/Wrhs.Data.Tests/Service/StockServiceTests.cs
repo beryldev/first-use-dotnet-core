@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using Wrhs.Common;
 using Wrhs.Data.Service;
@@ -35,6 +36,25 @@ namespace Wrhs.Data.Tests.Service
             stock.Quantity.Should().Be(30);
             stock.Product.Should().NotBeNull();
             stock.Product.Name.Should().Be("Prod1");
+        }
+
+        [Fact]
+        public void ShouldReturnProductStockOnGetProductStock()
+        {
+            context.Products.Add(new Product { Name="Prod1", Code = "P1" });
+            context.Products.Add(new Product { Name="Prod2", Code = "P2" });
+            context.Shifts.Add(new Shift{ OperationId=1, Confirmed = true, ProductId=1, Location="L1", Quantity = 10});
+            context.Shifts.Add(new Shift{ OperationId=1, Confirmed = true, ProductId=1, Location="L1", Quantity = 20});
+            context.Shifts.Add(new Shift{ OperationId=1, Confirmed = false, ProductId=1, Location="L1", Quantity = 20});
+            context.Shifts.Add(new Shift{ OperationId=1, Confirmed = true, ProductId=1, Location="L2", Quantity = 50});
+            context.Shifts.Add(new Shift{ OperationId=1, Confirmed = true, ProductId=2, Location="L1", Quantity = 50});
+            context.SaveChanges();
+
+            var stock = stockSrv.GetProductStock(1);
+
+            stock.Should().NotBeNullOrEmpty();
+            stock.Should().HaveCount(2);
+            stock.Sum(s=>s.Quantity).Should().Be(80);
         }
     }
 }
