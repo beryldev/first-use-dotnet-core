@@ -6,6 +6,7 @@ using Wrhs.Core;
 
 namespace Wrhs.WebApp.Controllers.Documents
 {
+    [Route("api/document")]
     public class DocumentReadController : BaseController 
     {
         protected readonly IDocumentService documentSrv;
@@ -15,8 +16,7 @@ namespace Wrhs.WebApp.Controllers.Documents
             this.documentSrv = documentSrv;
         }
 
-        [HttpGet]
-        [Route("api/document/delivery")]
+        [HttpGet("delivery")]
         public IActionResult GetDeliveryDocuments(DateTime? issueDate, string fullNumber="",
             int page=1, int pageSize=20)
         {
@@ -25,9 +25,8 @@ namespace Wrhs.WebApp.Controllers.Documents
                 
             return Ok(result);
         }
-
-        [HttpGet]
-        [Route("api/document/relocation")]
+]
+        [HttpGet("relocation")]
         public IActionResult GetRelocationDocuments(DateTime? issueDate, string fullNumber="",
             int page=1, int pageSize=20)
         {
@@ -37,8 +36,7 @@ namespace Wrhs.WebApp.Controllers.Documents
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("api/document/release")]
+        [HttpGet("release")]
         public IActionResult GetReleaseDocuments(DateTime? issueDate, string fullNumber="",
             int page=1, int pageSize=20)
         {
@@ -48,8 +46,7 @@ namespace Wrhs.WebApp.Controllers.Documents
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("api/document/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetDocument(int id)
         {
             var document = documentSrv.GetDocumentById(id);
