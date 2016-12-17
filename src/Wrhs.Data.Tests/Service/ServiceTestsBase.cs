@@ -6,24 +6,21 @@ namespace Wrhs.Data.Tests.Service
 {
     public abstract class ServiceTestsBase<T> : TestsBase where T : class
     {
-        protected readonly BaseService<T> service;
-
         protected ServiceTestsBase() : base()
         {
             for(var i=0; i<4; i++)
                 context.Add(CreateEntity(i));
             context.SaveChanges();
-
-            service = CreateService(context);
         }
 
-        protected abstract BaseService<T> CreateService(WrhsContext context);
-
         protected abstract T CreateEntity(int i);
+
+        protected abstract BaseService<T> GetService();
 
          [Fact]
         public void ShouldReturnPageWithProductsOnGet()
         {
+            var service = GetService();
             var result = service.Get();
 
             result.Should().NotBeNull();
@@ -33,6 +30,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnDefaultFirstPageOnGetWithoutParameters()
         {
+            var service = GetService();
             var result = service.Get();
 
             result.Page.Should().Be(1);
@@ -42,6 +40,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnRequestedPageWithDefaultPageSizeOnGet()
         {
+            var service = GetService();
             var result = service.Get(2);
 
             result.Page.Should().Be(2);
@@ -51,6 +50,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnRequestedPageAndPageSizeOnGet()
         {
+            var service = GetService();
             var result = service.Get(4, 10);
 
             result.Page.Should().Be(4);
@@ -64,6 +64,7 @@ namespace Wrhs.Data.Tests.Service
         [InlineData(2, 3, 1)]        
         public void ShouldReturnRequestedAndLimitedData(int page, int pageSize, int expected)
         {
+            var service = GetService();
             var result = service.Get(page, pageSize);
 
             result.Items.Should().HaveCount(expected);
@@ -75,6 +76,7 @@ namespace Wrhs.Data.Tests.Service
         [InlineData(0, 4)]
         public void ShouldReturnRequestedDataWithDefaultPageSize(int page, int expected)
         {
+            var service = GetService();
             var result = service.Get(page);
 
             result.Items.Should().HaveCount(expected);
@@ -83,6 +85,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnRequestedDataWithDefaultPageAndPageSize()
         {
+            var service = GetService();
             var result = service.Get();
 
             result.Items.Should().HaveCount(4);

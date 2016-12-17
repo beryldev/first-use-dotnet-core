@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Wrhs.Data.Service;
 using Wrhs.Products;
@@ -10,15 +9,22 @@ namespace Wrhs.Data.Tests.Service
 {
     public class ProductServiceTests : ServiceTestsBase<Product>, IDisposable
     {
+        private readonly ProductService service;
+
         public ProductServiceTests() : base()
         {
-            
+            service = new ProductService(context);
+        }
+
+        protected override BaseService<Product> GetService()
+        {
+            return service as BaseService<Product>;
         }
 
         [Fact]
         public void ShouldTrueWhenProdutcExistsById()
         {
-            var result = (service as ProductService).CheckProductExists(2);
+            var result = service.CheckProductExists(2);
 
             result.Should().BeTrue();
         }
@@ -26,7 +32,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnFalseWhenProductNotExistsById()
         {
-            var result = (service as ProductService).CheckProductExists(6);
+            var result = service.CheckProductExists(6);
 
             result.Should().BeFalse();
         }
@@ -34,7 +40,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnTrueWhenProdExistsByCode()
         {
-            var result = (service as ProductService).CheckProductExistsByCode("PROD1");
+            var result = service.CheckProductExistsByCode("PROD1");
 
             result.Should().BeTrue();
         }
@@ -42,7 +48,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnFalseWhenProdNotExistsByCode()
         {
-            var result = (service as ProductService).CheckProductExistsByCode("PROD11");
+            var result = service.CheckProductExistsByCode("PROD11");
 
             result.Should().BeFalse();
         }
@@ -50,7 +56,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnTrueWhenProdExistsByName()
         {
-            var result = (service as ProductService).CheckProductExistsByName("Product 1");
+            var result = service.CheckProductExistsByName("Product 1");
 
             result.Should().BeTrue();
         }
@@ -58,7 +64,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnFalseWhenProdNotExistsByName()
         {
-            var result = (service as ProductService).CheckProductExistsByName("Product 11");
+            var result = service.CheckProductExistsByName("Product 11");
 
             result.Should().BeFalse();
         }
@@ -66,7 +72,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnProductOnGetByCodeWhenExists()
         {
-            var result = (service as ProductService).GetProductByCode("PROD1");
+            var result = service.GetProductByCode("PROD1");
 
             result.Should().BeOfType<Product>();
             result.Name.Should().Be("Product 1");
@@ -76,7 +82,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnNullOnGetByCodeWhenNotExists()
         {
-            var result = (service as ProductService).GetProductByCode("PROD11");
+            var result = service.GetProductByCode("PROD11");
 
             result.Should().BeNull();
         }
@@ -84,7 +90,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnProductOnGetByIdWhenExists()
         {
-            var result = (service as ProductService).GetProductById(1);
+            var result = service.GetProductById(1);
 
             result.Should().BeOfType<Product>();
             result.Name.Should().Be("Product 1");
@@ -94,7 +100,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnNullOnGetByIdWhenNotExists()
         {
-            var result = (service as ProductService).GetProductById(11);
+            var result = service.GetProductById(11);
 
             result.Should().BeNull();
         }
@@ -102,7 +108,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnProductOnGetByNameWhenExists()
         {
-            var result = (service as ProductService).GetProductByName("Product 1");
+            var result = service.GetProductByName("Product 1");
 
             result.Should().BeOfType<Product>();
             result.Name.Should().Be("Product 1");
@@ -112,77 +118,10 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnNullOnGetByNameWhenNotExists()
         {
-            var result = (service as ProductService).GetProductByName("Product 11");
+            var result = service.GetProductByName("Product 11");
 
             result.Should().BeNull();
         }
-
-        // [Fact]
-        // public void ShouldReturnPageWithProductsOnGet()
-        // {
-        //     var result = service.Get();
-
-        //     result.Should().NotBeNull();
-        //     result.Items.Should().NotBeNullOrEmpty();
-        // }
-
-        // [Fact]
-        // public void ShouldReturnDefaultFirstPageOnGetWithoutParameters()
-        // {
-        //     var result = service.Get();
-
-        //     result.Page.Should().Be(1);
-        //     result.PageSize.Should().Be(20);
-        // }
-
-        // [Fact]
-        // public void ShouldReturnRequestedPageWithDefaultPageSizeOnGet()
-        // {
-        //     var result = service.Get(2);
-
-        //     result.Page.Should().Be(2);
-        //     result.PageSize.Should().Be(20);
-        // }
-
-        // [Fact]
-        // public void ShouldReturnRequestedPageAndPageSizeOnGet()
-        // {
-        //     var result = service.Get(4, 10);
-
-        //     result.Page.Should().Be(4);
-        //     result.PageSize.Should().Be(10);
-        // }
-
-        // [Theory]
-        // [InlineData(1, 2, 2)]
-        // [InlineData(2, 2, 2)]
-        // [InlineData(1, 4, 4)]
-        // [InlineData(2, 3, 1)]        
-        // public void ShouldReturnRequestedAndLimitedData(int page, int pageSize, int expected)
-        // {
-        //     var result = service.Get(page, pageSize);
-
-        //     result.Items.Should().HaveCount(expected);
-        // }
-
-        // [Theory]
-        // [InlineData(1, 4)]
-        // [InlineData(2, 0)]
-        // [InlineData(0, 4)]
-        // public void ShouldReturnRequestedDataWithDefaultPageSize(int page, int expected)
-        // {
-        //     var result = service.Get(page);
-
-        //     result.Items.Should().HaveCount(expected);
-        // }
-
-        // [Fact]
-        // public void ShouldReturnRequestedDataWithDefaultPageAndPageSize()
-        // {
-        //     var result = service.Get();
-
-        //     result.Items.Should().HaveCount(4);
-        // }
 
         [Fact]
         public void ShouldReturnFilteredProducts()
@@ -196,7 +135,7 @@ namespace Wrhs.Data.Tests.Service
             var filter = new Dictionary<string, object>();
             filter.Add("Name", "Product 9");
 
-            var result = (service as ProductService).FilterProducts(filter);
+            var result = service.FilterProducts(filter);
 
             result.Items.Should().HaveCount(2);
         }
@@ -216,7 +155,7 @@ namespace Wrhs.Data.Tests.Service
             filter.Add("Name", "Product 7");
             filter.Add("Code", "XPROD1");
 
-            var result = (service as ProductService).FilterProducts(filter);
+            var result = service.FilterProducts(filter);
 
             result.Items.Should().HaveCount(1);
         }
@@ -236,16 +175,11 @@ namespace Wrhs.Data.Tests.Service
             var filter = new Dictionary<string, object>();
             filter.Add("Name", "Product 3");
 
-            var result = (service as ProductService).FilterProducts(filter, page, pageSize);
+            var result = service.FilterProducts(filter, page, pageSize);
 
             result.Page.Should().Be(page);
             result.PageSize.Should().Be(pageSize);
             result.Items.Should().HaveCount(expected);
-        }
-
-        protected override BaseService<Product> CreateService(WrhsContext context)
-        {
-            return new ProductService(context);
         }
 
         protected override Product CreateEntity(int i)

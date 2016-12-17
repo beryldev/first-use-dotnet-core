@@ -10,10 +10,19 @@ namespace Wrhs.Data.Tests.Service
 {
     public class DocumentServiceTests : ServiceTestsBase<Document>
     {
+        private readonly DocumentService service;
+
         public DocumentServiceTests() : base()
-        {
+        {       
             context.Products.Add(new Product());
             context.SaveChanges();
+
+            service = new DocumentService(context);
+        }
+
+        protected override BaseService<Document> GetService()
+        {
+            return service as BaseService<Document>;
         }
 
         [Fact]
@@ -22,7 +31,7 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document());
             context.SaveChanges();
 
-            var result = (service as DocumentService).CheckDocumentExistsById(1);
+            var result = service.CheckDocumentExistsById(1);
 
             result.Should().BeTrue();
         }
@@ -33,7 +42,7 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document());
             context.SaveChanges();
 
-            var result = (service as DocumentService).CheckDocumentExistsById(900);
+            var result = service.CheckDocumentExistsById(900);
 
             result.Should().BeFalse();
         }
@@ -41,7 +50,7 @@ namespace Wrhs.Data.Tests.Service
         [Fact]
         public void ShouldReturnDocumentWithLinesOnGetById()
         {
-            var result = (service as DocumentService).GetDocumentById(1);
+            var result = service.GetDocumentById(1);
             result.Should().NotBeNull();
             result.Type.Should().Be(DocumentType.Delivery);
             result.Lines.Should().HaveCount(2);
@@ -53,9 +62,10 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Release});
             context.Documents.Add(new Document{ Type = DocumentType.Release});
             context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery});
             context.SaveChanges();
 
-            var result = (service as DocumentService).Get(DocumentType.Release);
+            var result = service.GetDocuments(DocumentType.Release);
 
             result.Items.Should().HaveCount(3);
         }
@@ -69,9 +79,10 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Release});
             context.SaveChanges();
 
-            var result = (service as DocumentService).Get(DocumentType.Release, page);
+            var result = service.GetDocuments(DocumentType.Release, page);
 
             result.Items.Should().HaveCount(3);
+            result.Page.Should().Be(1);
         }
 
         [Theory]
@@ -82,17 +93,14 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Release});
             context.Documents.Add(new Document{ Type = DocumentType.Release});
             context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery});
             context.SaveChanges();
 
-            var result = (service as DocumentService).Get(DocumentType.Release, page, pageSize);
+            var result = service.GetDocuments(DocumentType.Release, page, pageSize);
 
             result.Items.Should().HaveCount(expected);
-        }
-
-        protected override BaseService<Document> CreateService(WrhsContext context)
-        {
-            context.Products.Add(new Product());
-            return new DocumentService(context);
+            result.Page.Should().Be(page);
+            result.PageSize.Should().Be(pageSize);
         }
 
         protected override Document CreateEntity(int i)
