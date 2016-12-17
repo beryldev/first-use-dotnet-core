@@ -47,6 +47,48 @@ namespace Wrhs.Data.Tests.Service
             result.Lines.Should().HaveCount(2);
         }
 
+        [Fact]
+        public void ShouldReturnDocumentsByType()
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.SaveChanges();
+
+            var result = (service as DocumentService).Get(DocumentType.Release);
+
+            result.Items.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public void ShouldReturnDocumentsByTypeAndPage()
+        {
+            var page = 1;
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.SaveChanges();
+
+            var result = (service as DocumentService).Get(DocumentType.Release, page);
+
+            result.Items.Should().HaveCount(3);
+        }
+
+        [Theory]
+        [InlineData(1, 5, 3)]
+        [InlineData(2, 2, 1)]
+        public void ShouldReturnDocumentsByTypePageAndPageSize(int page, int pageSize, int expected)
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.Documents.Add(new Document{ Type = DocumentType.Release});
+            context.SaveChanges();
+
+            var result = (service as DocumentService).Get(DocumentType.Release, page, pageSize);
+
+            result.Items.Should().HaveCount(expected);
+        }
+
         protected override BaseService<Document> CreateService(WrhsContext context)
         {
             context.Products.Add(new Product());
