@@ -127,14 +127,6 @@ namespace Wrhs.WebApp.Tests
             result.Should().BeOfType<NotFoundResult>();
         }
 
-       
-
-       
-
-       
-
-        
-
         // [Fact]
         // public void ShouldReturnStocksWhenGetCalculatedStocks()
         // {
