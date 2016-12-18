@@ -4,9 +4,8 @@ using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
 using Wrhs.Release;
 using Wrhs.Relocation;
-using Wrhs.WebApp.Controllers;
 
-namespace Wrhs.WebApp.src.Controllers.Documents
+namespace Wrhs.WebApp.Controllers.Documents
 {
     [Route("api/document")]
     public class DocumentController : BaseController

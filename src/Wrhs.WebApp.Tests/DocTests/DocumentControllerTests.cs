@@ -7,7 +7,7 @@ using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
 using Wrhs.Release;
 using Wrhs.Relocation;
-using Wrhs.WebApp.src.Controllers.Documents;
+using Wrhs.WebApp.Controllers.Documents;
 using Xunit;
 
 namespace Wrhs.WebApp.Tests.DocTests
