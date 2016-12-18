@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Common;
@@ -13,7 +12,17 @@ namespace Wrhs.Data.Service
 
         public IEnumerable<Stock> GetProductStock(int productId)
         {
-            throw new NotImplementedException();
+            var items = context.Shifts
+                .Where(s => s.ProductId == productId && s.Confirmed)
+                .GroupBy(s => s.Location)
+                .Select(s => new Stock
+                {
+                    ProductId = productId,
+                    Location = s.First().Location,
+                    Quantity = s.Sum(x=>x.Quantity)
+                }).ToList();
+
+            return items;
         }
 
         public Stock GetStockAtLocation(int productId, string location)

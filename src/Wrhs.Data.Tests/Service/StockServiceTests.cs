@@ -56,5 +56,14 @@ namespace Wrhs.Data.Tests.Service
             stock.Should().HaveCount(2);
             stock.Sum(s=>s.Quantity).Should().Be(80);
         }
+
+        [Fact]
+        public void ShouldReturnEmptyCollectionOnGetProductStockWhenNoStocks()
+        {
+            var stock = stockSrv.GetProductStock(10);
+
+            stock.Should().NotBeNull();
+            stock.Should().BeEmpty();
+        }
     }
 }
