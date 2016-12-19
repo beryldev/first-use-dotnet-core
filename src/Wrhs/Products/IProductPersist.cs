@@ -5,5 +5,7 @@ namespace Wrhs.Products
          int Save(Product product);
 
          void Update(Product product);
+
+         void Delete(int productId);
     }
 }

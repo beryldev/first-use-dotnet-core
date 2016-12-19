@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Wrhs.Core;
+using Wrhs.Core.Exceptions;
 using Wrhs.Services;
 
 namespace Wrhs.Products
@@ -21,12 +22,15 @@ namespace Wrhs.Products
 
         protected override void ProcessInvalidCommand(DeleteProductCommand command, IEnumerable<ValidationResult> results)
         {
-            throw new NotImplementedException();
+            throw new CommandValidationException("Invalid commnand", command, results);
         }
 
         protected override DeleteProductEvent ProcessValidCommand(DeleteProductCommand command)
         {
-            throw new NotImplementedException();
+            var product = prodSrv.GetProductById(command.ProductId);
+            prodPersist.Delete(command.ProductId);
+
+            return new DeleteProductEvent(product, DateTime.UtcNow);
         }
     }
 }
