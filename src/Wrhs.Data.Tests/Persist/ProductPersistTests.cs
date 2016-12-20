@@ -38,5 +38,29 @@ namespace Wrhs.Data.Tests.Persist
 
             context.Products.Where(p=>p.Name == "NewName").Count().Should().Equals(1);
         }
+
+        [Fact]
+        public void ShouldRemoveProductFromContextOnDelete()
+        {
+            var product = new Product { Name = "Name", Code = "Code"};
+            context.Products.Add(product);
+            context.SaveChanges();
+
+            productPersist.Delete(product);
+
+            context.Products.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void ShouldNotFailWhenTryDeleteNull()
+        {
+            var product = new Product { Name = "Name", Code = "Code"};
+            context.Products.Add(product);
+            context.SaveChanges();
+
+            productPersist.Delete(null);
+
+            context.Products.Should().NotBeNullOrEmpty();
+        }
     }
 }

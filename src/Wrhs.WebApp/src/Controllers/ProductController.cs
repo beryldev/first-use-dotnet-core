@@ -28,6 +28,13 @@ namespace Wrhs.WebApp.Controllers
             return HandleCommand(command);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteProduct(int id, [FromBody]DeleteProductCommand command)
+        {
+            command.ProductId = id;
+            return HandleCommand(command);
+        }
+
         protected IActionResult HandleCommand(ICommand command)
         {
             IActionResult result;

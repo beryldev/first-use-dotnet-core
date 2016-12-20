@@ -6,6 +6,6 @@ namespace Wrhs.Products
 
          void Update(Product product);
 
-         void Delete(int productId);
+         void Delete(Product Product);
     }
 }

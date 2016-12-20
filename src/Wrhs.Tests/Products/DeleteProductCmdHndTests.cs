@@ -30,7 +30,7 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            productPersistMock.Verify(m=>m.Delete(It.IsNotNull<int>()), Times.Once());
+            productPersistMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Once());
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Wrhs.Tests.Products
                 handler.Handle(command);
             });
 
-            productPersistMock.Verify(m=>m.Delete(It.IsNotNull<int>()), Times.Never());
+            productPersistMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsNotNull<DeleteProductEvent>()), Times.Never());
         }
     }

@@ -28,7 +28,7 @@ namespace Wrhs.Products
         protected override DeleteProductEvent ProcessValidCommand(DeleteProductCommand command)
         {
             var product = prodSrv.GetProductById(command.ProductId);
-            prodPersist.Delete(command.ProductId);
+            prodPersist.Delete(product);
 
             return new DeleteProductEvent(product, DateTime.UtcNow);
         }

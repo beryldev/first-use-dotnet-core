@@ -92,60 +92,29 @@ namespace Wrhs.WebApp.Tests
             errors.Should().NotBeNullOrEmpty();
         }
 
-        // [Fact]
-        // public void ShouldReturnBadRequestOnUpdateWhenFail()
-        // {
-        //     var repository = new Mock<IRepository<Product>>();
-        //       repository.Setup(m=>m.GetById(It.IsAny<int>()))
-        //         .Returns(new Product());
-        //     var cmd = new UpdateProductCommand();
-        //     var handler = new Mock<ICommandHandler<UpdateProductCommand>>();
-        //     var validator = new Mock<IValidator<UpdateProductCommand>>();
-        //     validator.Setup(m=>m.Validate(cmd))
-        //         .Returns(new List<ValidationResult>(){new ValidationResult()});
-        //     var controller = new ProductController(repository.Object);
+        [Fact]
+        public void ShouldReturnOkOnDeleteWhenSuccess()
+        {
+            var command = new DeleteProductCommand();
 
-        //     var result = controller.Update(1, cmd, validator.Object, handler.Object);
+            var result = controller.DeleteProduct(1, command);
 
-        //     Assert.IsType<BadRequestObjectResult>(result);
-        // }
+            result.Should().BeOfType<OkResult>();
+        }
 
-        // [Fact]
-        // public void ShouldReturnOkOnDeleteWhenSuccess()
-        // {
-        //     var repository = new Mock<IRepository<Product>>();
-        //       repository.Setup(m=>m.GetById(It.IsAny<int>()))
-        //         .Returns(new Product());
-        //     var cmd = new DeleteProductCommand();
-        //     var handler = new Mock<ICommandHandler<DeleteProductCommand>>();
-        //     var validator = new Mock<IValidator<DeleteProductCommand>>();
-        //     validator.Setup(m=>m.Validate(cmd))
-        //         .Returns(new List<ValidationResult>());
-        //     var controller = new ProductController(repository.Object);
+        [Fact]
+        public void ShouldReturnBadRequestOnDeleteWhenFail()
+        {
+            var command = new DeleteProductCommand();
+            cmdBusMock.Setup(m=>m.Send(It.IsNotNull<ICommand>()))
+                .Throws(new CommandValidationException("Excetption", 
+                    command, new List<ValidationResult>{new ValidationResult("F", "M")}));
 
-        //     var result = controller.Delete(1, cmd, validator.Object, handler.Object);
+            var result = controller.DeleteProduct(1, command);
 
-        //     Assert.IsType<OkResult>(result);
-        // }
-
-        // [Fact]
-        // public void ShouldReturnBadRequestOnDeleteWhenFail()
-        // {
-        //     var repository = new Mock<IRepository<Product>>();
-        //       repository.Setup(m=>m.GetById(It.IsAny<int>()))
-        //         .Returns(new Product());
-        //     var cmd = new DeleteProductCommand();
-        //     var handler = new Mock<ICommandHandler<DeleteProductCommand>>();
-        //     var validator = new Mock<IValidator<DeleteProductCommand>>();
-        //     validator.Setup(m=>m.Validate(cmd))
-        //         .Returns(new List<ValidationResult>(){new ValidationResult()});
-        //     var controller = new ProductController(repository.Object);
-
-        //     var result = controller.Delete(1, cmd, validator.Object, handler.Object);
-
-        //     Assert.IsType<BadRequestObjectResult>(result);
-        // }
-
-        
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            errors.Should().NotBeNullOrEmpty();
+        }   
     }
 }

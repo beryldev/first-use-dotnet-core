@@ -8,6 +8,15 @@ namespace Wrhs.Data.Persist
         {
         }
 
+        public void Delete(Product product)
+        {
+            if(product == null)
+                return;
+                
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
+
         public int Save(Product product)
         {
             context.Products.Add(product);
