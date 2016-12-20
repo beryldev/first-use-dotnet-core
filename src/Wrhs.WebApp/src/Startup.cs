@@ -111,6 +111,18 @@ namespace Wrhs.WebApp
                 return new DocumentPersist(context, numerator);
             });
 
+            services.AddTransient(typeof(IOperationService), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new OperationService(context);
+            });
+
+            services.AddTransient(typeof(IOperationPersist), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new OperationPersist(context);
+            });
+
             services.AddTransient(typeof(IStockService), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -125,10 +137,13 @@ namespace Wrhs.WebApp
 
             services.AddTransient(typeof(ICommandBus), (IServiceProvider provider)=>
             {
+                var operationSrv = provider.GetService(typeof(IOperationService)) as IOperationService;
+                var operationPersist = provider.GetService(typeof(IOperationPersist)) as IOperationPersist;
                 var productSrv = provider.GetService(typeof(IProductService)) as IProductService;
                 var productPersist = provider.GetService(typeof(IProductPersist)) as IProductPersist;
                 var stockSrv = provider.GetService(typeof(IStockService)) as IStockService;
                 var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
+                var docSrv = provider.GetService(typeof(IDocumentService)) as IDocumentService;
                 var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
                 var commands = new Dictionary<Type, Func<ICommandHandler>>
                 {
@@ -155,6 +170,18 @@ namespace Wrhs.WebApp
                     { typeof(DeleteProductCommand), ()=>{
                         var validator = new DeleteProductCommandValidator();
                         return new DeleteProductCommandHandler(validator, eventBus, productSrv, productPersist);
+                    }},
+                    { typeof(BeginDeliveryOperationCommand), ()=>{
+                        var validator = new BeginDeliveryOperationCommandValidator(docSrv, operationSrv);
+                        return new BeginDeliveryOperationCommandHandler(validator, eventBus, operationPersist);
+                    }},
+                    { typeof(BeginRelocationOperationCommand), ()=>{
+                        var validator = new BeginRelocationOperationCommandValidator(docSrv, operationSrv);
+                        return new BeginRelocationOperationCommandHandler(validator, eventBus, operationPersist);
+                    }},
+                    { typeof(BeginReleaseOperationCommand), ()=>{
+                        var validator = new BeginReleaseOperationCommandValidator(docSrv, operationSrv);
+                        return new BeginReleaseOperationCommandHandler(validator, eventBus, operationPersist);
                     }}
                 };
 
