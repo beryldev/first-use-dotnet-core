@@ -26,6 +26,7 @@ namespace Wrhs.Data.Persist
 
         public void Update(Document document)
         {
+            context.Documents.Update(document);
             context.SaveChanges();
         }
     }

@@ -97,7 +97,7 @@ namespace Wrhs.WebApp.Tests
         {
             var command = new DeleteProductCommand();
 
-            var result = controller.DeleteProduct(1, command);
+            var result = controller.DeleteProduct(1);
 
             result.Should().BeOfType<OkResult>();
         }
@@ -110,7 +110,7 @@ namespace Wrhs.WebApp.Tests
                 .Throws(new CommandValidationException("Excetption", 
                     command, new List<ValidationResult>{new ValidationResult("F", "M")}));
 
-            var result = controller.DeleteProduct(1, command);
+            var result = controller.DeleteProduct(1);
 
             result.Should().BeOfType<BadRequestObjectResult>();
             var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;

@@ -26,6 +26,7 @@ namespace Wrhs.Data.Persist
 
         public void Update(Product product)
         {
+            context.Products.Update(product);
             context.SaveChanges();
         }
     }

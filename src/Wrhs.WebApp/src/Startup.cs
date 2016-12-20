@@ -14,6 +14,7 @@ using Wrhs.Data.ContextFactory;
 using Wrhs.Data.Persist;
 using Wrhs.Data.Service;
 using Wrhs.Delivery;
+using Wrhs.Products;
 using Wrhs.Release;
 using Wrhs.Relocation;
 using Wrhs.Services;
@@ -86,6 +87,12 @@ namespace Wrhs.WebApp
                 return new ProductService(context);
             });
 
+            services.AddTransient(typeof(IProductPersist), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new ProductPersist(context);
+            });
+
             services.AddTransient(typeof(IDocumentService), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -119,6 +126,7 @@ namespace Wrhs.WebApp
             services.AddTransient(typeof(ICommandBus), (IServiceProvider provider)=>
             {
                 var productSrv = provider.GetService(typeof(IProductService)) as IProductService;
+                var productPersist = provider.GetService(typeof(IProductPersist)) as IProductPersist;
                 var stockSrv = provider.GetService(typeof(IStockService)) as IStockService;
                 var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
                 var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
@@ -135,6 +143,18 @@ namespace Wrhs.WebApp
                     { typeof(CreateReleaseDocumentCommand), ()=>{
                         var validator = new CreateReleaseDocumentCommandValidator(productSrv, stockSrv);
                         return new CreateReleaseDocumentCommandHandler(validator, eventBus, docPersist);
+                    }},
+                    { typeof(CreateProductCommand), ()=>{
+                        var validator = new CreateProductCommandValidator(productSrv);
+                        return new CreateProductCommandHandler(validator, eventBus, productPersist);
+                    }},
+                    { typeof(UpdateProductCommand), ()=>{
+                        var validator = new UpdateProductCommandValidator(productSrv);
+                        return new UpdateProductCommandHandler(validator, eventBus, productPersist, productSrv);
+                    }},
+                    { typeof(DeleteProductCommand), ()=>{
+                        var validator = new DeleteProductCommandValidator();
+                        return new DeleteProductCommandHandler(validator, eventBus, productSrv, productPersist);
                     }}
                 };
 
