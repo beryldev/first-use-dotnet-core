@@ -17,21 +17,21 @@ namespace Wrhs.WebApp.Controllers.Operations
             this.cmdBus = cmdBus;
         }
 
-        [HttpPost("delivery/{guid}")]
+        [HttpPost("delivery/{guid}/shift")]
         public IActionResult ProcessDelivery(string guid, [FromBody]ProcessDeliveryOperationCommand command)
         {
             command.OperationGuid = guid;
             return HandleCommand<ProcessDeliveryOperationCommand>(command);     
         }
 
-        [HttpPost("relocation/{guid}")]
+        [HttpPost("relocation/{guid}/shift")]
         public IActionResult ProcessRelocation(string guid, [FromBody]ProcessRelocationOperationCommand command)
         {
             command.OperationGuid = guid;
             return HandleCommand<ProcessRelocationOperationCommand>(command);
         }
 
-        [HttpPost("release/{guid}")]
+        [HttpPost("release/{guid}/shift")]
         public IActionResult ProcessRelease(string guid, [FromBody]ProcessReleaseOperationCommand command)
         {
             command.OperationGuid = guid;
