@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
@@ -20,43 +21,22 @@ namespace Wrhs.WebApp.Controllers.Operations
         [HttpPost("delivery")]
         public IActionResult BeginDelivery([FromBody]BeginDeliveryOperationCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                command.OperationGuid = GenerateGuid();
-                cmdBus.Send(command);
-                result = Ok(command.OperationGuid);
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            return HandleCommand(command);
         }
 
         [HttpPost("relocation")]
         public IActionResult BeginRelocation([FromBody]BeginRelocationOperationCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                command.OperationGuid = GenerateGuid();
-                cmdBus.Send(command);
-                result = Ok(command.OperationGuid);
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            return HandleCommand(command);
         }
 
         [HttpPost("release")]
         public IActionResult BeginRelease([FromBody]BeginReleaseOperationCommand command)
+        {
+           return HandleCommand(command);
+        }
+
+        protected IActionResult HandleCommand<T>(T command) where T : BeginOperationCommand
         {
             IActionResult result;
 

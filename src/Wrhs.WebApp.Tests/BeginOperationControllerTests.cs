@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
 using Wrhs.Release;
 using Wrhs.Relocation;
@@ -12,14 +8,12 @@ using Xunit;
 
 namespace Wrhs.WebApp.Tests
 {
-    public class BeginOperationControllerTests
+    public class BeginOperationControllerTests : OperationControllerTestsBase
     {
         private readonly BeginOperationController controller;
-        private readonly Mock<ICommandBus> cmdBusMock;
 
-        public BeginOperationControllerTests()
+        public BeginOperationControllerTests() : base()
         {
-            cmdBusMock = new Mock<ICommandBus>();
             controller = new BeginOperationController(cmdBusMock.Object);
         }
 
@@ -37,7 +31,7 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnBadRequestWithErrorsOnBeginDeliveryWhenValidationFail()
         {
             var command = new BeginDeliveryOperationCommand();
-            CmdBusShouldThrowExecpt(command);
+            SetupCmdBusValidationFails(command);
 
             var result = controller.BeginDelivery(command);
 
@@ -58,7 +52,7 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnBadRequestWithErrorsOnBeginRelocationWhenValidationFail()
         {
             var command = new BeginRelocationOperationCommand();
-            CmdBusShouldThrowExecpt(command);
+            SetupCmdBusValidationFails(command);
 
             var result = controller.BeginRelocation(command);
 
@@ -79,7 +73,7 @@ namespace Wrhs.WebApp.Tests
         public void ShouldReturnBadRequestWithErrorsOnBeginReleaseWhenValidationFail()
         {
             var command = new BeginReleaseOperationCommand();
-            CmdBusShouldThrowExecpt(command);
+            SetupCmdBusValidationFails(command);
 
             var result = controller.BeginRelease(command);
 
@@ -91,20 +85,6 @@ namespace Wrhs.WebApp.Tests
             result.Should().BeOfType<OkObjectResult>();
             var guid = (result as OkObjectResult).Value as string;
             guid.Should().NotBeNullOrWhiteSpace();
-        }
-
-        protected void AssertBadRequest(IActionResult result)
-        {
-            result.Should().BeOfType<BadRequestObjectResult>();
-            var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
-            errors.Should().NotBeNullOrEmpty();
-        }
-
-        protected void CmdBusShouldThrowExecpt(ICommand command)
-        {
-            cmdBusMock.Setup(m=>m.Send(command))
-                .Throws(new CommandValidationException("Fail", command,
-                    new List<ValidationResult>{new ValidationResult("F", "M")}));
         }
     }
 }

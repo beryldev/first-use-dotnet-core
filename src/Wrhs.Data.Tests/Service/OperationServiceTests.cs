@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Wrhs.Data.Tests.Service
 {
-    public class OperationServiceTests : TestsBase
+    public class OperationServiceTests : ServiceTestsBase<Operation>
     {
         private readonly OperationService operationSrv;
 
@@ -71,6 +72,16 @@ namespace Wrhs.Data.Tests.Service
             result.Shifts.Where(s=>s.Location=="loc").Should().HaveCount(2);
             result.Document.Type.Should().Be(DocumentType.Delivery);
             result.Document.Lines.Should().HaveCount(1);
+        }
+
+        protected override Operation CreateEntity(int i)
+        {
+            return new Operation();
+        }
+
+        protected override BaseService<Operation> GetService()
+        {
+            return operationSrv as BaseService<Operation>;
         }
     }
 }
