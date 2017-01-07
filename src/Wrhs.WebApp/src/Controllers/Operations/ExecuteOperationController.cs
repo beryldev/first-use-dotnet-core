@@ -15,12 +15,10 @@ namespace Wrhs.WebApp.Controllers.Operations
             this.cmdBus = cmdBus;
         } 
 
-        [HttpPost("release/{guid}")]
-        [HttpPost("relocation/{guid}")]
-        [HttpPost("delivery/{guid}")]
-        public IActionResult Execute(string guid, [FromBody]ExecuteOperationCommand command)
+        [HttpPost("{guid}")]
+        public IActionResult Execute(string guid)
         {
-            command.OperationGuid = guid;
+            var command = new ExecuteOperationCommand { OperationGuid = guid };
             return HandleCommand(command);
         }
 
