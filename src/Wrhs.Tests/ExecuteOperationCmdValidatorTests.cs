@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using Moq;
 using Wrhs.Common;
-using Wrhs.Core;
 using Xunit;
 
 namespace Wrhs.Tests
@@ -16,11 +16,13 @@ namespace Wrhs.Tests
             operationSrvMock = new Mock<IOperationService>();
             operationSrvMock.Setup(m=>m.CheckOperationGuidExists(It.IsAny<string>())).Returns(true);
             operationSrvMock.Setup(m=>m.GetOperationByGuid(It.IsAny<string>()))
-                .Returns(new Operation());
+                .Returns(new Operation{Shifts = new List<Shift>{
+                    new Shift { ProductId=1, Quantity=10, Location="loc1"}
+                }});
 
             command = CreateCommand();
 
-            validator = CreateValidator(operationSrvMock.Object);
+            validator = new ExecuteOperationCommandValidator(operationSrvMock.Object);
         }
 
         [Theory]
@@ -47,14 +49,19 @@ namespace Wrhs.Tests
             AssertSingleError(results, "OperationGuid");
         }
 
+        [Fact]
+        public void ShouldReturnErrorWhenOperationNotProcessedTotaly()
+        {
+
+            var results = validator.Validate(command);
+
+            AssertSingleError(results, "OperationGuid");
+        }
+
         protected ExecuteOperationCommand CreateCommand()
         {
             return new ExecuteOperationCommand { OperationGuid = "some-guid"} ;
         }
 
-        protected IValidator<ExecuteOperationCommand> CreateValidator(IOperationService operationSrv)
-        {
-            return new ExecuteOperationCommandValidator(operationSrv);
-        }
     }
 }
