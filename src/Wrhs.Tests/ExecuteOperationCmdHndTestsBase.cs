@@ -9,25 +9,23 @@ using Xunit;
 
 namespace Wrhs.Tests
 {
-    public abstract class ExecuteOperationCmdHndTestsBase<TCommand, TEvent>
-        where TCommand : ExecuteOperationCommand
-        where TEvent : ExecuteOperationEvent
+    public class ExecuteOperationCmdHndTests
     {
-        protected readonly TCommand command;
-        protected readonly ICommandHandler<TCommand> handler;
-        protected readonly Mock<IValidator<TCommand>> validatorMock;
+        protected readonly ExecuteOperationCommand command;
+        protected readonly ICommandHandler<ExecuteOperationCommand> handler;
+        protected readonly Mock<IValidator<ExecuteOperationCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly Mock<IOperationService> operationSrvMock;
         protected readonly Mock<IDocumentPersist> docPersistMock;
         protected readonly Mock<IShiftPersist> shiftPersistMock;
         protected readonly Mock<IOperationPersist> operationPersistMock;
 
-        protected ExecuteOperationCmdHndTestsBase()
+        public ExecuteOperationCmdHndTests()
         {
             eventBusMock = new Mock<IEventBus>();
             
-            validatorMock = new Mock<IValidator<TCommand>>();
-            validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
+            validatorMock = new Mock<IValidator<ExecuteOperationCommand>>();
+            validatorMock.Setup(m=>m.Validate(It.IsAny<ExecuteOperationCommand>()))
                 .Returns(new List<ValidationResult>());
 
             operationSrvMock = new Mock<IOperationService>();
@@ -46,14 +44,26 @@ namespace Wrhs.Tests
             handler = CreateHandler(validatorMock.Object, eventBusMock.Object, parameters);
         }
 
-        protected abstract TCommand CreateCommand();
+        protected ExecuteOperationCommand CreateCommand()
+        {
+            return new ExecuteOperationCommand { OperationGuid = "some-guid"};
+        }
 
-        protected abstract ICommandHandler<TCommand> CreateHandler(IValidator<TCommand> validator,
-            IEventBus eventBus, HandlerParameters parameters);
+        protected ICommandHandler<ExecuteOperationCommand> CreateHandler(IValidator<ExecuteOperationCommand> validator,
+            IEventBus eventBus, HandlerParameters parameters)
+        {
+            return new ExecuteOperationCommandHandler(validator, eventBus, parameters);
+        }
 
-        protected abstract OperationType GetExpectedOperationType();
+        protected OperationType GetExpectedOperationType()
+        {
+            return OperationType.Delivery;
+        }
 
-        protected abstract DocumentType GetExpectedDocumentType();
+        protected DocumentType GetExpectedDocumentType()
+        {
+            return DocumentType.Delivery;
+        }
 
         [Fact]
         public void ShouldChangeDocumentStateToExecuted()
@@ -112,7 +122,7 @@ namespace Wrhs.Tests
         [Fact]
         public void ShouldOnlyThrowValidationExceptionWhenValidationFail()
         {
-            validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
+            validatorMock.Setup(m=>m.Validate(It.IsAny<ExecuteOperationCommand>()))
                 .Returns(new List<ValidationResult>{new ValidationResult("Field", "Message")});
 
             Assert.Throws<CommandValidationException>(()=>{

@@ -1,8 +1,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Wrhs.Delivery;
-using Wrhs.Release;
-using Wrhs.Relocation;
+using Wrhs.Common;
 using Wrhs.WebApp.Controllers.Operations;
 using Xunit;
 
@@ -18,64 +16,22 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnOkOnExecuteDeliveryWhenSuccess()
+        public void ShouldReturnOkOnExecuteWhenSuccess()
         {
-            var command = new ExecuteDeliveryOperationCommand();
+            var command = new ExecuteOperationCommand();
 
-            var result = controller.ExecuteDelivery("some-guid", command);
+            var result = controller.Execute("some-guid", command);
 
             result.Should().BeOfType<OkResult>();   
         }
 
         [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnExecuteDeliveryWhenValidationFail()
+        public void ShouldReturnBadRequestWithErrorsOnExecuteWhenValidationFail()
         {
-            var command = new ExecuteDeliveryOperationCommand();
+            var command = new ExecuteOperationCommand();
             SetupCmdBusValidationFails(command);
 
-            var result = controller.ExecuteDelivery("some-guid", command);
-
-            AssertBadRequest(result);
-        }
-
-        [Fact]
-        public void ShouldReturnOkOnExecuteRelocationWhenSuccess()
-        {
-            var command = new ExecuteRelocationOperationCommand();
-
-            var result = controller.ExecuteRelocation("some-guid", command);
-
-            result.Should().BeOfType<OkResult>();   
-        }
-
-        [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnExecuteRelocationWhenValidationFail()
-        {
-            var command = new ExecuteRelocationOperationCommand();
-            SetupCmdBusValidationFails(command);
-
-            var result = controller.ExecuteRelocation("some-guid", command);
-
-            AssertBadRequest(result);
-        }
-        
-        [Fact]
-        public void ShouldReturnOkOnExecuteReleaseWhenSuccess()
-        {
-            var command = new ExecuteReleaseOperationCommand();
-
-            var result = controller.ExecuteRelease("some-guid", command);
-
-            result.Should().BeOfType<OkResult>();   
-        }
-
-        [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnExecuteReleaseWhenValidationFail()
-        {
-            var command = new ExecuteReleaseOperationCommand();
-            SetupCmdBusValidationFails(command);
-
-            var result = controller.ExecuteRelease("some-guid", command);
+            var result = controller.Execute("some-guid", command);
 
             AssertBadRequest(result);
         }

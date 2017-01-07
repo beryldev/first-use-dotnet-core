@@ -5,18 +5,18 @@ using Xunit;
 
 namespace Wrhs.Tests
 {
-    public abstract class ExecuteOperationCmdValidatorTestsBase<TCommand>
-        : CommandValidatorTestsBase<TCommand> where TCommand : ExecuteOperationCommand
+    public class ExecuteOperationCmdValidatorTests
+        : CommandValidatorTestsBase<ExecuteOperationCommand>
     {
         protected readonly Mock<IOperationService> operationSrvMock;
-        protected readonly TCommand command;
+        protected readonly ExecuteOperationCommand command;
 
-        public ExecuteOperationCmdValidatorTestsBase()
+        public ExecuteOperationCmdValidatorTests()
         {       
             operationSrvMock = new Mock<IOperationService>();
             operationSrvMock.Setup(m=>m.CheckOperationGuidExists(It.IsAny<string>())).Returns(true);
             operationSrvMock.Setup(m=>m.GetOperationByGuid(It.IsAny<string>()))
-                .Returns(new Operation { Type = GetValidOperationType()});
+                .Returns(new Operation());
 
             command = CreateCommand();
 
@@ -47,24 +47,14 @@ namespace Wrhs.Tests
             AssertSingleError(results, "OperationGuid");
         }
 
-        [Fact]
-        public void ShouldReturnErrorWhenInvalidOperationType()
+        protected ExecuteOperationCommand CreateCommand()
         {
-            operationSrvMock.Setup(m=>m.GetOperationByGuid(It.IsAny<string>()))
-                .Returns(new Operation { Type = GetInvalidOperationType()});
-
-            var results = validator.Validate(command);
-
-            AssertSingleError(results, "OperationGuid");
+            return new ExecuteOperationCommand { OperationGuid = "some-guid"} ;
         }
 
-        protected abstract TCommand CreateCommand();
-
-        protected abstract IValidator<TCommand> CreateValidator(IOperationService operationSrv);
-
-        protected abstract OperationType GetValidOperationType();
-
-        protected abstract OperationType GetInvalidOperationType();
-
+        protected IValidator<ExecuteOperationCommand> CreateValidator(IOperationService operationSrv)
+        {
+            return new ExecuteOperationCommandValidator(operationSrv);
+        }
     }
 }

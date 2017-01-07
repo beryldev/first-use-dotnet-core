@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
-using Wrhs.Delivery;
-using Wrhs.Release;
-using Wrhs.Relocation;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
@@ -17,22 +15,10 @@ namespace Wrhs.WebApp.Controllers.Operations
             this.cmdBus = cmdBus;
         } 
 
-        [HttpPost("delivery/{guid}")]
-        public IActionResult ExecuteDelivery(string guid, [FromBody]ExecuteDeliveryOperationCommand command)
-        {
-            command.OperationGuid = guid;
-            return HandleCommand(command);
-        }
-
-        [HttpPost("relocation/{guid}")]
-        public IActionResult ExecuteRelocation(string guid, [FromBody]ExecuteRelocationOperationCommand command)
-        {
-            command.OperationGuid = guid;
-            return HandleCommand(command);
-        }
-
         [HttpPost("release/{guid}")]
-        public IActionResult ExecuteRelease(string guid, [FromBody]ExecuteReleaseOperationCommand command)
+        [HttpPost("relocation/{guid}")]
+        [HttpPost("delivery/{guid}")]
+        public IActionResult Execute(string guid, [FromBody]ExecuteOperationCommand command)
         {
             command.OperationGuid = guid;
             return HandleCommand(command);

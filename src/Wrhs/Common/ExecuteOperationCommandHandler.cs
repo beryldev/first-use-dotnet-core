@@ -5,17 +5,15 @@ using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public abstract class ExecuteOperationCommandHandler<TCommand, TEvent>
-        : CommandHandler<TCommand, TEvent>
-        where TCommand : ExecuteOperationCommand
-        where TEvent : ExecuteOperationEvent
+    public class ExecuteOperationCommandHandler
+        : CommandHandler<ExecuteOperationCommand, ExecuteOperationEvent>
     {
         protected readonly IOperationService operationSrv;
         protected readonly IOperationPersist operationPersist;
         protected readonly IDocumentPersist docPersist;
         protected readonly IShiftPersist shiftPersist;  
 
-       public ExecuteOperationCommandHandler(IValidator<TCommand> validator, IEventBus eventBus,
+       public ExecuteOperationCommandHandler(IValidator<ExecuteOperationCommand> validator, IEventBus eventBus,
             HandlerParameters parameters) : base(validator, eventBus)
         {
             this.operationSrv = parameters.OperationService;
@@ -24,12 +22,12 @@ namespace Wrhs.Common
             this.shiftPersist = parameters.ShiftPersist;           
         }   
 
-        protected override void ProcessInvalidCommand(TCommand command, IEnumerable<ValidationResult> results)
+        protected override void ProcessInvalidCommand(ExecuteOperationCommand command, IEnumerable<ValidationResult> results)
         {
             throw new CommandValidationException("Invalid command.", command, results);
         } 
 
-        protected override TEvent ProcessValidCommand(TCommand command)
+        protected override ExecuteOperationEvent ProcessValidCommand(ExecuteOperationCommand command)
         {
             var operation = operationSrv.GetOperationByGuid(command.OperationGuid);
 
@@ -48,7 +46,11 @@ namespace Wrhs.Common
             return CreateEvent(operation, DateTime.UtcNow);
         }
 
-        protected abstract TEvent CreateEvent(Operation operation, DateTime executedAt);
+
+        protected ExecuteOperationEvent CreateEvent(Operation operation, DateTime executedAt)
+        {
+            return new ExecuteOperationEvent(operation, executedAt);
+        }
 
     }
 

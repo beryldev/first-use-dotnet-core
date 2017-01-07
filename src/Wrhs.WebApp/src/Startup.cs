@@ -129,6 +129,12 @@ namespace Wrhs.WebApp
                 return new StockService(context);
             });
 
+            services.AddTransient(typeof(IShiftPersist), (IServiceProvider provider)=>
+            {
+                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
+                return new ShiftPersist(context);
+            });
+
             services.AddTransient(typeof(IEventBus), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
@@ -145,6 +151,7 @@ namespace Wrhs.WebApp
                 var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
                 var docSrv = provider.GetService(typeof(IDocumentService)) as IDocumentService;
                 var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
+                var shiftPersist = provider.GetService(typeof(IShiftPersist)) as IShiftPersist;
                 var commands = new Dictionary<Type, Func<ICommandHandler>>
                 {
                     { typeof(CreateDeliveryDocumentCommand), ()=>{
@@ -174,6 +181,17 @@ namespace Wrhs.WebApp
                     { typeof(BeginOperationCommand), ()=>{
                         var validator = new BeginOperationCommandValidator(docSrv, operationSrv);
                         return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
+                    }},
+                    { typeof(ExecuteOperationCommand), ()=>{
+                        var validator = new ExecuteOperationCommandValidator(operationSrv);
+                        var parameters = new HandlerParameters
+                        {
+                            OperationService = operationSrv,
+                            OperationPersist = operationPersist,
+                            DocumentPersist = docPersist,
+                            ShiftPersist = shiftPersist
+                        };
+                        return new ExecuteOperationCommandHandler(validator, eventBus, parameters);
                     }}
                 };
 
