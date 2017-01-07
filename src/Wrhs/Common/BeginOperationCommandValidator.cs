@@ -3,14 +3,14 @@ using Wrhs.Core;
 
 namespace Wrhs.Common
 {
-    public abstract class BeginOperationCommandValidator<TCommand>
-        : CommandValidator<TCommand> where TCommand : BeginOperationCommand
+    public class BeginOperationCommandValidator
+        : CommandValidator<BeginOperationCommand>
     {
         protected readonly IDocumentService documentSrv;
         protected readonly IOperationService operationSrv;
         protected readonly OperationInfoValidator operationValidator;
 
-        protected BeginOperationCommandValidator(IDocumentService documentSrv,
+        public BeginOperationCommandValidator(IDocumentService documentSrv,
             IOperationService operationSrv)
         {
             this.documentSrv = documentSrv;
@@ -18,7 +18,7 @@ namespace Wrhs.Common
             operationValidator = new OperationInfoValidator(operationSrv, true);
         }
 
-        public override IEnumerable<ValidationResult> Validate(TCommand command)
+        public override IEnumerable<ValidationResult> Validate(BeginOperationCommand command)
         {
             results.AddRange(operationValidator.Validate(command));
 
@@ -29,13 +29,10 @@ namespace Wrhs.Common
             if(document.State != DocumentState.Confirmed)
                 AddValidationResult("DocumentId", $"Invalid document state: {document.State}");
 
-            if(document.Type != GetExpectedDocumentType())
-                AddValidationResult("OperationGuid", 
-                    $"Invalid document type. Expected: {GetExpectedDocumentType()} given: {document.Type}");
-
+            if(command.OperationType != (OperationType)document.Type)
+                AddValidationResult("OperationType", "Operation type inconsistent with document type");
+            
             return results;
         }
-
-        protected abstract DocumentType GetExpectedDocumentType();
     }
 }

@@ -171,17 +171,9 @@ namespace Wrhs.WebApp
                         var validator = new DeleteProductCommandValidator();
                         return new DeleteProductCommandHandler(validator, eventBus, productSrv, productPersist);
                     }},
-                    { typeof(BeginDeliveryOperationCommand), ()=>{
-                        var validator = new BeginDeliveryOperationCommandValidator(docSrv, operationSrv);
-                        return new BeginDeliveryOperationCommandHandler(validator, eventBus, operationPersist);
-                    }},
-                    { typeof(BeginRelocationOperationCommand), ()=>{
-                        var validator = new BeginRelocationOperationCommandValidator(docSrv, operationSrv);
-                        return new BeginRelocationOperationCommandHandler(validator, eventBus, operationPersist);
-                    }},
-                    { typeof(BeginReleaseOperationCommand), ()=>{
-                        var validator = new BeginReleaseOperationCommandValidator(docSrv, operationSrv);
-                        return new BeginReleaseOperationCommandHandler(validator, eventBus, operationPersist);
+                    { typeof(BeginOperationCommand), ()=>{
+                        var validator = new BeginOperationCommandValidator(docSrv, operationSrv);
+                        return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
                     }}
                 };
 

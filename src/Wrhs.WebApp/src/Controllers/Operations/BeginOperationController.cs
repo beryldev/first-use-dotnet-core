@@ -2,9 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
-using Wrhs.Delivery;
-using Wrhs.Release;
-using Wrhs.Relocation;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
@@ -19,20 +16,23 @@ namespace Wrhs.WebApp.Controllers.Operations
         }
 
         [HttpPost("delivery")]
-        public IActionResult BeginDelivery([FromBody]BeginDeliveryOperationCommand command)
+        public IActionResult BeginDelivery([FromBody]BeginOperationCommand command)
         {
+            command.OperationType = OperationType.Delivery;
             return HandleCommand(command);
         }
 
         [HttpPost("relocation")]
-        public IActionResult BeginRelocation([FromBody]BeginRelocationOperationCommand command)
+        public IActionResult BeginRelocation([FromBody]BeginOperationCommand command)
         {
+            command.OperationType = OperationType.Relocation;
             return HandleCommand(command);
         }
 
         [HttpPost("release")]
-        public IActionResult BeginRelease([FromBody]BeginReleaseOperationCommand command)
+        public IActionResult BeginRelease([FromBody]BeginOperationCommand command)
         {
+            command.OperationType = OperationType.Release;
            return HandleCommand(command);
         }
 

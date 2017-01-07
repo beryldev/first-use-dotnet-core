@@ -1,8 +1,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Wrhs.Delivery;
-using Wrhs.Release;
-using Wrhs.Relocation;
+using Wrhs.Common;
 using Wrhs.WebApp.Controllers.Operations;
 using Xunit;
 
@@ -20,7 +18,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithGuidOnBeginDelivery()
         {
-            var command = new BeginDeliveryOperationCommand();
+            var command = new BeginOperationCommand();
 
             var result = controller.BeginDelivery(command);
 
@@ -30,7 +28,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnBadRequestWithErrorsOnBeginDeliveryWhenValidationFail()
         {
-            var command = new BeginDeliveryOperationCommand();
+            var command = new BeginOperationCommand();
             SetupCmdBusValidationFails(command);
 
             var result = controller.BeginDelivery(command);
@@ -41,7 +39,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithGuidOnBeginRelocation()
         {
-            var command = new BeginRelocationOperationCommand();
+            var command = new BeginOperationCommand();
 
             var result = controller.BeginRelocation(command);
 
@@ -51,7 +49,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnBadRequestWithErrorsOnBeginRelocationWhenValidationFail()
         {
-            var command = new BeginRelocationOperationCommand();
+            var command = new BeginOperationCommand();
             SetupCmdBusValidationFails(command);
 
             var result = controller.BeginRelocation(command);
@@ -62,7 +60,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithGuidOnBeginRelease()
         {
-            var command = new BeginReleaseOperationCommand();
+            var command = new BeginOperationCommand();
 
             var result = controller.BeginRelease(command);
 
@@ -72,7 +70,7 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnBadRequestWithErrorsOnBeginReleaseWhenValidationFail()
         {
-            var command = new BeginReleaseOperationCommand();
+            var command = new BeginOperationCommand();
             SetupCmdBusValidationFails(command);
 
             var result = controller.BeginRelease(command);

@@ -5,32 +5,45 @@ using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public abstract class BeginOperationCommandHandler<TCommand, TEvent>
-        : CommandHandler<TCommand, TEvent>
-        where TCommand : BeginOperationCommand
-        where TEvent : BeginOperationEvent
+    public class BeginOperationCommandHandler 
+        : CommandHandler<BeginOperationCommand, BeginOperationEvent>
     {
         protected readonly IOperationPersist operationPersist;
 
-        protected BeginOperationCommandHandler(IValidator<TCommand> validator, IEventBus eventBus,
+        public BeginOperationCommandHandler(IValidator<BeginOperationCommand> validator, IEventBus eventBus,
             IOperationPersist operationPersist) : base(validator, eventBus)
         {
             this.operationPersist = operationPersist;
         }
 
-        protected override void ProcessInvalidCommand(TCommand command, IEnumerable<ValidationResult> results)
+        protected override void ProcessInvalidCommand(BeginOperationCommand command, IEnumerable<ValidationResult> results)
         {
             throw new CommandValidationException("Invalid command.", command, results);
         }
 
-        protected override TEvent ProcessValidCommand(TCommand command)
+        protected override BeginOperationEvent ProcessValidCommand(BeginOperationCommand command)
         {
             var operation = RegisterOperation(command);
             return CreateEvent(operation, DateTime.UtcNow);
         }
 
-        protected abstract Operation RegisterOperation(TCommand command);
+         protected BeginOperationEvent CreateEvent(Operation operation, DateTime createdAt)
+        {
+            return new BeginOperationEvent(operation, createdAt);
+        }
 
-        protected abstract TEvent CreateEvent(Operation operation, DateTime createdAt);
+        protected Operation RegisterOperation(BeginOperationCommand command)
+        {
+            var operation = new Operation
+            {
+                Type = command.OperationType,
+                DocumentId = command.DocumentId,
+                OperationGuid = command.OperationGuid
+            };
+
+            operationPersist.Save(operation);
+
+            return operation;
+        }
     }
 }

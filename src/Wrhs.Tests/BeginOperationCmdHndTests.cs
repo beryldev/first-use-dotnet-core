@@ -8,20 +8,18 @@ using Xunit;
 
 namespace Wrhs.Tests
 {
-    public abstract class BeginOperationCmdHndTestsBase<TCommand, TEvent>
-        where TCommand : BeginOperationCommand
-        where TEvent : BeginOperationEvent
+    public class BeginOperationCmdHndTests
     {
-        protected readonly Mock<IValidator<TCommand>> validatorMock;
+        protected readonly Mock<IValidator<BeginOperationCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly Mock<IOperationPersist> operationPersistMock;
-        protected readonly BeginOperationCommandHandler<TCommand, TEvent> handler;
-        protected readonly TCommand command;
+        protected readonly BeginOperationCommandHandler handler;
+        protected readonly BeginOperationCommand command;
 
-        protected BeginOperationCmdHndTestsBase()
+        public BeginOperationCmdHndTests()
         {
-            validatorMock = new Mock<IValidator<TCommand>>();
-            validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
+            validatorMock = new Mock<IValidator<BeginOperationCommand>>();
+            validatorMock.Setup(m=>m.Validate(It.IsAny<BeginOperationCommand>()))
                 .Returns(new List<ValidationResult>());
 
             eventBusMock = new Mock<IEventBus>();
@@ -34,12 +32,26 @@ namespace Wrhs.Tests
                 operationPersistMock.Object);
         }
 
-        protected abstract TCommand CreateCommand();
+        protected BeginOperationCommand CreateCommand()
+        {
+            return new BeginOperationCommand
+            {
+                DocumentId = 1,
+                OperationGuid = "some-guid",
+                OperationType = OperationType.Delivery
+            };
+        }
 
-        protected abstract BeginOperationCommandHandler<TCommand, TEvent> CreateCommandHandler(IValidator<TCommand> validator,
-            IEventBus eventBus, IOperationPersist operationPersist);
+        protected BeginOperationCommandHandler CreateCommandHandler(IValidator<BeginOperationCommand> validator,
+            IEventBus eventBus, IOperationPersist operationPersist)
+        {
+            return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
+        }
 
-        protected abstract OperationType GetValidOperationType();
+        protected OperationType GetValidOperationType()
+        {
+            return OperationType.Delivery;
+        }
         
         [Fact]
         public void ShouldRegisterNewOperationWhenCommandValid()
@@ -65,8 +77,8 @@ namespace Wrhs.Tests
             var validOperationGuid = false;
             var validOperationType = false;
             
-            eventBusMock.Setup(m=>m.Publish(It.IsAny<TEvent>()))
-                .Callback((TEvent @event)=>{
+            eventBusMock.Setup(m=>m.Publish(It.IsAny<BeginOperationEvent>()))
+                .Callback((BeginOperationEvent @event)=>{
                     validDocumentId = @event.Operation.DocumentId == command.DocumentId;
                     validOperationGuid = @event.Operation.OperationGuid == command.OperationGuid;
                     validOperationType = @event.Operation.Type == GetValidOperationType();  
@@ -74,7 +86,7 @@ namespace Wrhs.Tests
 
             handler.Handle(command);
 
-            eventBusMock.Verify(m=>m.Publish(It.IsAny<TEvent>()), Times.Once());
+            eventBusMock.Verify(m=>m.Publish(It.IsAny<BeginOperationEvent>()), Times.Once());
             validDocumentId.Should().BeTrue();
             validOperationGuid.Should().BeTrue();
             validOperationType.Should().BeTrue();
@@ -83,7 +95,7 @@ namespace Wrhs.Tests
         [Fact]
         public void ShouldOnlyThrowValidationExceptionWhenValidationFails()
         {
-            validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
+            validatorMock.Setup(m=>m.Validate(It.IsAny<BeginOperationCommand>()))
                 .Returns(new List<ValidationResult>{new ValidationResult("Field", "Message")});
 
             Assert.Throws<CommandValidationException>(()=>{
@@ -91,7 +103,7 @@ namespace Wrhs.Tests
             });
 
             operationPersistMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Never());
-            eventBusMock.Verify(m=>m.Publish(It.IsAny<TEvent>()), Times.Never());
+            eventBusMock.Verify(m=>m.Publish(It.IsAny<BeginOperationEvent>()), Times.Never());
         }  
     }
 }

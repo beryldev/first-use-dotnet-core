@@ -7,14 +7,13 @@ using Xunit;
 
 namespace Wrhs.Tests
 {
-    public abstract class BeginOperationCmdValidatorTestsBase<T>
-        where T : BeginOperationCommand
+    public class BeginOperationCmdValidatorTests
     {
         private readonly Mock<IDocumentService> documentSrvMock;
         private readonly Mock<IOperationService> operationSrvMock;
-        private readonly IValidator<T> validator;
+        private readonly IValidator<BeginOperationCommand> validator;
 
-        protected BeginOperationCmdValidatorTestsBase()
+        public BeginOperationCmdValidatorTests()
         {
             documentSrvMock = new Mock<IDocumentService>();
             documentSrvMock.Setup(m=>m.CheckDocumentExistsById(It.IsAny<int>())).Returns(true);
@@ -23,17 +22,24 @@ namespace Wrhs.Tests
             operationSrvMock = new Mock<IOperationService>();
             operationSrvMock.Setup(m=>m.CheckOperationGuidExists(It.IsAny<string>()))
                 .Returns(false);
-            validator = CreateValidator(documentSrvMock.Object, operationSrvMock.Object);
+
+            validator = new BeginOperationCommandValidator(documentSrvMock.Object, operationSrvMock.Object);
+            
         }
 
-        protected abstract IValidator<T> CreateValidator(IDocumentService documentSrv,
-            IOperationService operationSrv);
+        private BeginOperationCommand CreateCommand()
+        {
+            return new BeginOperationCommand
+            {
+                DocumentId = 1,
+                OperationGuid = "some-guid"
+            };
+        }
 
-        protected abstract T CreateCommand();
-
-        protected abstract DocumentType GetValidDocumentType();
-
-        protected abstract DocumentType GetInvalidDocumentType();
+        private DocumentType GetValidDocumentType()
+        {
+            return DocumentType.Delivery;
+        }
 
         [Theory]
         [InlineData(null)]
@@ -93,17 +99,21 @@ namespace Wrhs.Tests
             results.Select(x=>x.Field).Should().Contain("OperationGuid");
         }
 
-        [Fact]
-        public void ShouldReturnErrorWhenInvalidDocumentType()
+        [Theory]
+        [InlineDataAttribute(OperationType.Delivery, DocumentType.Release)]
+        [InlineDataAttribute(OperationType.Relocation, DocumentType.Delivery)]
+        [InlineDataAttribute(OperationType.Release, DocumentType.Relocation)]
+        public void ShouldReturnErrorWhenInvalidOperationType(OperationType operTypeCommand, DocumentType docType)
         {
             var command = CreateCommand();
+            command.OperationType = operTypeCommand;
             documentSrvMock.Setup(m=>m.GetDocumentById(It.IsAny<int>()))
-                .Returns(new Document{ Type = GetInvalidDocumentType(), State=DocumentState.Confirmed});
+                .Returns(new Document{ Type = docType, State=DocumentState.Confirmed});
 
             var results = validator.Validate(command);
 
             results.Should().HaveCount(1);
-            results.Select(x=>x.Field).Should().Contain("OperationGuid");
+            results.Select(x=>x.Field).Should().Contain("OperationType");
         }
     }
 }
