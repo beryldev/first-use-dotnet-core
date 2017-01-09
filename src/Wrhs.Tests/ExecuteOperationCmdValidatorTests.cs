@@ -85,7 +85,7 @@ namespace Wrhs.Tests
             AssertSingleError(results, "OperationGuid");
         }
 
-         [Fact]
+        [Fact]
         public void ShouldReturnErrorWhenReleaseOperationNotProcessedTotaly()
         {
             operationSrvMock.Setup(m=>m.GetOperationByGuid(It.IsAny<string>()))
@@ -102,6 +102,35 @@ namespace Wrhs.Tests
                         {
                             new DocumentLine { ProductId=1, Quantity=5, SrcLocation="loc1"},
                             new DocumentLine { ProductId=2, Quantity=10, SrcLocation="loc2"}
+                        }
+                    }
+                });
+
+            var results = validator.Validate(command);
+
+            AssertSingleError(results, "OperationGuid");
+        }
+
+        [Fact]
+        public void ShouldReturnErrorWhenRelocationOperationNotProcessedTotaly()
+        {
+            operationSrvMock.Setup(m=>m.GetOperationByGuid(It.IsAny<string>()))
+                .Returns(new Operation
+                {
+                    Type = OperationType.Relocation,
+                    Shifts = new List<Shift>
+                    {
+                        new Shift {ProductId=1, Quantity=-2, Location="loc1"},
+                        new Shift {ProductId=1, Quantity=2, Location="loc2"},
+                        new Shift {ProductId=1, Quantity=-1, Location="loc1"},
+                        new Shift {ProductId=1, Quantity=1, Location="loc2"}
+                    },
+                    Document = new Document
+                    {
+                        Lines = new List<DocumentLine>
+                        {
+                            new DocumentLine { ProductId=1, Quantity=5, SrcLocation="loc1", DstLocation="loc2"},
+                            new DocumentLine { ProductId=2, Quantity=10, SrcLocation="loc2", DstLocation="loc1"}
                         }
                     }
                 });
