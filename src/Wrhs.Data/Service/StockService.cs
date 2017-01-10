@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Wrhs.Common;
 using Wrhs.Core;
 
@@ -48,15 +49,17 @@ namespace Wrhs.Data.Service
 
             var result =  context.Shifts
                 .Where(s => s.Confirmed)
+                .Include(s=>s.Product)
                 .GroupBy(s => new {a=s.ProductId, b=s.Location})
                 .Select(x => new Stock
                 {
                     ProductId = x.First().ProductId,
                     Location = x.First().Location,
-                    Quantity = x.Sum(y=>y.Quantity)
-                })
+                    Quantity = x.Sum(y=>y.Quantity),
+                    Product = x.First().Product
+                })          
                 .Skip(pg * pageSize)
-                .Take(pageSize)
+                .Take(pageSize)          
                 .ToList();
 
             return new ResultPage<Stock>(result, page, pageSize);    

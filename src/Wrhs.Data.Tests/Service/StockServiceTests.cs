@@ -84,7 +84,7 @@ namespace Wrhs.Data.Tests.Service
             context.Shifts.Add(new Shift{ OperationId=1, Confirmed = true, ProductId=2, Location="L1", Quantity = 50});
             context.SaveChanges();
 
-            var result = stockSrv.GetStocks(page:page, pageSize:pageSize);
+            var result = stockSrv.GetStocks(page, pageSize);
 
             result.Should().NotBeNull();
             result.Items.Should().HaveCount(expCount);

@@ -1,20 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using Wrhs.Common;
 
 namespace Wrhs.WebApp.Controllers
 {
     [Route("api/stock")]
     public class StockController : BaseController
     {
-        private readonly IWarehouse warehouse;
+        private readonly IStockService stockSrv;
 
-        public StockController(IWarehouse warehouse)
+        public StockController(IStockService stockSrv)
         {
-            this.warehouse = warehouse;
+            this.stockSrv = stockSrv;
         }
 
-        public IActionResult GetStocks()
+        [HttpGet]
+        public IActionResult GetStocks(int page=1, int pageSize=20)
         {
-            return Ok(warehouse.ReadStocks());
+            var result = stockSrv.GetStocks(page, pageSize);
+            return Ok(result);
         }
     }
 }
