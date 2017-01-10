@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Wrhs.Core;
 
 namespace Wrhs.Common
 {
@@ -7,5 +8,7 @@ namespace Wrhs.Common
          Stock GetStockAtLocation(int productId, string location);
 
          IEnumerable<Stock> GetProductStock(int productId);
+
+         ResultPage<Stock> GetStocks(int page, int pageSize);
     }
 }

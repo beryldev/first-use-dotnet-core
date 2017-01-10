@@ -20,7 +20,7 @@ namespace Wrhs.WebApp.Tests
         {
             var command = new ExecuteOperationCommand();
 
-            var result = controller.Execute("some-guid", command);
+            var result = controller.Execute("some-guid");
 
             result.Should().BeOfType<OkResult>();   
         }
@@ -31,7 +31,7 @@ namespace Wrhs.WebApp.Tests
             var command = new ExecuteOperationCommand();
             SetupCmdBusValidationFails(command);
 
-            var result = controller.Execute("some-guid", command);
+            var result = controller.Execute("some-guid");
 
             AssertBadRequest(result);
         }

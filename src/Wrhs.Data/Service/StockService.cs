@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Common;
+using Wrhs.Core;
 
 namespace Wrhs.Data.Service
 {
@@ -38,6 +40,26 @@ namespace Wrhs.Data.Service
                 Quantity = sum,
                 Product = context.Products.Find(productId)
             };
+        }
+
+        public ResultPage<Stock> GetStocks(int page, int pageSize)
+        {
+            var pg = page < 1 ? 0 : page-1;
+
+            var result =  context.Shifts
+                .Where(s => s.Confirmed)
+                .GroupBy(s => new {a=s.ProductId, b=s.Location})
+                .Select(x => new Stock
+                {
+                    ProductId = x.First().ProductId,
+                    Location = x.First().Location,
+                    Quantity = x.Sum(y=>y.Quantity)
+                })
+                .Skip(pg * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new ResultPage<Stock>(result, page, pageSize);    
         }
     }
 }
