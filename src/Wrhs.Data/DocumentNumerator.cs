@@ -17,10 +17,13 @@ namespace Wrhs.Data
 
         public Document AssignNumber(Document document)
         {
-            document.FullNumber = "number";
+           
             document.Number = GetNextNumber(document);
             document.Month = document.IssueDate.Month;
             document.Year = document.IssueDate.Year;
+
+            var symbol = prefixMapping[document.Type];
+            document.FullNumber = $"{symbol}/{document.Number}/{document.Month}/{document.Year}";
 
             return document;
         }

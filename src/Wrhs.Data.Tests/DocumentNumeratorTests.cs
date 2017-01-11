@@ -77,5 +77,17 @@ namespace Wrhs.Data.Tests
 
             result.Number.Should().Be(3);
         }
+
+        [Fact]
+        public void ShouldAssignFormatedFullNumber()
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, Number = 1, Month = 1, Year=2017});
+            context.SaveChanges();
+            var document = new Document { Type = DocumentType.Delivery, IssueDate=new DateTime(2017, 1, 1)};
+
+            var result = numerator.AssignNumber(document);
+
+            result.FullNumber.Should().Be("DLV/2/1/2017");
+        }
     }
 }
