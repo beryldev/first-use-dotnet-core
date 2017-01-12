@@ -36,12 +36,7 @@
             }
 
             function initNewDoc(){
-                return $http.get(service.baseUrl+'/new')
-                    .then(onSuccess);
-
-                function onSuccess(response){
-                    service.guid = response.data;
-                }
+                
             }
 
             function openNewLineModal(lineModel){

@@ -38,13 +38,12 @@
             };
 
             vm.service = newDocServiceFactory.createService(config);
-            vm.service.initNewDoc().then(function(){
-                vm.doc = vm.service.document;
-                vm.openNewLineModal = openNewLineModal;
-                vm.openChangeLineModal = vm.service.openChangeLineModal;
-                vm.removeLine = vm.service.removeLine;
-                vm.saveDocument = saveDocument;
-            });
+            vm.service.initNewDoc();
+            vm.doc = vm.service.document;
+            vm.openNewLineModal = openNewLineModal;
+            vm.openChangeLineModal = vm.service.openChangeLineModal;
+            vm.removeLine = vm.service.removeLine;
+            vm.saveDocument = saveDocument;
 
             function lineToCmd(line){
                 return {
@@ -103,7 +102,7 @@
             var filter = {
                 name: value,
                 page: 1,
-                perPage: 10
+                pageSize: 10
             };
 
             $http.get('api/product', {params: filter})

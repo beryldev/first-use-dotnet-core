@@ -24,9 +24,9 @@ namespace Wrhs.WebApp.Controllers
 
             var filter = new Dictionary<string, object>
             {
-                {"name", name},
-                {"code", code},
-                {"ean", ean}
+                {"name", name ?? string.Empty},
+                {"code", code ?? string.Empty},
+                {"ean", ean ?? string.Empty}
             };
 
             var result = productSrv.FilterProducts(filter, page, pageSize);
