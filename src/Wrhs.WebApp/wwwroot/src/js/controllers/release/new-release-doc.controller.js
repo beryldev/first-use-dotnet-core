@@ -9,7 +9,6 @@
 
     function NewReleaseDocCtrl($http, newDocServiceFactory){
         var vm = this;
-        vm.doc = {};
         vm.service = null;
         vm.openNewLineModal = null;
         vm.openChangeLineModal = null;
@@ -35,13 +34,11 @@
             }
 
             vm.service = newDocServiceFactory.createService(config);
-            vm.service.initNewDoc().then(function(){
-                vm.doc = vm.service.document;
-                vm.openNewLineModal = openNewLineModal;
-                vm.openChangeLineModal = vm.service.openChangeLineModal;
-                vm.removeLine = vm.service.removeLine;
-                vm.saveDocument = saveDocument;
-            });
+            vm.service.initNewDoc();
+            vm.openNewLineModal = openNewLineModal;
+            vm.openChangeLineModal = vm.service.openChangeLineModal;
+            vm.removeLine = vm.service.removeLine;
+            vm.saveDocument = saveDocument;
         }
 
         function lineToCmd(line){

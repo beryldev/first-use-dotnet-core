@@ -19,6 +19,8 @@
                 document: {},
                 baseUrl: '',
                 guid: '',
+                lines: [],
+                remarks: '',
                 initNewDoc: initNewDoc,
                 openNewLineModal: openNewLineModal,
                 openChangeLineModal: openChangeLineModal,
@@ -40,7 +42,6 @@
             }
 
             function openNewLineModal(lineModel){
-                console.log('open new line modal');
                 var content = { 
                     title: 'New line', 
                     line: {quantity: 1} 
@@ -50,12 +51,19 @@
             }
 
             function openChangeLineModal(line){
-                console.log('open edit line modal', line);
                 var content = {
                     title: 'Change line'
                 }
 
-                openLineModal(content, updateDocLine, line);
+                var editLine  = {
+                    product: line.product,
+                    quantity: line.quantity,
+                    srcLocation: line.srcLocation,
+                    dstLocation: line.dstLocation,
+                    index: service.lines.indexOf(line)
+                };
+
+                openLineModal(content, updateDocLine, editLine);
             }
 
             function openLineModal(content, closeCallback, lineModel){
@@ -76,42 +84,32 @@
             }
 
             function addDocLine(line){
-                var cmd = config.lineToCmd(line);
-
-                $http.post(service.baseUrl+'/new/'+service.guid+'/line', cmd)
-                    .then(onSuccess);
-
-                function onSuccess(response){
-                    service.document.lines = response.data;
-                }
+                service.lines.push(line);
             }
 
             function updateDocLine(line){
-                console.log('update', line);
-                $http.put(config.baseUrl + '/new/' + service.guid + '/line', line)
-                    .then(onSuccess);
-
-                function onSuccess(response){
-                    service.document.lines = response.data;
-                }
+                service.lines[line.index] = line;
+                line = null;
             }
 
             function removeLine(line){
-                var requestConfig = {
-                    data: line,
-                    headers: {'Content-Type': 'application/json'}
-                };
-
-                $http.delete(config.baseUrl+'/new/'+service.guid+'/line', requestConfig)
-                    .then(onSuccess);
-                
-                function onSuccess(response){
-                    service.document.lines = response.data;
-                }
+                service.lines.splice(service.lines.indexOf(line), 1);
             }
 
             function save(returnRoute){
-                $http.post(config.baseUrl + '/new/'+service.guid, service.document)
+                var document = {
+                    lines: service.lines.map(function(line){
+                        return {
+                            quantity: line.quantity,
+                            productId: line.product.id,
+                            srcLocation: line.srcLocation,
+                            dstLocation: line.dstLocation
+                        }
+                    }),
+                    remarks: service.remarks
+                };
+
+                $http.post(config.baseUrl, document)
                     .then(onSuccess);
 
                 function onSuccess(response){

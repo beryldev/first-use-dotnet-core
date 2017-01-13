@@ -10,7 +10,6 @@
 
     function NewDeliveryDocCtrl($http, $uibModal, $state, messageService, newDocServiceFactory){
         var vm = this;
-        vm.doc = {};
         vm.service = null;
         vm.openNewLineModal = null;
         vm.openChangeLineModal = null;
@@ -39,7 +38,6 @@
 
             vm.service = newDocServiceFactory.createService(config);
             vm.service.initNewDoc();
-            vm.doc = vm.service.document;
             vm.openNewLineModal = openNewLineModal;
             vm.openChangeLineModal = vm.service.openChangeLineModal;
             vm.removeLine = vm.service.removeLine;
