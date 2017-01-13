@@ -67,5 +67,16 @@ namespace Wrhs.Tests
 
             AssertSingleError(result, "Quantity");
         }
+
+        [Fact]
+        public void ShouldReturnErrorWhenNoLines()
+        {
+            var command = CreateCommand();
+            command.Lines = new List<CreateDocumentCommand.DocumentLine>();
+
+            var result = Act(command);
+
+            AssertSingleError(result, "Lines");
+        }
     }
 }

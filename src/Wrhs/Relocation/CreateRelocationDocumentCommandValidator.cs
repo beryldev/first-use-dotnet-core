@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Services;
@@ -19,6 +20,9 @@ namespace Wrhs.Relocation
 
         public override IEnumerable<ValidationResult> Validate(CreateRelocationDocumentCommand command)
         {
+            if(!command.Lines.Any())
+                AddValidationResult("Lines", "Can't register document without lines.");
+                
             foreach(var line in command.Lines)
                 results.AddRange(productValidator.Validate(line));
 

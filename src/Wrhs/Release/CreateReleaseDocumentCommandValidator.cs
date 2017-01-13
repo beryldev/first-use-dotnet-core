@@ -22,6 +22,9 @@ namespace Wrhs.Release
 
         public override IEnumerable<ValidationResult> Validate(CreateReleaseDocumentCommand command)
         {
+            if(!command.Lines.Any())
+                AddValidationResult("Lines", "Can't register document without lines.");
+                
             foreach(var line in command.Lines)
             {
                 results.AddRange(productValidator.Validate(line));
