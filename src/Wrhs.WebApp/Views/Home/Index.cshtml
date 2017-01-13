@@ -11,16 +11,15 @@
     </head>
     <body ng-app="wrhs">
         <div class="navbar navbar-default navbar-fixed-top">
-			<div class="container">
+
+			<div class="col-sm-3 col-md-2">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-              			<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
 					<a class="navbar-brand" href="#">WRHS</a>
 				</div>
+			</div>
+
+			<div class="container">
+		
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li ui-sref-active="active"><a ui-sref="stocks">Stocks</a></li>
@@ -40,8 +39,32 @@
 				</div>
 			</div>
 		</div>
-		<div class="container content-wrapper" ui-view="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3 col-md-2 sidebar">
+					<div class="content-wrapper">
+						<ul class="nav nav-sidebar" style="margin: 38px 0 18px;">
+							<li ui-sref-active="active"><a ui-sref="stocks">Stocks</a></li>
+							<li ui-sref-active="active"><a ui-sref="products">Products</a></li>
+							<li uib-dropdown ui-sref-active="active">
+								<a href uib-dropdown-toggle> Documents 
+									<span class="caret"></span> 
+								</a>
+								<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown"> 
+									<li><a ui-sref="documents.delivery">Delivery</a></li> 
+									<li><a ui-sref="documents.relocation">Relocation</a></li>
+									<li><a ui-sref="documents.release">Release</a></li>
+								</ul> 
+							</li>
+						</ul>
+					</div>			
+				</div>
+				<div class="col-sm-9 col-md-10">
+					<div class="content-wrapper" ui-view="wrapper"></div>
+				</div>
+			</div>
 		</div>
+		
 
         <script src="build/js/lib.min.js"></script>
         <script src="build/js/app.min.js"></script>
