@@ -13,6 +13,7 @@ namespace Wrhs.Common
         public int Month { get; set; }
         public int Year { get; set; }
         public DateTime IssueDate { get; set; }
+        public string Remarks { get; set; }
 
         public virtual List<DocumentLine> Lines { get; set; }
     }

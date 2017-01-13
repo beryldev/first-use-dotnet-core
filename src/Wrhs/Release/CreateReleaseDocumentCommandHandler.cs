@@ -23,6 +23,7 @@ namespace Wrhs.Release
             var document = new Document
             {
                 Type = DocumentType.Release,
+                Remarks = command.Remarks,
                 Lines = command.Lines.Select(l => new DocumentLine
                 {
                     ProductId = l.ProductId,

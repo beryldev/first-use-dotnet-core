@@ -23,6 +23,7 @@ namespace Wrhs.Delivery
             var document = new Document
             {
                 Type = DocumentType.Delivery,
+                Remarks = command.Remarks,
                 Lines = command.Lines.Select(l => new DocumentLine
                 {
                     ProductId = l.ProductId,

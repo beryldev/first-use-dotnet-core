@@ -7,6 +7,8 @@ namespace Wrhs.Common
     {
         public IEnumerable<DocumentLine> Lines { get; set; }
 
+        public string Remarks { get; set; }
+
         public class DocumentLine : IValidableProductInfo
         {
             public int ProductId { get; set; }

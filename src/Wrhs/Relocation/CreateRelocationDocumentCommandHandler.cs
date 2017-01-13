@@ -23,6 +23,7 @@ namespace Wrhs.Relocation
             var document = new Document
             {
                 Type = DocumentType.Relocation,
+                Remarks = command.Remarks,
                 Lines = command.Lines.Select(l => new DocumentLine
                 {
                     ProductId = l.ProductId,

@@ -40,17 +40,21 @@ namespace Wrhs.Tests
         public void ShouldSaveNewDocWhenCmdValid()
         { 
             var isValidDocumentType = false;
+            var passedRemarks = false;
             validatorMock.Setup(m=>m.Validate(It.IsNotNull<TCommand>()))
                 .Returns(new List<ValidationResult>());
             docPersistMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
                 .Callback((Document doc) => {
                     isValidDocumentType = doc.Type == GetDocumentType();
+                    passedRemarks = !string.IsNullOrEmpty(doc.Remarks);
                  });
 
+            command.Remarks = "some remarks";
             handler.Handle(command);
 
             docPersistMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Once());
             isValidDocumentType.Should().BeTrue();
+            passedRemarks.Should().BeTrue();
         }
 
         [Fact]

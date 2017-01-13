@@ -18,6 +18,7 @@ namespace Wrhs.Data.Migrations
                     IssueDate = table.Column<DateTime>(nullable: false),
                     Month = table.Column<int>(nullable: false),
                     Number = table.Column<int>(nullable: false),
+                    Remarks = table.Column<string>(nullable: true),
                     State = table.Column<int>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     Year = table.Column<int>(nullable: false)

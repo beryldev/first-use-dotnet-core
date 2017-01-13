@@ -29,6 +29,8 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<int>("Number");
 
+                    b.Property<string>("Remarks");
+
                     b.Property<int>("State");
 
                     b.Property<int>("Type");
