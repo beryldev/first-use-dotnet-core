@@ -32,7 +32,7 @@
             return service;
 
             function initOperation(){
-                return $http.get(service.baseUrl+'/new/'+ service.documentId)
+                return $http.post(service.baseUrl, { documentId: service.documentId})
                     .then(onSuccess);
 
                 function onSuccess(response){
@@ -43,7 +43,7 @@
             }
 
             function getState(){
-                return $http.get(service.baseUrl+'/'+service.guid)
+                return $http.get('api/operation/'+service.guid)
                     .then(onSuccess);
 
                 function onSuccess(response){

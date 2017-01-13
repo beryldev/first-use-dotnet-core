@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <h3>Document: {{ vm.service.state.baseDocument.fullNumber }}</h3>
+        <h3>Document: {{ vm.service.state.document.fullNumber }}</h3>
         <button type="button" class="btn btn-default btn-sm" ng-click="vm.service.getState()">Refresh</button>
         <table class="table table-striped">
             <thead>
@@ -13,7 +13,7 @@
                 <th></th>
             </thead>
             <tbody>
-                <tr ng-repeat="line in vm.service.state.baseDocument.lines">
+                <tr ng-repeat="line in vm.service.state.document.lines">
                     <td>{{ line.product.name }}</td>
                     <td>{{ line.product.code }}</td>
                     <td>{{ line.product.ean }}</td>
@@ -26,7 +26,7 @@
         
         <hr>
 
-        <h3>Registered allocations</h3>
+        <h3>Registered shifts</h3>
         <table class="table table-striped">
             <thead>
                 <th>Product</th>
@@ -36,7 +36,7 @@
                 <th>Location</th>
             </thead>
             <tbody>
-                <tr ng-repeat="item in vm.service.state.pendingAllocations">
+                <tr ng-repeat="item in vm.service.state.shifts">
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.product.code }}</td>
                     <td>{{ item.product.ean }}</td>
