@@ -44,10 +44,11 @@ paths.libJs = [
 ];
 
 paths.libCss = [
-    //paths.webroot + 'lib/bootstrap/dist/css/bootstrap.css',
+    paths.webroot + 'lib/bootstrap/dist/css/bootstrap.css',
     paths.webroot + 'lib/angular-ui-grid/ui-grid.css',
     paths.webroot + 'lib/toastr/toastr.css',
-    paths.webroot + 'lib/angular-ui-select/dist/select.css'
+    paths.webroot + 'lib/angular-ui-select/dist/select.css',
+    paths.webroot + 'lib/font-awesome/css/font-awesome.css'
 ];
 
 paths.libRes = [
@@ -110,9 +111,14 @@ gulp.task('min:lib:css', function () {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('min:lib', ['min:lib:js', 'min:lib:css', 'copy:lib:res']);
+gulp.task('min:lib', ['min:lib:js', 'min:lib:css', 'copy:lib:res', 'copy:lib:fonts']);
 
 gulp.task('copy:lib:res', function(){
   gulp.src(paths.libRes)
   .pipe(gulp.dest(paths.webroot+'build/css'));
+});
+
+gulp.task('copy:lib:fonts', function(){
+  gulp.src([paths.webroot + 'lib/font-awesome/fonts/*.{oft,eot,dvg,ttf,woff,woff2}'])
+  .pipe(gulp.dest(paths.webroot+'build/fonts'));
 });

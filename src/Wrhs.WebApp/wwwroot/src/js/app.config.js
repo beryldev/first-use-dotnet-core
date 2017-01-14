@@ -18,6 +18,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/product/productsList.html',
                         controller: 'ProductsListCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/product/productsListContext.html'
                     }
                 }
             })
@@ -27,6 +30,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/product/newProduct.html',
                         controller: 'NewProductCtrl as vm'
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title">New product</strong>'
                     }
                 }
             })
@@ -36,6 +42,9 @@
                     'wrapper@':{
                         templateUrl: 'templates/product/productDetails.html',
                         controller: 'ProductDetailsCtrl as vm'
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title">Product details</strong>'
                     }
                 }
             })
@@ -49,6 +58,9 @@
                     'wrapper@':{
                         templateUrl: 'templates/delivery/deliveryDocList.html',
                         controller: 'DeliveryDocListCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/delivery/deliveryDocListContext.html'
                     }
                 }
             })
@@ -58,6 +70,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/delivery/newDeliveryDoc.html',
                         controller: 'NewDeliveryDocCtrl as vm'
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title">New delivery document</strong>'
                     }
                 }
             })
@@ -67,6 +82,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/relocation/relocationDocList.html',
                         controller: 'RelocationDocListCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/relocation/relocationDocListContext.html'
                     }
                 }
             })
@@ -76,6 +94,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/relocation/newRelocationDoc.html',
                         controller: 'NewRelocationDocCtrl as vm'
+                    },
+                     'context@': {
+                        template: '<strong class="navbar-text context-title">New relocation document</strong>'
                     }
                 }
             })
@@ -85,6 +106,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/release/releaseDocList.html',
                         controller: 'ReleaseDocListCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/release/releaseDocListContext.html'
                     }
                 }
             })
@@ -94,6 +118,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/release/newReleaseDoc.html',
                         controller: 'NewReleaseDocCtrl as vm'
+                    },
+                     'context@': {
+                        template: '<strong class="navbar-text context-title">New release document</strong>'
                     }
                 }
             })
@@ -107,6 +134,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/delivery/operation.html',
                         controller: 'DeliveryOperationCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/delivery/operationContext.html'
                     }
                 }
             })
@@ -116,6 +146,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/relocation/operation.html',
                         controller: 'RelocationOperationCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/relocation/operationContext.html'
                     }
                 }
             })
@@ -125,6 +158,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/release/operation.html',
                         controller: 'ReleaseOperationCtrl as vm'
+                    },
+                    'context@': {
+                        templateUrl: 'templates/release/operationContext.html'
                     }
                 }
             })
@@ -134,6 +170,9 @@
                     'wrapper@': {
                         templateUrl: 'templates/stocksList.html',
                         controller: 'StocksListCtrl as vm'
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title">Stocks</strong>'
                     }
                 }
             });

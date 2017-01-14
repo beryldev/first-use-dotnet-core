@@ -20,22 +20,8 @@
 
 			<div class="container">
 		
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li ui-sref-active="active"><a ui-sref="stocks">Stocks</a></li>
-						<li ui-sref-active="active"><a ui-sref="products">Products</a></li>
-						<li uib-dropdown ui-sref-active="active">
-							<a href uib-dropdown-toggle> Documents 
-								<span class="caret"></span> 
-							</a>
-							<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown"> 
-								<li><a ui-sref="documents.delivery">Delivery</a></li> 
-								<li><a ui-sref="documents.relocation">Relocation</a></li>
-								<li><a ui-sref="documents.release">Release</a></li>
-							</ul> 
-						</li>
-						
-					</ul>
+				<div class="navbar-collapse collapse" ui-view="context">
+					
 				</div>
 			</div>
 		</div>
