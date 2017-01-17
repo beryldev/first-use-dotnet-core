@@ -57,16 +57,22 @@
             }
 
             function addOperationStep(){
-                $http.post(service.baseUrl+'/'+service.guid+'/step', 
-                    service.operationStep).then(onSuccess);
+                var data = {
+                    productId: service.operationStep.line.product.id,
+                    quantity: service.operationStep.quantity,
+                    dstLocation: service.operationStep.dstLocation
+                };
+
+                $http.post(service.baseUrl+'/'+service.guid+'/shift', data)
+                    .then(onSuccess);
                 
                 function onSuccess(response){
-                    service.state = response.data;
+                    service.getState();
                 }
             }
 
             function confirmOperation(){
-                $http.post(service.baseUrl+'/'+service.guid)
+                $http.post('/api/operation/'+service.guid)
                     .then(onSuccess);
 
                 function onSuccess(response){

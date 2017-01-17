@@ -25,7 +25,8 @@ namespace Wrhs.Delivery
             {
                 OperationId = operation.Id,
                 ProductId = command.ProductId,
-                Quantity = command.Quantity
+                Quantity = command.Quantity,
+                Location = command.DstLocation
             };
 
             shiftPersist.Save(shift);

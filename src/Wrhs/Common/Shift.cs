@@ -12,7 +12,7 @@ namespace Wrhs.Common
 
         public decimal Quantity { get; set; }
 
-        public string Location { get; set; }
+        public string Location { get; set; } = string.Empty;
 
         public bool Confirmed { get; set; }
 

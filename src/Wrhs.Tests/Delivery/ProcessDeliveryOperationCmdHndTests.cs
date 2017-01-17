@@ -49,11 +49,13 @@ namespace Wrhs.Tests.Delivery
             var validOperationId = false;
             var validProductId = false;
             var validQuantity = false;
+            var validLocation = false;
             var unconfirmed = false;
             var operation = new Operation { Id = 1 };
             command.ProductId = 1;
             command.Quantity = 5;
             command.OperationGuid = "guid";
+            command.DstLocation = "loc01";
             operationSrvMock.Setup(m=>m.GetOperationByGuid(command.OperationGuid))
                 .Returns(operation);
             eventBusMock.Setup(m=>m.Publish(It.IsAny<ProcessOperationEvent>()))
@@ -62,6 +64,7 @@ namespace Wrhs.Tests.Delivery
                     validOperationId = shift.OperationId == operation.Id;
                     validProductId = shift.ProductId == command.ProductId;
                     validQuantity = shift.Quantity == command.Quantity;
+                    validLocation = shift.Location == "loc01";
                     unconfirmed = !shift.Confirmed;
                 });
 
@@ -71,6 +74,7 @@ namespace Wrhs.Tests.Delivery
             validOperationId.Should().BeTrue();
             validProductId.Should().BeTrue();
             validQuantity.Should().BeTrue();
+            validLocation.Should().BeTrue();
             unconfirmed.Should().BeTrue();
         }
 

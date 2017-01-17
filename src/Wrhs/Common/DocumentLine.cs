@@ -8,8 +8,8 @@ namespace Wrhs.Common
         public int DocumentId { get; set; }
         public int ProductId { get; set; }
         public decimal Quantity { get; set; }
-        public string SrcLocation { get; set; }
-        public string DstLocation { get; set; }
+        public string SrcLocation { get; set; } = string.Empty;
+        public string DstLocation { get; set; } = string.Empty;
 
         public virtual Document Document { get; set; }
         public virtual Product Product { get; set; }
