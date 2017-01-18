@@ -52,6 +52,7 @@ namespace Wrhs.Data.Tests.Persist
                 Confirmed = false
             };
             context.Shifts.Add(shift);
+            context.SaveChanges();
 
             shift.Confirmed = true;
             shiftPersist.Update(shift);

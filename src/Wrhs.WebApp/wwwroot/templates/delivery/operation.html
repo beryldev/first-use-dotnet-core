@@ -4,17 +4,17 @@
         <table class="table table-striped">
             <thead>
                 <th>Product</th>
-                <th>Code</th>
                 <th>EAN</th>
                 <th>Quantity</th>
+                <th>Dst Location</th>
                 <th></th>
             </thead>
             <tbody>
                 <tr ng-repeat="line in vm.service.state.document.lines">
                     <td>{{ line.product.name }}</td>
-                    <td>{{ line.product.code }}</td>
                     <td>{{ line.product.ean }}</td>
                     <td>{{ line.quantity }}</td>
+                    <td>{{ line.dstLocation }}</td>
                     <td style="width: 80px;"><button type="button" ng-click="vm.service.selectLine(line)" 
                         class="btn btn-xs btn-default">Select</button></td>
                 </tr>

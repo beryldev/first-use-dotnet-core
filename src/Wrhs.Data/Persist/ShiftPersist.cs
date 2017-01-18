@@ -18,6 +18,7 @@ namespace Wrhs.Data.Persist
 
         public void Update(Shift shift)
         {
+            context.Shifts.Update(shift);
             context.SaveChanges();
         }
     }

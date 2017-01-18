@@ -34,7 +34,7 @@
         function loadData(){
             $http.get('api/stock')
                 .then(function(response){
-                    var data = response.data;
+                    var data = response.data.items;
                     vm.gridConfig.data = data;
                 });
         }

@@ -10,6 +10,7 @@
                     <th>#</th>
                     <th>Product</th>
                     <th>Quantity</th>
+                    <th>Dst Location</th>
                     <th></th>
                 </thead>
                 <tbody>
@@ -17,13 +18,14 @@
                         <td>1</td>
                         <td>{{ line.product.name }}</td>
                         <td>{{ line.quantity }}</td>
+                        <td>{{ line.dstLocation }}</td>
                         <td class="text-right">
                             <button type="button" class="btn btn-danger btn-xs" ng-click="vm.removeLine(line)">Delete</button>
                             <button type="button" class="btn btn-default btn-xs" ng-click="vm.openChangeLineModal(line)">Change</button>
                         </td>
                     </tr>
                     <tr ng-if="vm.service.lines.length == 0">
-                        <td class="text-center" colspan="4">
+                        <td class="text-center" colspan="5">
                             No lines 
                             <button class="btn btn-default btn-xs" ng-click="vm.openNewLineModal()">Add new line</button>
                         </td>
