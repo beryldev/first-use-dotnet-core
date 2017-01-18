@@ -9,7 +9,8 @@ namespace Wrhs.Relocation
     public class ProcessRelocationOperationCommandValidator
         : ProcessOperationCommandValidator<ProcessRelocationOperationCommand>
     {
-        public ProcessRelocationOperationCommandValidator(IOperationService operationSrv, IProductService productSrv) : base(operationSrv, productSrv)
+        public ProcessRelocationOperationCommandValidator(IOperationService operationSrv, IProductService productSrv) 
+            : base(operationSrv, productSrv)
         {
         }
 

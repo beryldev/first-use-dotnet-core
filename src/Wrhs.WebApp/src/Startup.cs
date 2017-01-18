@@ -182,9 +182,13 @@ namespace Wrhs.WebApp
                         var validator = new BeginOperationCommandValidator(docSrv, operationSrv);
                         return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
                     }},
-                     { typeof(ProcessDeliveryOperationCommand), ()=>{
+                    { typeof(ProcessDeliveryOperationCommand), ()=>{
                         var validator = new ProcessDeliveryOperationCommandValidator(operationSrv, productSrv);
                         return new ProcessDeliveryOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+                    }},
+                     { typeof(ProcessRelocationOperationCommand), ()=>{
+                        var validator = new ProcessRelocationOperationCommandValidator(operationSrv, productSrv);
+                        return new ProcessRelocationOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
                     }},
                     { typeof(ExecuteOperationCommand), ()=>{
                         var validator = new ExecuteOperationCommandValidator(operationSrv);

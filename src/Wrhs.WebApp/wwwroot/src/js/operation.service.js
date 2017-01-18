@@ -60,7 +60,8 @@
                 var data = {
                     productId: service.operationStep.line.product.id,
                     quantity: service.operationStep.quantity,
-                    dstLocation: service.operationStep.dstLocation
+                    dstLocation: service.operationStep.dstLocation,
+                    srcLocation: service.operationStep.srcLocation
                 };
 
                 $http.post(service.baseUrl+'/'+service.guid+'/shift', data)
