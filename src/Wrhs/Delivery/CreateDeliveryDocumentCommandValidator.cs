@@ -19,7 +19,12 @@ namespace Wrhs.Delivery
         public override IEnumerable<ValidationResult> Validate(CreateDeliveryDocumentCommand command)
         {
             foreach(var line in command.Lines)
+            {
                 results.AddRange(productValidator.Validate(line));
+
+                if(string.IsNullOrWhiteSpace(line.DstLocation))
+                    AddValidationResult("DstLocation", "Invalid destination location address.");
+            }
 
             if(!command.Lines.Any())
                 AddValidationResult("Lines", "Can't register document without lines.");

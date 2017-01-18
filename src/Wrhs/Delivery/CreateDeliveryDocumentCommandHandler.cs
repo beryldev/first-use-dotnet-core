@@ -27,7 +27,8 @@ namespace Wrhs.Delivery
                 Lines = command.Lines.Select(l => new DocumentLine
                 {
                     ProductId = l.ProductId,
-                    Quantity = l.Quantity
+                    Quantity = l.Quantity,
+                    DstLocation = l.DstLocation
                 }).ToList()
             };
 
