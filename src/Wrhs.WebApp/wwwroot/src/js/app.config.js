@@ -32,7 +32,7 @@
                         controller: 'NewProductCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title">New product</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> New product</strong>'
                     }
                 }
             })
@@ -44,7 +44,7 @@
                         controller: 'ProductDetailsCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title">Product details</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> Product details</strong>'
                     }
                 }
             })
@@ -72,7 +72,7 @@
                         controller: 'NewDeliveryDocCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title">New delivery document</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> New delivery document</strong>'
                     }
                 }
             })
@@ -96,7 +96,7 @@
                         controller: 'NewRelocationDocCtrl as vm'
                     },
                      'context@': {
-                        template: '<strong class="navbar-text context-title">New relocation document</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> New relocation document</strong>'
                     }
                 }
             })
@@ -120,7 +120,7 @@
                         controller: 'NewReleaseDocCtrl as vm'
                     },
                      'context@': {
-                        template: '<strong class="navbar-text context-title">New release document</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> New release document</strong>'
                     }
                 }
             })
@@ -172,7 +172,7 @@
                         controller: 'StocksListCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title">Stocks</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-cubes margin-r" aria-hidden="true"></i> Stocks</strong>'
                     }
                 }
             });

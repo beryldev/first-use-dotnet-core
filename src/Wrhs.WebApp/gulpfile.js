@@ -45,6 +45,7 @@ paths.libJs = [
 
 paths.libCss = [
     paths.webroot + 'lib/bootstrap/dist/css/bootstrap.css',
+    paths.webroot + 'lib/bootstrap/dist/css/bootstrap-theme.css',
     paths.webroot + 'lib/angular-ui-grid/ui-grid.css',
     paths.webroot + 'lib/toastr/toastr.css',
     paths.webroot + 'lib/angular-ui-select/dist/select.css',
