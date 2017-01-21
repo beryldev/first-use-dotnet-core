@@ -189,9 +189,13 @@ namespace Wrhs.WebApp
                         var validator = new ProcessDeliveryOperationCommandValidator(operationSrv, productSrv);
                         return new ProcessDeliveryOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
                     }},
-                     { typeof(ProcessRelocationOperationCommand), ()=>{
+                    { typeof(ProcessRelocationOperationCommand), ()=>{
                         var validator = new ProcessRelocationOperationCommandValidator(operationSrv, productSrv);
                         return new ProcessRelocationOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+                    }},
+                    { typeof(ProcessReleaseOperationCommand), ()=>{
+                        var validator = new ProcessReleaseOperationCommandValidator(operationSrv, productSrv);
+                        return new ProcessReleaseOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
                     }},
                     { typeof(ExecuteOperationCommand), ()=>{
                         var validator = new ExecuteOperationCommandValidator(operationSrv);

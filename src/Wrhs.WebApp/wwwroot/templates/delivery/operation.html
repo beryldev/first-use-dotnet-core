@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-8">
         <h3>Document: {{ vm.service.state.document.fullNumber }}</h3>
         <table class="table table-striped">
             <thead>
@@ -45,8 +45,8 @@
 
     </div>
 
-    <div class="col-lg-6">
-        <h3>Allocation</h3>
+    <div class="col-lg-4">
+        <h3>Shift</h3>
 
         <div class="form-group">
             <label>Product name</label>
@@ -69,13 +69,19 @@
         </div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-primary" ng-click="vm.service.addOperationStep()">Register</button>
+            <button type="button" class="btn btn-primary" ng-click="vm.service.addOperationStep()">
+                <i class="fa fa-check margin-r"></i> Register
+            </button>
         </div>
      
     </div>
 
     <div class="col-xs-12">
-        <button type="button" class="btn btn-primary" ng-click="vm.service.confirmOperation()">Confirm operation</button>
-        <a ui-sref="documents.delivery" class="btn btn-default">Cancel</a>
+        <button type="button" class="btn btn-primary" ng-click="vm.service.confirmOperation()">
+            <i class="fa fa-flash margin-r"></i> Confirm operation
+        </button>
+        <a ui-sref="documents.delivery" class="btn btn-default">
+            <i class="fa fa-times margin-r"></i> Cancel
+        </a>
     </div>
 </div>
