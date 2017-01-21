@@ -54,14 +54,19 @@ namespace Wrhs.WebApp
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             app.UseStaticFiles();
-            
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+                
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}");
             });
+
+            using(var context = SqliteContextFactory.Create("Filename=./wrhs.db"))
+            {
+                context.Database.EnsureCreated();
+            }
         }
 
         void ConfigureDI(IServiceCollection services)
@@ -69,9 +74,7 @@ namespace Wrhs.WebApp
             services.AddTransient(typeof(WrhsContext),
                 (IServiceProvider provider) => 
                 { 
-                    var context = SqliteContextFactory.Create("Filename=./wrhs.db");
-                    //var context = InMemoryContextFactory.Create();
-                    context.Database.EnsureCreated();
+                    var context = SqliteContextFactory.Create("Filename=./wrhs.db"); 
                     return context; 
                 });
 

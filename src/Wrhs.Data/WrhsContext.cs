@@ -20,6 +20,13 @@ namespace Wrhs.Data
         public DbSet<Shift> Shifts { get; set; }
         
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>()
+                .Property(b => b.Name)
+                .HasAnnotation("CaseSensitive", false);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Filename=./wrhs.db");

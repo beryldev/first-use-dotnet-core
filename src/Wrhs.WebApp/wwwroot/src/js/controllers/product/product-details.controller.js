@@ -51,7 +51,7 @@
         }
 
          function loadData(){
-            $http.get('api/product/'+$stateParams.id+'/stocks')
+            $http.get('api/product/'+$stateParams.id+'/stock')
                 .then(function(response){
                     var data = response.data;
                     vm.gridConfig.data = data;

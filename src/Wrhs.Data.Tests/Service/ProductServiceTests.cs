@@ -182,6 +182,27 @@ namespace Wrhs.Data.Tests.Service
             result.Items.Should().HaveCount(expected);
         }
 
+        [TheoryAttribute]
+        [InlineDataAttribute("tea", "tea", 1)]
+        [InlineDataAttribute("TEA", "tEa", 1)]
+        [InlineDataAttribute("prod", "prd", 2)]
+        [InlineDataAttribute("PROD", "PRd", 2)]
+        public void ShouldIgnoreCaseOnFilter(string name, string code, int expected)
+        {
+            context.Products.Add(new Product { Name="Product 1", Code= "PRD1"});
+            context.Products.Add(new Product { Name="Tea", Code= "TEA"});
+            context.Products.Add(new Product { Name="Product 2", Code= "PRD2"});
+            context.SaveChanges();
+
+            var filter = new Dictionary<string, object>();
+            filter.Add("Name", name);
+            filter.Add("Code", code);
+
+            var result = service.FilterProducts(filter);
+
+            result.Items.Should().HaveCount(expected);
+        }
+
         protected override Product CreateEntity(int i)
         {
             return new Product { Name = $"Product {i+1}", Code = $"PROD{i+1}" };

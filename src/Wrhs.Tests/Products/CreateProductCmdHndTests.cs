@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Moq;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
@@ -59,5 +61,24 @@ namespace Wrhs.Tests.Products
             productPersistMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsAny<CreateProductEvent>()), Times.Never());
         }
+
+        [Theory]
+        [InlineData("prod1")]
+        [InlineData("PROD1")]
+        [InlineData("pRoD1")]
+        public void ShouldSaveProductWithUpperCaseCode(string code)
+        {
+            var validCase = false;
+            productPersistMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
+                .Callback((Product p) => {
+                    validCase = p.Code.Equals(code.ToUpper(), StringComparison.CurrentCulture);
+                });
+            command.Code = code;
+
+            handler.Handle(command);
+
+            validCase.Should().BeTrue();
+        }
+
     }
 }

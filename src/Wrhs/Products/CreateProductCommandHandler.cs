@@ -33,7 +33,7 @@ namespace Wrhs.Products
             var product = new Product
             {
                 Name = command.Name,
-                Code = command.Code,
+                Code = command.Code?.ToUpper(),
                 Description = command.Description
             };
 

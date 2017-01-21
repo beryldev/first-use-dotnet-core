@@ -35,7 +35,7 @@ namespace Wrhs.Products
         {
             var product = service.GetProductById(command.ProductId);
             product.Name = command.Name;
-            product.Code = command.Code;
+            product.Code = command.Code?.ToUpper();
             product.Description = command.Description;
             
             persist.Update(product);

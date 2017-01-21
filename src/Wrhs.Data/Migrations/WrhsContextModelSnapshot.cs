@@ -119,7 +119,8 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasAnnotation("CaseSensitive", false);
 
                     b.HasKey("Id");
 
