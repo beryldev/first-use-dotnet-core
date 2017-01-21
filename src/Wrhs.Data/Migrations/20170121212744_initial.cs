@@ -36,7 +36,9 @@ namespace Wrhs.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Code = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Ean = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Sku = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

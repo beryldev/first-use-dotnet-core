@@ -28,12 +28,24 @@ namespace Wrhs.Tests.Products
         [Fact]
         public void ShouldSaveNewProductWhenCmdValid()
         {
+            var passedEan = false;
+            var passedSku = false;
+
+            command.Ean = "some-ean";
+            command.Sku = "some-sku";
             validatorMock.Setup(m=>m.Validate(It.IsAny<CreateProductCommand>()))
                 .Returns(new List<ValidationResult>());
+            productPersistMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
+                .Callback((Product p)=>{
+                    passedEan = p.Ean == "some-ean";
+                    passedSku = p.Sku == "some-sku";
+                });
 
             handler.Handle(command);
 
             productPersistMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Once());
+            passedEan.Should().BeTrue();
+            passedSku.Should().BeTrue();
         }
 
         [Fact]

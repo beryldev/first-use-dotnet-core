@@ -34,6 +34,8 @@ namespace Wrhs.Products
             {
                 Name = command.Name,
                 Code = command.Code?.ToUpper(),
+                Ean = command.Ean,
+                Sku = command.Sku,
                 Description = command.Description
             };
 

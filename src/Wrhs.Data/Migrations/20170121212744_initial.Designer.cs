@@ -9,7 +9,7 @@ using Wrhs.Common;
 namespace Wrhs.Data.Migrations
 {
     [DbContext(typeof(WrhsContext))]
-    [Migration("20170121101449_initial")]
+    [Migration("20170121212744_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,8 +120,12 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Ean");
+
                     b.Property<string>("Name")
                         .HasAnnotation("CaseSensitive", false);
+
+                    b.Property<string>("Sku");
 
                     b.HasKey("Id");
 

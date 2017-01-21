@@ -119,8 +119,12 @@ namespace Wrhs.Data.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<string>("Ean");
+
                     b.Property<string>("Name")
                         .HasAnnotation("CaseSensitive", false);
+
+                    b.Property<string>("Sku");
 
                     b.HasKey("Id");
 

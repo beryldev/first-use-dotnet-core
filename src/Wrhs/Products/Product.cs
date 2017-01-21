@@ -9,6 +9,10 @@ namespace Wrhs.Products
 
         public string Code { get; set; }
 
+        public string Ean { get; set; }
+
+        public string Sku { get; set; }
+
         public string Description { get; set; }
     }
 }

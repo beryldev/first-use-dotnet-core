@@ -29,12 +29,23 @@ namespace Wrhs.Tests.Products
         [Fact]
         public void ShouldUpdateProductWhenCmdValid()
         {
+            var updateEan = false;
+            var updateSku = false;
+            command.Ean = "some-ean";
+            command.Sku = "some-sku";
             validatorMock.Setup(m=>m.Validate(It.IsAny<UpdateProductCommand>()))
                 .Returns(new List<ValidationResult>());
+            productPersistMock.Setup(m=>m.Update(It.IsNotNull<Product>()))
+                .Callback((Product p)=>{
+                    updateEan = p.Ean == "some-ean";
+                    updateSku = p.Sku == "some-sku";
+                }); 
 
             handler.Handle(command);
 
             productPersistMock.Verify(m=>m.Update(It.IsAny<Product>()), Times.Once());
+            updateEan.Should().BeTrue();
+            updateSku.Should().BeTrue();
         }
 
         [Fact]
