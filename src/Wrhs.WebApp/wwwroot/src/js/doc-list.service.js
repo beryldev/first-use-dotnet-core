@@ -36,7 +36,7 @@
             }
 
             function loadData(){
-                $http.get(documentUrl, { params: service.filter})
+                $scope.documentsBusy = $http.get(documentUrl, { params: service.filter})
                     .then(onSuccess);
 
                 function onSuccess(response){

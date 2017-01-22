@@ -32,7 +32,7 @@
         }
 
         function loadData(){
-            $http.get('api/stock')
+            vm.stocksBusy = $http.get('api/stock')
                 .then(function(response){
                     var data = response.data.items;
                     vm.gridConfig.data = data;

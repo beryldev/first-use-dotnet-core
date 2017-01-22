@@ -56,7 +56,7 @@
                 url: '/delivery',
                 views: {
                     'wrapper@':{
-                        templateUrl: 'templates/delivery/deliveryDocList.html',
+                        templateUrl: 'templates/docList.html',
                         controller: 'DeliveryDocListCtrl as vm'
                     },
                     'context@': {
@@ -80,7 +80,7 @@
                 url: '/relocation',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/relocation/relocationDocList.html',
+                        templateUrl: 'templates/docList.html',
                         controller: 'RelocationDocListCtrl as vm'
                     },
                     'context@': {
@@ -104,7 +104,7 @@
                 url: '/release',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/release/releaseDocList.html',
+                        templateUrl: 'templates/docList.html',
                         controller: 'ReleaseDocListCtrl as vm'
                     },
                     'context@': {
@@ -177,5 +177,14 @@
                 }
             });
     }
+
+    angular.module('wrhs').value('cgBusyDefaults',{
+        //message:'Loading Stuff',
+       // backdrop: false,
+        //templateUrl: 'my_custom_template.html',
+        delay: 300,
+        //minDuration: 700,
+        //wrapperClass: 'my-class my-class2'
+    });
 
 })();

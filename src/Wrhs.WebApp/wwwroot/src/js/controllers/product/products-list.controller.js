@@ -75,7 +75,7 @@
         }
 
         function loadData(){
-            $http.get('api/product', {params: vm.filter})
+            vm.productsBusy = $http.get('api/product', {params: vm.filter})
                 .then(function(response){
                     var data = response.data;
                     vm.gridConfig.data = data.items;

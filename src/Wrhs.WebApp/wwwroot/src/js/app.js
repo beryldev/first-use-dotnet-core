@@ -9,7 +9,8 @@
         'ui.grid', 
         'ui.grid.pagination', 
         'ui.grid.selection', 
-        'ui.select'
+        'ui.select',
+        'cgBusy'
     ]);
 
     app.directive('focusMe', function() {
