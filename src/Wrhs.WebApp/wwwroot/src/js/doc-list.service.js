@@ -62,6 +62,7 @@
                     columnDefs: [
                         { name: 'fullNumber', displayName: 'Number'},
                         { name: 'issueDate', displayName: 'Issue date', type: 'date',  cellFilter: 'date:\'yyyy-MM-dd\'' },
+                        { name: 'state', displayName: 'State', cellFilter: 'documentState'},
                         { name: 'remarks'}
                     ],
                     onRegisterApi: function(gridApi) {

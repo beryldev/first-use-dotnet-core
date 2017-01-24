@@ -19,6 +19,7 @@ paths.appJs = [
   paths.webroot + 'src/js/doc-list.service.js',
   paths.webroot + 'src/js/new-document.service.js',
   paths.webroot + 'src/js/operation.service.js',
+  paths.webroot + 'src/js/document-state.filter.js',
   paths.webroot + 'src/js/app.config.js',
   paths.webroot + 'src/js/controllers/**/*.js'
 ]
