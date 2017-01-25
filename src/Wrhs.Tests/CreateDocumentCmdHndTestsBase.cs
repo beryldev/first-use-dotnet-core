@@ -41,12 +41,14 @@ namespace Wrhs.Tests
         { 
             var isValidDocumentType = false;
             var passedRemarks = false;
+            var isValidState = false;
             validatorMock.Setup(m=>m.Validate(It.IsNotNull<TCommand>()))
                 .Returns(new List<ValidationResult>());
             docPersistMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
                 .Callback((Document doc) => {
                     isValidDocumentType = doc.Type == GetDocumentType();
                     passedRemarks = !string.IsNullOrEmpty(doc.Remarks);
+                    isValidState = doc.State == DocumentState.Open;
                  });
 
             command.Remarks = "some remarks";

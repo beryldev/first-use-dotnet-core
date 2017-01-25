@@ -76,6 +76,18 @@
                     }
                 }
             })
+            .state('documents.delivery.edit', {
+                url: '/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/delivery/editDeliveryDoc.html',
+                        controller: 'EditDeliveryDocCtrl as vm'
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Edit delivery document</strong>'
+                    }
+                }
+            })
             .state('documents.relocation', {
                 url: '/relocation',
                 views: {
