@@ -22,7 +22,7 @@
         }
 
         function onRowDoubleClick(row){
-            $state.go('operation.delivery', {id: row.entity.id});
+            $state.go('documents.delivery.edit', {id: row.entity.id});
         }
     }
 })();
