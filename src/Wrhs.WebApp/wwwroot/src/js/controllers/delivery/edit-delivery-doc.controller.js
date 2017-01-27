@@ -5,15 +5,17 @@
         .module('wrhs')
         .controller('EditDeliveryDocCtrl', EditDeliveryDocCtrl);
 
-    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope'];
+    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope', '$state'];
 
-    function EditDeliveryDocCtrl($http, $stateParams, $scope){
+    function EditDeliveryDocCtrl($http, $stateParams, $scope, $state){
         var vm = this;
         vm.document = {};
+        vm.rules = {};
         vm.gridConfig = {};
         vm.selectedLine = null;
         vm.addLine = addLine;
         vm.removeSelected = removeSelected;
+        vm.saveAndBack = saveAndBack;
 
         init();
 
@@ -26,6 +28,7 @@
                     vm.selectedLine = row.entity;
                 }
             }
+            
             vm.gridConfig = getGridConfig();
             console.log('EditDeliveryDocCtrl init');
         }
@@ -57,7 +60,17 @@
 
             function successCallback(resp){
                 vm.document = resp.data; 
-                vm.gridConfig.data = resp.data.lines;             
+                vm.gridConfig.data = resp.data.lines;
+                vm.rules = {
+                    canBeginOperation: vm.document.state===1,
+                    canConfirm: vm.document.state === 0,
+                    canDelete: vm.document.state === 0,
+                    canCancel: vm.document.state === 1,
+                    canEdit: vm.document.state === 0,
+                    hasAction: vm.document.state !== 2
+                }    
+
+                console.log(vm.rules);         
             }
         }
 
@@ -79,6 +92,10 @@
                 vm.selectedLine = null;
             }
             
+        }
+
+        function saveAndBack(){
+            $state.go('documents.delivery');
         }
     }
 

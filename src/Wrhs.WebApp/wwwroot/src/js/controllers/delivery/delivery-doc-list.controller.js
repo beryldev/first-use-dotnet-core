@@ -10,7 +10,8 @@
     function DeliveryDocListCtrl($scope, $http, $state, messageService, documentListFactory){
         var vm = this;
         vm.filter = {};
-        vm.gridConfig = {}
+        vm.gridConfig = {};
+        vm.newDocState='';
 
         init();
 
@@ -19,6 +20,7 @@
             var service = documentListFactory.createService($scope, 'api/document/delivery', onRowDoubleClick);
             vm.filter = service.filter;
             vm.gridConfig = service.gridConfig;
+            vm.newDocState = 'documents.delivery.new';
         }
 
         function onRowDoubleClick(row){

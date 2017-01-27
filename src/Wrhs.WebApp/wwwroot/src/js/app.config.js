@@ -60,7 +60,7 @@
                         controller: 'DeliveryDocListCtrl as vm'
                     },
                     'context@': {
-                        templateUrl: 'templates/delivery/deliveryDocListContext.html'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Delivery documents:</strong>'
                     }
                 }
             })
