@@ -18,7 +18,14 @@
             var service = {
                 gridConfig: {},
                 filter: {},
-                loadData: loadData
+                selectedRow: null,
+                loadData: loadData,
+                openSelected: openSelected,
+                removeSelected: removeSelected,
+                rules: {
+                    canOpen: false,
+                    canRemove: false
+                }
             }
 
             initService();
@@ -28,7 +35,13 @@
             function initService(){
                 $scope.myAppScopeProvider = {
                     showInfo : function(row) {
-                        onRowDoubleClick(row);
+                        if(row.entity)
+                            onRowDoubleClick(row);
+                    },
+                    selectRow: function(row) {
+                        service.selectedRow = row;
+                        service.rules.canOpen = true;
+                        service.rules.canRemove = true;//= row.entity.state === 0;
                     }
                 }
                 service.gridConfig = gridConfig();
@@ -43,6 +56,20 @@
                     service.gridConfig.data = response.data.items;
                     service.gridConfig.totalItems = response.data.total;
                 }
+            }
+
+            function openSelected(){
+                onRowDoubleClick(service.selectedRow);
+            }
+
+            function removeSelected(){
+                var id = service.selectedRow.entity.id;
+                console.log(id);
+                var url = documentUrl+'/'+id;
+                $scope.documentsBusy = $http.delete(url)
+                    .then(function(resp){
+                        service.loadData();
+                    });
             }
 
            
@@ -89,7 +116,7 @@
                         });
                     },
                     appScopeProvider: $scope.myAppScopeProvider,
-                    rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
+                    rowTemplate: '<div ng-click=\'grid.appScope.selectRow(row)\' ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
                 }
             }
 

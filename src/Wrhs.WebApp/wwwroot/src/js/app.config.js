@@ -57,10 +57,19 @@
                 views: {
                     'wrapper@':{
                         templateUrl: 'templates/docList.html',
-                        controller: 'DeliveryDocListCtrl as vm'
+                        controller: 'DocListCtrl as vm',
+                        resolve: {
+                            config: function(){
+                                return {
+                                    dataSourceUrl: 'api/document/delivery',
+                                    newDocState: 'documents.delivery.new',
+                                    editDocState: 'documents.delivery.edit'
+                                }
+                            }
+                        }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Delivery documents:</strong>'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Delivery documents</strong>'
                     }
                 }
             })
@@ -93,10 +102,19 @@
                 views: {
                     'wrapper@': {
                         templateUrl: 'templates/docList.html',
-                        controller: 'RelocationDocListCtrl as vm'
+                        controller: 'DocListCtrl as vm',
+                        resolve: {
+                            config: function(){
+                                return {
+                                    dataSourceUrl: 'api/document/relocation',
+                                    newDocState: 'documents.relocation.new',
+                                    editDocState: 'documents.relocation.edit'
+                                }
+                            }
+                        }
                     },
                     'context@': {
-                        templateUrl: 'templates/relocation/relocationDocListContext.html'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Relocation documents</strong>'
                     }
                 }
             })
@@ -117,10 +135,20 @@
                 views: {
                     'wrapper@': {
                         templateUrl: 'templates/docList.html',
-                        controller: 'ReleaseDocListCtrl as vm'
+                        controller: 'DocListCtrl as vm',
+                        data: { value: 'test'},
+                         resolve: {
+                            config: function(){
+                                return {
+                                    dataSourceUrl: 'api/document/release',
+                                    newDocState: 'documents.release.new',
+                                    editDocState: 'documents.release.edit'
+                                }
+                            }
+                        }
                     },
                     'context@': {
-                        templateUrl: 'templates/release/releaseDocListContext.html'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Release documents</strong>'
                     }
                 }
             })

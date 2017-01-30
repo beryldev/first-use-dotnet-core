@@ -3,6 +3,12 @@
         <a ui-sref="{{vm.newDocState}}" class="btn btn-default btn-sm">
             <i class="fa fa-plus-circle margin-r"></i> New Document
         </a>
+        <button class="btn btn-default btn-sm" ng-click="vm.service.openSelected()" ng-disabled="!vm.service.rules.canOpen">
+            <i class="fa fa-search margin-r"></i> Open selected
+        </button>
+         <button class="btn btn-danger btn-sm" ng-click="vm.service.removeSelected()" ng-disabled="!vm.service.rules.canRemove">
+            <i class="fa fa-times margin-r"></i> Remove selected
+        </button>
     </div>
 </div>
 
@@ -11,3 +17,4 @@
         <div ui-grid="vm.gridConfig" ui-grid-pagination ui-grid-selection class="myGrid" cg-busy="documentsBusy"></div>
     </div>
 </div>
+<h1>{{vm.title}}</h1>
