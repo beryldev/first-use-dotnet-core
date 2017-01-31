@@ -5,5 +5,7 @@ namespace Wrhs.Common
          int Save(Document document);
 
          void Update(Document document);
+
+         void Delete(Document document);
     }
 }

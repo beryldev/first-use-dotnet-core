@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
@@ -68,6 +69,27 @@ namespace Wrhs.WebApp.Controllers.Documents
                 result = BadRequest(e.ValidationResults);
             }
             
+            return result;
+        }
+
+        [HttpDelete("delivery/{documentId}")]
+        [HttpDelete("relocation/{documentId}")]
+        [HttpDelete("release/{documentId}")]
+        public IActionResult RemoveDocument(int documentId)
+        {
+            IActionResult result;
+
+            try
+            {
+                var command = new RemoveDocumentCommand { DocumentId = documentId};
+                commandBus.Send(command);
+                result = Ok();
+            }
+            catch(CommandValidationException e)
+            {
+                result = BadRequest(e.ValidationResults);
+            }
+
             return result;
         }
 

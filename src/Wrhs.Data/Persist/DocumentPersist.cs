@@ -29,5 +29,14 @@ namespace Wrhs.Data.Persist
             context.Documents.Update(document);
             context.SaveChanges();
         }
+
+        public void Delete(Document document)
+        {
+            if(document != null)
+            {
+                context.Documents.Remove(document);
+                context.SaveChanges();
+            }
+        }
     }
 }

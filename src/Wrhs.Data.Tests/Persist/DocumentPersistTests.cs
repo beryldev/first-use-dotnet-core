@@ -95,5 +95,39 @@ namespace Wrhs.Data.Tests.Persist
             upLine.ProductId.Should().Be(1);
             upLine.Quantity.Should().Be(99);
         }
+
+        [Fact]
+        public void ShouldRemoveEntityFromContextOnDelete()
+        {
+            context.Products.Add(new Product());
+            context.SaveChanges();
+            var document1 = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10}
+                }
+            };
+            var document2 = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10}
+                }
+            };
+            context.Documents.Add(document1);
+            context.Documents.Add(document2);
+            context.SaveChanges();
+
+            documentPersist.Delete(document1);
+
+            context.Documents.Should().HaveCount(1);
+            context.DocumentLines.Should().HaveCount(1);
+        }
+
     }
 }

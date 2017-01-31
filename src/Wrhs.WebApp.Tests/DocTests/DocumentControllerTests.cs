@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
@@ -86,7 +87,7 @@ namespace Wrhs.WebApp.Tests.DocTests
         }
 
         [Fact]
-        public void ShouldReturnOkOnCreateReleaseDocumentWhenValidationFail()
+        public void ShouldReturnBadRequestWithErrorOnCreateReleaseDocumentWhenValidationFail()
         {
             var command = new CreateReleaseDocumentCommand();
             commandBusMock.Setup(m=>m.Send(command))
@@ -95,6 +96,31 @@ namespace Wrhs.WebApp.Tests.DocTests
             var controller = new DocumentController(commandBusMock.Object);
             
             var result = controller.CreateReleaseDocument(command);
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            errors.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public void ShouldReturnOkOnRemoveDocumentWhenSuccess()
+        {
+            var controller = new DocumentController(commandBusMock.Object);
+
+            var result = controller.RemoveDocument(1);
+
+            result.Should().BeOfType<OkResult>();
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestWithErrorOnRemoveDocumentWhenValidationFail()
+        {
+            commandBusMock.Setup(m=>m.Send(It.IsAny<ICommand>()))
+                .Throws(new CommandValidationException("Validation fail", 
+                    new RemoveDocumentCommand(), new List<ValidationResult>{new ValidationResult("Field", "Error")}));
+            var controller = new DocumentController(commandBusMock.Object);
+            
+            var result = controller.RemoveDocument(1);
 
             result.Should().BeOfType<BadRequestObjectResult>();
             var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
