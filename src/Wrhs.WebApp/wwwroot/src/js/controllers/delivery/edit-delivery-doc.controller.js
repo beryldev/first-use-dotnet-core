@@ -5,9 +5,9 @@
         .module('wrhs')
         .controller('EditDeliveryDocCtrl', EditDeliveryDocCtrl);
 
-    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope', '$state'];
+    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope', '$state', 'messageService', 'modalService'];
 
-    function EditDeliveryDocCtrl($http, $stateParams, $scope, $state){
+    function EditDeliveryDocCtrl($http, $stateParams, $scope, $state, messageService, modalService){
         var vm = this;
         vm.document = {};
         vm.rules = {};
@@ -16,6 +16,7 @@
         vm.addLine = addLine;
         vm.removeSelected = removeSelected;
         vm.saveAndBack = saveAndBack;
+        vm.deleteDocument = deleteDocument;
 
         init();
 
@@ -96,6 +97,27 @@
 
         function saveAndBack(){
             $state.go('documents.delivery');
+        }
+
+        function deleteDocument(){
+
+            modalService.showConfirmModal({
+                title: 'Document remove',
+                message: 'Please confirm remove this document.',
+                onConfirm: confirmDelete,
+                onCancel: function(){return false;}
+            });
+            
+            function confirmDelete(){
+                var id = vm.document.id;
+                $http.delete('api/document/delivery/'+id)
+                    .then(successCallback);
+
+                function successCallback(resp){
+                    messageService.success("", "Document was successfully deleted");
+                    $state.go('documents.delivery');
+                }
+            }     
         }
     }
 

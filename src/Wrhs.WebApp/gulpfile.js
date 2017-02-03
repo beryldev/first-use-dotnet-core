@@ -15,6 +15,7 @@ var paths = {
 paths.appJs = [
   paths.webroot + 'src/js/app.js',
   paths.webroot + 'src/js/message.service.js',
+  paths.webroot + 'src/js/modal.service.js',
   paths.webroot + 'src/js/http-interceptor.service.js',
   paths.webroot + 'src/js/doc-list.service.js',
   paths.webroot + 'src/js/new-document.service.js',

@@ -5,9 +5,9 @@
         .module('wrhs')
         .factory('documentListFactory', documentListFactory);
 
-    documentListFactory.$inject = ['$http'];
+    documentListFactory.$inject = ['$http', 'messageService', 'modalService'];
 
-    function documentListFactory($http){
+    function documentListFactory($http, messageService, modalService){
         var factory = {
             createService: createService
         };
@@ -63,13 +63,25 @@
             }
 
             function removeSelected(){
-                var id = service.selectedRow.entity.id;
-                console.log(id);
-                var url = documentUrl+'/'+id;
-                $scope.documentsBusy = $http.delete(url)
-                    .then(function(resp){
-                        service.loadData();
-                    });
+                modalService.showConfirmModal({
+                    title: 'Document remove',
+                    message: 'Please confirm remove this document.',
+                    onConfirm: confirmDelete,
+                    onCancel: function(){return false;}
+                });
+
+                function confirmDelete(){
+                    var id = service.selectedRow.entity.id;
+                
+                    var url = documentUrl+'/'+id;
+                    $scope.documentsBusy = $http.delete(url)
+                        .then(function(resp){
+                            service.rules.canOpen = false;
+                            service.rules.canRemove = false;
+                            messageService.success("", "Document was successfully deleted");
+                            service.loadData();
+                        });
+                }  
             }
 
            
