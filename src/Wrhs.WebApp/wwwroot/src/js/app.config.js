@@ -77,8 +77,25 @@
                 url: '/new',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/delivery/newDeliveryDoc.html',
-                        controller: 'NewDeliveryDocCtrl as vm'
+                        templateUrl: 'templates/new-document.html',
+                        controller: 'NewDocumentController as vm',
+                        resolve: {
+                            config: function(){
+                                return {
+                                    columnDefs: [
+                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
+                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
+                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
+                                        { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
+                                    ],
+                                    docServiceConfig: {
+                                        baseUrl: 'api/document/delivery',
+                                        goToAfterSave: 'documents.delivery',
+                                        docLineModalTemplateUrl: 'templates/delivery/deliveryDocLineModal.html'
+                                    }
+                                }
+                            }
+                        }
                     },
                     'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> New delivery document</strong>'
@@ -122,8 +139,26 @@
                 url: '/new',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/relocation/newRelocationDoc.html',
-                        controller: 'NewRelocationDocCtrl as vm'
+                        templateUrl: 'templates/new-document.html',
+                        controller: 'NewDocumentController as vm',
+                        resolve: {
+                            config: function(){
+                                return {
+                                    columnDefs: [
+                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
+                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
+                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
+                                        { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false},
+                                        { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
+                                    ],
+                                    docServiceConfig: {
+                                        baseUrl: 'api/document/relocation',
+                                        goToAfterSave: 'documents.relocation',
+                                        docLineModalTemplateUrl: 'templates/relocation/relocationDocLineModal.html'
+                                    }
+                                };
+                            }      
+                        }
                     },
                      'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> New relocation document</strong>'
@@ -156,8 +191,25 @@
                 url: '/new',
                 views: { 
                     'wrapper@': {
-                        templateUrl: 'templates/release/newReleaseDoc.html',
-                        controller: 'NewReleaseDocCtrl as vm'
+                        templateUrl: 'templates/new-document.html',
+                        controller: 'NewDocumentController as vm',
+                        resolve: {
+                            config: function(){
+                                return {
+                                    columnDefs: [
+                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
+                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
+                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
+                                        { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false}
+                                    ],
+                                    docServiceConfig: {
+                                        baseUrl: 'api/document/release',
+                                        goToAfterSave: 'documents.release',
+                                        docLineModalTemplateUrl: 'templates/release/releaseDocLineModal.html'
+                                    }
+                                }
+                            }
+                        }
                     },
                      'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> New release document</strong>'

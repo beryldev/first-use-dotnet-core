@@ -89,7 +89,7 @@
                 service.lines.splice(service.lines.indexOf(line), 1);
             }
 
-            function save(returnRoute){
+            function save(){
                 var document = {
                     lines: service.lines.map(function(line){
                         return {
@@ -107,7 +107,7 @@
 
                 function onSuccess(response){
                     messageService.success("", "Created new document");
-                    $state.go(returnRoute);
+                    $state.go(config.goToAfterSave);
                 }
             }
         }
