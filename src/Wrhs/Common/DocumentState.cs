@@ -4,6 +4,7 @@ namespace Wrhs.Common
     {
         Open,
         Confirmed,
-        Executed
+        Executed,
+        Canceled
     }
 }

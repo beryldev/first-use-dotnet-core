@@ -17,6 +17,8 @@
         vm.removeSelected = removeSelected;
         vm.saveAndBack = saveAndBack;
         vm.deleteDocument = deleteDocument;
+        vm.confirmDocument = confirmDocument;
+        vm.cancelDocument = cancelDocument;
 
         init();
 
@@ -56,7 +58,7 @@
         }
 
         function loadData(){
-            $http.get('/api/document/'+$stateParams.id)
+            $scope.documentBusy = $http.get('/api/document/'+$stateParams.id)
                 .then(successCallback);
 
             function successCallback(resp){
@@ -68,7 +70,7 @@
                     canDelete: vm.document.state === 0,
                     canCancel: vm.document.state === 1,
                     canEdit: vm.document.state === 0,
-                    hasAction: vm.document.state !== 2
+                    hasAction: vm.document.state !== 2 && vm.document.state !== 3
                 }    
 
                 console.log(vm.rules);         
@@ -118,6 +120,36 @@
                     $state.go('documents.delivery');
                 }
             }     
+        }
+
+        function confirmDocument(){
+            var id = vm.document.id;
+            $http.put('api/document/delivery/'+id+'/state?state=1')
+                .then(successCallback);
+
+            function successCallback(resp){
+                loadData();
+            }
+        }
+
+        function cancelDocument(){
+            modalService.showConfirmModal({
+                title: 'Cancel document',
+                message: 'Please confirm cancellation of this document.',
+                onConfirm: confirmCancel,
+                onCancel: function(){return false;}
+            });
+
+            function confirmCancel(){
+                var id = vm.document.id;
+                $http.put('api/document/delivery/'+id+'/state?state=3')
+                    .then(successCallback);
+
+                function successCallback(resp){
+                    loadData();
+                }
+            }
+            
         }
     }
 

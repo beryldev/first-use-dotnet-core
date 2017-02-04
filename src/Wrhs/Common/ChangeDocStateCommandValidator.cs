@@ -41,6 +41,7 @@ namespace Wrhs.Common
             var allowed = new string[]
             {
                 $"{DocumentState.Open}|{DocumentState.Confirmed}",
+                $"{DocumentState.Confirmed}|{DocumentState.Canceled}",
                 $"{from}|{from}"
             };
 

@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row" cg-busy="documentBusy">
     <div class="col-xs-12">
         <div class="form-group">
             <div class="well well-sm">
@@ -23,8 +23,8 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="btn-group" uib-dropdown>
-                    <button id="split-button" type="button" class="btn btn-success" ng-if="vm.rules.canEdit"><i class="fa fa-check margin-r"></i> Save changes</button>
+                <div class="btn-group" uib-dropdown ng-if="vm.rules.canEdit">
+                    <button id="split-button" type="button" class="btn btn-success"><i class="fa fa-check margin-r"></i> Save changes</button>
                     <button type="button" class="btn btn-success" uib-dropdown-toggle>
                         <span class="caret"></span>
                         <span class="sr-only">Split button!</span>
@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li role="menuitem" ng-if="vm.rules.canConfirm">
-                            <a href="" >
+                            <a href="" ng-click="vm.confirmDocument()">
                                 <i class="fa fa-check margin-r" aria-hidden="true"></i> Confirm document
                             </a>
                         </li>
@@ -59,7 +59,7 @@
                             </a>
                         </li>
                         <li role="menuitem" ng-if="vm.rules.canCancel">
-                            <a href="" >
+                            <a href="" ng-click="vm.cancelDocument()" >
                                 <span class="text-danger">
                                     <i class="fa fa-ban margin-r" aria-hidden="true"></i> Cancel document
                                 </span>

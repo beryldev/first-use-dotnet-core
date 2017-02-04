@@ -93,6 +93,33 @@ namespace Wrhs.WebApp.Controllers.Documents
             return result;
         }
 
+        [HttpPut("delivery/{documentId}/state")]
+        [HttpPut("relocation/{documentId}/state")]
+        [HttpPut("release/{documentId}/state")]
+        public IActionResult ChangeDocState(int documentId, DocumentState state)
+        {
+            System.Console.WriteLine($"!!!!!DOCUMENT ID: {documentId}");
+            System.Console.WriteLine($"!!!!!NEW STATE: {state}");
+            IActionResult result;
+
+            try
+            {
+                var command = new ChangeDocStateCommand 
+                { 
+                    DocumentId = documentId,
+                    NewState = state
+                };
+                commandBus.Send(command);
+                result = Ok();
+            }
+            catch(CommandValidationException e)
+            {
+                result = BadRequest(e.ValidationResults);
+            }
+
+            return result;
+        }
+
 
     }
 }

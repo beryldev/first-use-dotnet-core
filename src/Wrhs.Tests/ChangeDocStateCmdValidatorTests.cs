@@ -31,6 +31,11 @@ namespace Wrhs.Tests
         [InlineData(DocumentState.Executed, DocumentState.Open)]
         [InlineData(DocumentState.Open, DocumentState.Executed)]
         [InlineData(DocumentState.Confirmed, DocumentState.Executed)]
+        [InlineData(DocumentState.Open, DocumentState.Canceled)]
+        [InlineData(DocumentState.Executed, DocumentState.Canceled)]
+        [InlineData(DocumentState.Canceled, DocumentState.Executed)]
+        [InlineData(DocumentState.Canceled, DocumentState.Confirmed)]
+        [InlineData(DocumentState.Canceled, DocumentState.Open)]
         public void ShouldReturnErrorWhenCantChangeFromOneStateToOther(DocumentState from, DocumentState to)
         {
             command.NewState = to;

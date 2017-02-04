@@ -9,7 +9,8 @@
         var states = [
             'open',
             'confirmed',
-            'executed'
+            'executed',
+            'canceled'
         ];
 
         return function(input){
