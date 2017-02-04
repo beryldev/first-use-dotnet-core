@@ -81,19 +81,7 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return {
-                                    columnDefs: [
-                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
-                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
-                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
-                                        { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
-                                    ],
-                                    docServiceConfig: {
-                                        baseUrl: 'api/document/delivery',
-                                        goToAfterSave: 'documents.delivery',
-                                        docLineModalTemplateUrl: 'templates/delivery/deliveryDocLineModal.html'
-                                    }
-                                }
+                                return getNewDocCtrlConfig('delivery');
                             }
                         }
                     },
@@ -143,20 +131,7 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return {
-                                    columnDefs: [
-                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
-                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
-                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
-                                        { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false},
-                                        { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
-                                    ],
-                                    docServiceConfig: {
-                                        baseUrl: 'api/document/relocation',
-                                        goToAfterSave: 'documents.relocation',
-                                        docLineModalTemplateUrl: 'templates/relocation/relocationDocLineModal.html'
-                                    }
-                                };
+                                return getNewDocCtrlConfig('relocation');
                             }      
                         }
                     },
@@ -195,19 +170,7 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return {
-                                    columnDefs: [
-                                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
-                                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
-                                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
-                                        { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false}
-                                    ],
-                                    docServiceConfig: {
-                                        baseUrl: 'api/document/release',
-                                        goToAfterSave: 'documents.release',
-                                        docLineModalTemplateUrl: 'templates/release/releaseDocLineModal.html'
-                                    }
-                                }
+                                return getNewDocCtrlConfig('release');
                             }
                         }
                     },
@@ -268,6 +231,41 @@
                     }
                 }
             });
+
+            function getNewDocCtrlConfig(type){
+                var config = {
+                    columnDefs: [
+                        { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
+                        { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
+                        { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false}
+                    ],
+                    docServiceConfig: {
+                        baseUrl: 'api/document/'+type,
+                        goToAfterSave: 'documents.'+type,
+                        docLineModalTemplateUrl: 'templates/'+type+'/'+type+'DocLineModal.html'
+                    }
+                };
+
+                config.columnDefs = config.columnDefs.concat(getCustomColumns(type));
+                return config;
+
+                function getCustomColumns(type){
+                    var sets = {
+                        'delivery': [
+                            { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
+                        ],
+                        'relocation': [
+                            { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false},
+                            { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
+                        ],
+                        'release': [
+                            { name: 'srcLocation', displayName: 'Src location', enableColumnMenu: false},
+                        ]
+                    }
+
+                    return sets[type];
+                }
+            }
     }
 
     angular.module('wrhs').value('cgBusyDefaults',{
