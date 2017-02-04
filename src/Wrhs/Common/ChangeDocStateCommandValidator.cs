@@ -22,11 +22,10 @@ namespace Wrhs.Common
                 return results;
             }
 
-
             var document = documentSrv.GetDocumentById(command.DocumentId);
             if(document == null)
             {
-                AddValidationResult("DocumentId", $"Document (id: {command.DocumentId} not found");
+                AddValidationResult("DocumentId", $"Document (id: {command.DocumentId}) not found");
                 return results;
             }
 
