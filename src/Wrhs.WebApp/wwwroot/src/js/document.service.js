@@ -3,11 +3,11 @@
 
     angular
         .module('wrhs')
-        .factory('newDocServiceFactory', newDocServiceFactory);
+        .factory('documentServiceFactory', DocumentServiceFactory);
 
-    newDocServiceFactory.$inject = ['$http', '$uibModal', '$state', 'messageService'];
+    DocumentServiceFactory.$inject = ['$http', '$uibModal', '$state', 'messageService'];
 
-    function newDocServiceFactory($http, $uibModal, $state, messageService){
+    function DocumentServiceFactory($http, $uibModal, $state, messageService){
         var factory = {
             createService: createService
         }
@@ -16,35 +16,30 @@
 
         function createService(config){
             var service = {
-                document: {},
-                baseUrl: '',
+                baseUrl: config.baseUrl,
                 guid: '',
                 lines: [],
                 remarks: '',
-                initNewDoc: initNewDoc,
                 openNewLineModal: openNewLineModal,
                 openChangeLineModal: openChangeLineModal,
                 removeLine: removeLine,
                 save: save
             };
 
-            initService();
-
             return service;
 
-            function initService(){
-                service.document = config.documentModel;
-                service.baseUrl = config.baseUrl;
-            }
-
-            function initNewDoc(){
-                
-            }
-
-            function openNewLineModal(lineModel){
+            function openNewLineModal(){
                 var content = { 
-                    title: 'New line', 
+                    title: 'New document line', 
                     line: {quantity: 1} 
+                };
+
+                var lineModel = {
+                    lp: 0,
+                    product: null,
+                    quantity: 1,
+                    srcLocation: '',
+                    dstLocation: ''
                 };
 
                 openLineModal(content, addDocLine, lineModel);
@@ -52,7 +47,7 @@
 
             function openChangeLineModal(line){
                 var content = {
-                    title: 'Change line'
+                    title: 'Change document line'
                 }
 
                 var editLine  = {
@@ -76,9 +71,7 @@
                     resolve: {
                         content: function() { return content; },
                         lineModel: function() { return lineModel; }
-                    }
-                    //size: size,
-                    //appendTo: parentElem,        
+                    }      
                 });
                 modalInstance.close = closeCallback;
             }

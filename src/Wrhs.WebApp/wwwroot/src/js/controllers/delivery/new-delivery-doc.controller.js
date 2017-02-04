@@ -6,17 +6,15 @@
         .controller('NewDeliveryDocCtrl', NewDeliveryDocCtrl)
         .controller('DocLineModalCtrl', DocLineModalCtrl);
 
-    NewDeliveryDocCtrl.$inject = ['$http', '$uibModal', '$state', 'messageService', 'newDocServiceFactory'];
+    NewDeliveryDocCtrl.$inject = ['$scope', '$http', '$uibModal', '$state', 'messageService', 'documentServiceFactory'];
 
-    function NewDeliveryDocCtrl($http, $uibModal, $state, messageService, newDocServiceFactory){
+    function NewDeliveryDocCtrl($scope, $http, $uibModal, $state, messageService, documentServiceFactory){
         var vm = this;
         vm.service = null;
-        vm.openNewLineModal = null;
-        vm.openChangeLineModal = null;
-        vm.removeLine = null;
         vm.saveDocument = null;
+        vm.gridConfig = {};
+        vm.selectedLine = {};
 
-        
 
         init();
 
@@ -27,43 +25,48 @@
 
         function initDocService(){
             var config = {
-                documentModel: {
-                    remarks: '',
-                    lines: []
-                },
                 baseUrl: 'api/document/delivery',
-                docLineModalTemplateUrl: 'templates/delivery/deliveryDocLineModal.html',
-                lineToCmd: lineToCmd
+                go
+                docLineModalTemplateUrl: 'templates/delivery/deliveryDocLineModal.html'
             };
 
-            vm.service = newDocServiceFactory.createService(config);
-            vm.service.initNewDoc();
-            vm.openNewLineModal = openNewLineModal;
-            vm.openChangeLineModal = vm.service.openChangeLineModal;
-            vm.removeLine = vm.service.removeLine;
+            vm.service = documentServiceFactory.createService(config);
             vm.saveDocument = saveDocument;
 
-            function lineToCmd(line){
-                return {
-                    lp: line.lp,
-                    productId: line.product.id,
-                    quantity: line.quantity
-                };
+             $scope.myAppScopeProvider = {
+                showInfo : function(row) {
+                    console.log(row);
+                },
+                selectRow: function(row){
+                    vm.selectedLine = row.entity;
+                    console.log(vm.selectedLine);
+                }
             }
-        }
-
-        function openNewLineModal(){
-             var lineModel = {
-                    lp: 0,
-                    product: null,
-                    quantity: 1
-                };
-
-            vm.service.openNewLineModal(lineModel);
+            vm.gridConfig = getGridConfig();
         }
 
         function saveDocument(){
             vm.service.save('documents.delivery');
+        }
+
+        function getGridConfig(){
+            return {
+                data: vm.service.lines,
+                multiSelect: false,
+                enableSelectAll: false,
+                enableRowSelection: true,
+                noUnselect: true,
+                enableRowHeaderSelection: false,
+                enableFiltering: false,
+                columnDefs: [
+                    { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
+                    { name: 'product.ean', displayName: 'EAN', enableColumnMenu: false},
+                    { name: 'quantity', displayName: 'Quantity', enableColumnMenu: false},
+                    { name: 'dstLocation', displayName: 'Dst location', enableColumnMenu: false}
+                ],
+                appScopeProvider: $scope.myAppScopeProvider,
+                rowTemplate: '<div ng-click=\'grid.appScope.selectRow(row)\' ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
+            }
         }
     }
 
