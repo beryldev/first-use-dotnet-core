@@ -21,55 +21,19 @@ namespace Wrhs.WebApp.Controllers.Documents
         [HttpPost("delivery")]
         public IActionResult CreateDeliveryDocument([FromBody]CreateDeliveryDocumentCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                commandBus.Send(command ?? new CreateDeliveryDocumentCommand());
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+           return HandleRequest<CreateDeliveryDocumentCommand>(command);
         }
 
         [HttpPost("relocation")]
         public IActionResult CreateRelocationDocument([FromBody]CreateRelocationDocumentCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                commandBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+           return HandleRequest<CreateRelocationDocumentCommand>(command);
         }
 
         [HttpPost("release")]
         public IActionResult CreateReleaseDocument([FromBody]CreateReleaseDocumentCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                commandBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+            return HandleRequest<CreateReleaseDocumentCommand>(command);
         }
 
         [HttpDelete("delivery/{documentId}")]
@@ -77,20 +41,9 @@ namespace Wrhs.WebApp.Controllers.Documents
         [HttpDelete("release/{documentId}")]
         public IActionResult RemoveDocument(int documentId)
         {
-            IActionResult result;
-
-            try
-            {
-                var command = new RemoveDocumentCommand { DocumentId = documentId};
-                commandBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            var command = new RemoveDocumentCommand { DocumentId = documentId};
+            
+            return HandleRequest<RemoveDocumentCommand>(command);
         }
 
         [HttpPut("delivery/{documentId}/state")]
@@ -98,17 +51,29 @@ namespace Wrhs.WebApp.Controllers.Documents
         [HttpPut("release/{documentId}/state")]
         public IActionResult ChangeDocState(int documentId, DocumentState state)
         {
-            System.Console.WriteLine($"!!!!!DOCUMENT ID: {documentId}");
-            System.Console.WriteLine($"!!!!!NEW STATE: {state}");
+            var command = new ChangeDocStateCommand 
+            { 
+                DocumentId = documentId,
+                NewState = state
+            };
+
+            return HandleRequest<ChangeDocStateCommand>(command);
+        }
+
+
+        [HttpPut("delivery/{documentId}")]
+        public IActionResult UpdateDeliveryDocument(int documentId, [FromBody]UpdateDeliveryDocumentCommand command)
+        {
+            command.DocumentId = documentId;
+            return HandleRequest<UpdateDeliveryDocumentCommand>(command);
+        }
+
+        protected IActionResult HandleRequest<T>(T command) where T : ICommand
+        {
             IActionResult result;
 
             try
             {
-                var command = new ChangeDocStateCommand 
-                { 
-                    DocumentId = documentId,
-                    NewState = state
-                };
                 commandBus.Send(command);
                 result = Ok();
             }
@@ -119,7 +84,5 @@ namespace Wrhs.WebApp.Controllers.Documents
 
             return result;
         }
-
-
     }
 }

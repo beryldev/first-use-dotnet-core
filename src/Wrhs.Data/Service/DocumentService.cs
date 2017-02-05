@@ -48,7 +48,7 @@ namespace Wrhs.Data.Service
             return PaginateQuery(query, page, pageSize);
         }
 
-         public ResultPage<Document> FilterDocuments(DocumentType type,
+        public ResultPage<Document> FilterDocuments(DocumentType type,
             Dictionary<string, object> filter)
         {
             return FilterDocuments(type, filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
@@ -65,6 +65,12 @@ namespace Wrhs.Data.Service
         {
             var query = context.Documents.Where(d => d.Type == type);
             return Filter(query, filter, page, pageSize);
+        }
+
+        public void Update(Document document)
+        {
+            context.Documents.Update(document);
+            context.SaveChanges();
         }
 
         protected override Dictionary<string, Func<Document, object, bool>> GetFilterMapping()

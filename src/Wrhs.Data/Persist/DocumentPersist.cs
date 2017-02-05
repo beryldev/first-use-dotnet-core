@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Wrhs.Common;
 
 namespace Wrhs.Data.Persist

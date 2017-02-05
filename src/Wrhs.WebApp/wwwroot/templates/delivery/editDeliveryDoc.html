@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="btn-group" uib-dropdown ng-if="vm.rules.canEdit">
-                    <button id="split-button" type="button" class="btn btn-success"><i class="fa fa-check margin-r"></i> Save changes</button>
+                    <button id="split-button" type="button" class="btn btn-success" ng-click="vm.service.update()"><i class="fa fa-check margin-r"></i> Save changes</button>
                     <button type="button" class="btn btn-success" uib-dropdown-toggle>
                         <span class="caret"></span>
                         <span class="sr-only">Split button!</span>

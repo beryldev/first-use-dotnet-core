@@ -21,5 +21,7 @@ namespace Wrhs.Common
 
          ResultPage<Document> FilterDocuments(DocumentType type,
             Dictionary<string, object> filter, int page, int pageSize);
+
+        void Update(Document document);
     }
 }

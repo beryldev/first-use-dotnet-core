@@ -177,6 +177,11 @@ namespace Wrhs.WebApp
                         var validator = new ChangeDocStateCommandValidator(docSrv);
                         return new ChangeDocStateCommandHandler(validator, eventBus, docPersist, docSrv);
                     }},
+                    { typeof(UpdateDeliveryDocumentCommand), ()=>{
+                        var innerValid = new CreateDeliveryDocumentCommandValidator(productSrv);
+                        var validator = new UpdateDeliveryDocumentCommandValidator(innerValid);
+                        return new UpdateDeliveryDocumentCommandHandler(validator, eventBus, docPersist, docSrv);
+                    }},
                     { typeof(CreateProductCommand), ()=>{
                         var validator = new CreateProductCommandValidator(productSrv);
                         return new CreateProductCommandHandler(validator, eventBus, productPersist);

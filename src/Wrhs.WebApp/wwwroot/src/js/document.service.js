@@ -137,7 +137,12 @@
                     remarks: service.document.remarks
                 }
 
-                console.log('update', document);
+                $http.put(config.baseUrl + '/' + service.document.id, service.document)
+                    .then(successCallback);
+                
+                function successCallback(resp){
+                    console.log('success');
+                }
             }
 
             function getDocument(id){

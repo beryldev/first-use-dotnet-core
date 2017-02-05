@@ -13,8 +13,6 @@
         vm.rules = {};
         vm.gridConfig = {};
         vm.selectedLine = null;
-        vm.addLine = addLine;
-        vm.removeSelected = removeSelected;
         vm.saveAndBack = saveAndBack;
         vm.deleteDocument = deleteDocument;
         vm.confirmDocument = confirmDocument;

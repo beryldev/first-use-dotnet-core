@@ -151,5 +151,32 @@ namespace Wrhs.WebApp.Tests.DocTests
             var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
             errors.Should().NotBeNullOrEmpty();
         }
+
+        [Fact]
+        public void ShouldReturnOkOnUpdateDeliveryDocWhenSuccess()
+        {
+            var controller = new DocumentController(commandBusMock.Object);
+
+            var command = new UpdateDeliveryDocumentCommand();
+            var result = controller.UpdateDeliveryDocument(1, command);
+
+            result.Should().BeOfType<OkResult>();
+        }
+
+        [Fact]
+        public void ShouldReturnBadRequestWithErrorOnUpdateDeliveryDocWhenValidationFail()
+        {
+            commandBusMock.Setup(m=>m.Send(It.IsAny<ICommand>()))
+                .Throws(new CommandValidationException("Validation fail", 
+                    new RemoveDocumentCommand(), new List<ValidationResult>{new ValidationResult("Field", "Error")}));
+            var controller = new DocumentController(commandBusMock.Object);
+            
+            var command = new UpdateDeliveryDocumentCommand();
+            var result = controller.UpdateDeliveryDocument(1, command);
+
+            result.Should().BeOfType<BadRequestObjectResult>();
+            var errors = (result as BadRequestObjectResult).Value as IEnumerable<ValidationResult>;
+            errors.Should().NotBeNullOrEmpty();
+        }
     }
 }
