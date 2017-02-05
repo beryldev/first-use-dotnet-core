@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
+using Moq;
 using Wrhs.Common;
 using Wrhs.Data.Service;
 using Wrhs.Products;
@@ -11,13 +13,21 @@ namespace Wrhs.Data.Tests.Service
     public class DocumentServiceTests : ServiceTestsBase<Document>
     {
         private readonly DocumentService service;
+        private readonly Mock<IDocumentNumerator> docNumeratorMock;
 
         public DocumentServiceTests() : base()
         {       
+            docNumeratorMock = new Mock<IDocumentNumerator>();
+            docNumeratorMock.Setup(m=>m.AssignNumber(It.IsNotNull<Document>()))
+                .Returns((Document doc)=>{ 
+                    doc.FullNumber = "some-number";
+                    return doc;
+                 });
+
             context.Products.Add(new Product());
             context.SaveChanges();
 
-            service = new DocumentService(context);
+            service = new DocumentService(context, docNumeratorMock.Object);
         }
 
         protected override BaseService<Document> GetService()
@@ -127,6 +137,83 @@ namespace Wrhs.Data.Tests.Service
             result.Page.Should().Be(page);
             result.PageSize.Should().Be(pageSize);
             result.Items.Should().HaveCount(expected);
+        }
+
+        [Fact]
+        public void ShouldStoreDocumentWithLinesInContextOnSave()
+        {
+            var document = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10},
+                    new DocumentLine { ProductId = 1, Quantity = 20}
+                }
+            };
+
+            service.Save(document);
+
+            context.Documents.Should().HaveCount(5);
+            context.DocumentLines.Should().HaveCount(10);
+            context.Documents.First().Type.Should()
+                .Be(DocumentType.Delivery);
+            context.Documents.Last().State.Should()
+                .Be(DocumentState.Confirmed);
+        }
+
+        [Fact]
+        public void ShouldAssignNumberToDocumentOnSave()
+        {
+            var document = new Document { Type = DocumentType.Delivery};
+
+            service.Save(document);
+
+            var saved = context.Documents.First();
+            saved.FullNumber.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public void ShouldUpdateDataInContextOnUpdate()
+        {
+            context.Products.Add(new Product());
+            context.Products.Add(new Product());
+            context.SaveChanges();
+            var document = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10},
+                    new DocumentLine { ProductId = 1, Quantity = 20}
+                }
+            };
+            context.Documents.Add(document);
+            context.SaveChanges();
+
+            document.State = DocumentState.Executed;
+            document.Lines.Last().Quantity = 99;
+            service.Update(document);
+
+            var upDoc = context.Documents.Last();
+            var upLine = context.DocumentLines.Last();
+            upDoc.Type.Should().Be(DocumentType.Delivery);
+            upDoc.State.Should().Be(DocumentState.Executed);
+            upLine.ProductId.Should().Be(1);
+            upLine.Quantity.Should().Be(99);
+        }
+
+        [Fact]
+        public void ShouldRemoveEntityFromContextOnDelete()
+        {
+            var doc = context.Documents.First();
+            
+            service.Delete(doc);
+
+            context.Documents.Should().HaveCount(3);
+            context.DocumentLines.Should().HaveCount(6);
         }
 
         protected override Document CreateEntity(int i)

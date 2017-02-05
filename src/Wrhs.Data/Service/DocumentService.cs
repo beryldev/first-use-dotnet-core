@@ -9,8 +9,12 @@ namespace Wrhs.Data.Service
 {
     public class DocumentService : BaseService<Document>,  IDocumentService
     {
-        public DocumentService(WrhsContext context) : base(context)
+        private readonly IDocumentNumerator docNumerator;
+
+        public DocumentService(WrhsContext context, IDocumentNumerator docNumerator) : base(context)
         {
+            this.docNumerator = docNumerator;
+            this.docNumerator.SetContext(context);
         }
 
         public bool CheckDocumentExistsById(int id)
@@ -67,10 +71,29 @@ namespace Wrhs.Data.Service
             return Filter(query, filter, page, pageSize);
         }
 
+        public int Save(Document document)
+        {
+            document.IssueDate = DateTime.Now;
+            document = docNumerator.AssignNumber(document);
+            context.Documents.Add(document);
+            context.SaveChanges();
+
+            return document.Id;
+        }
+
         public void Update(Document document)
         {
             context.Documents.Update(document);
             context.SaveChanges();
+        }
+
+        public void Delete(Document document)
+        {
+            if(document != null)
+            {
+                context.Documents.Remove(document);
+                context.SaveChanges();
+            }
         }
 
         protected override Dictionary<string, Func<Document, object, bool>> GetFilterMapping()
