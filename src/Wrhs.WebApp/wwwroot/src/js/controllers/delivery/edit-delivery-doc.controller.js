@@ -5,9 +5,9 @@
         .module('wrhs')
         .controller('EditDeliveryDocCtrl', EditDeliveryDocCtrl);
 
-    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope', '$state', 'messageService', 'modalService'];
+    EditDeliveryDocCtrl.$inject = ['$http', '$stateParams', '$scope', '$state', 'messageService', 'modalService', 'documentServiceFactory'];
 
-    function EditDeliveryDocCtrl($http, $stateParams, $scope, $state, messageService, modalService){
+    function EditDeliveryDocCtrl($http, $stateParams, $scope, $state, messageService, modalService, documentServiceFactory){
         var vm = this;
         vm.document = {};
         vm.rules = {};
@@ -19,6 +19,7 @@
         vm.deleteDocument = deleteDocument;
         vm.confirmDocument = confirmDocument;
         vm.cancelDocument = cancelDocument;
+        vm.service = null;
 
         init();
 
@@ -31,6 +32,13 @@
                     vm.selectedLine = row.entity;
                 }
             }
+
+            var type = 'delivery';
+            vm.service = documentServiceFactory.createService({
+                baseUrl: 'api/document/'+type,
+                goToAfterSave: 'documents.'+type,
+                docLineModalTemplateUrl: 'templates/'+type+'/'+type+'DocLineModal.html'
+            });
             
             vm.gridConfig = getGridConfig();
             console.log('EditDeliveryDocCtrl init');
@@ -58,12 +66,12 @@
         }
 
         function loadData(){
-            $scope.documentBusy = $http.get('/api/document/'+$stateParams.id)
+            vm.service.getDocument($stateParams.id)
                 .then(successCallback);
 
-            function successCallback(resp){
-                vm.document = resp.data; 
-                vm.gridConfig.data = resp.data.lines;
+            function successCallback(){
+                vm.document = vm.service.document; 
+                vm.gridConfig.data = vm.document.lines;
                 vm.rules = {
                     canBeginOperation: vm.document.state===1,
                     canConfirm: vm.document.state === 0,
@@ -71,9 +79,7 @@
                     canCancel: vm.document.state === 1,
                     canEdit: vm.document.state === 0,
                     hasAction: vm.document.state !== 2 && vm.document.state !== 3
-                }    
-
-                console.log(vm.rules);         
+                }             
             }
         }
 

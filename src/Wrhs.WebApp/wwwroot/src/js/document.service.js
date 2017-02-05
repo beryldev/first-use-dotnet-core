@@ -18,15 +18,28 @@
             var service = {
                 baseUrl: config.baseUrl,
                 guid: '',
-                lines: [],
-                remarks: '',
                 openNewLineModal: openNewLineModal,
                 openChangeLineModal: openChangeLineModal,
                 removeLine: removeLine,
-                save: save
+                save: save,
+                update: update,
+                getDocument: getDocument,
+                document: {},
             };
 
+            initService();
+
             return service;
+
+            function initService(){
+                service.document = {
+                    remarks: '',
+                    lines: [],
+                    state: null,
+                    issueDate: null,
+                    fullNumber: ''
+                };
+            }
 
             function openNewLineModal(){
                 var content = { 
@@ -55,7 +68,7 @@
                     quantity: line.quantity,
                     srcLocation: line.srcLocation,
                     dstLocation: line.dstLocation,
-                    index: service.lines.indexOf(line)
+                    index: service.document.lines.indexOf(line)
                 };
 
                 openLineModal(content, updateDocLine, editLine);
@@ -77,21 +90,21 @@
             }
 
             function addDocLine(line){
-                service.lines.push(line);
+                service.document.lines.push(line);
             }
 
             function updateDocLine(line){
-                service.lines[line.index] = line;
+                service.document.lines[line.index] = line;
                 line = null;
             }
 
             function removeLine(line){
-                service.lines.splice(service.lines.indexOf(line), 1);
+                service.document.lines.splice(service.document.lines.indexOf(line), 1);
             }
 
             function save(){
                 var document = {
-                    lines: service.lines.map(function(line){
+                    lines: service.document.lines.map(function(line){
                         return {
                             quantity: line.quantity,
                             productId: line.product.id,
@@ -99,7 +112,7 @@
                             dstLocation: line.dstLocation
                         }
                     }),
-                    remarks: service.remarks
+                    remarks: service.document.remarks
                 };
 
                 $http.post(config.baseUrl, document)
@@ -110,6 +123,33 @@
                     $state.go(config.goToAfterSave);
                 }
             }
+
+            function update(){
+                var document = {
+                    lines: service.document.lines.map(function(line){
+                        return {
+                            quantity: line.quantity,
+                            productId: line.product.id,
+                            srcLocation: line.srcLocation,
+                            dstLocation: line.dstLocation
+                        }
+                    }),
+                    remarks: service.document.remarks
+                }
+
+                console.log('update', document);
+            }
+
+            function getDocument(id){
+                return $http.get('api/document/'+id)
+                    .then(successCallback);
+
+                function successCallback(resp){
+                    service.document = resp.data;
+                }
+            }
         }
+
+
     }
 })();

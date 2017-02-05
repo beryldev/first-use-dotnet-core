@@ -30,7 +30,6 @@ namespace Wrhs.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Filename=./wrhs.db");
-            //optionsBuilder.UseSqlServer("Server=192.168.5.15;Database=wrhs;User Id=SA;Password=Password123;");
         }
     }
 }

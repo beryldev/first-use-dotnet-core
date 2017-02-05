@@ -38,7 +38,7 @@
             }
 
             vm.gridConfig = {
-                data: vm.service.lines,
+                data: vm.service.document.lines,
                 multiSelect: false,
                 enableSelectAll: false,
                 enableRowSelection: true,

@@ -5,20 +5,19 @@
             <div class="well well-sm">
                  <div class="row">
                 
-                 <div class="col-md-4">
-                    <h4>
-                        Full number: <strong>{{vm.document.fullNumber}}</strong><br>
-                    </h4>
+                    <div class="col-md-4">
+                        <h4>
+                            Full number: <strong>{{vm.service.document.fullNumber}}</strong><br>
+                        </h4>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <h4>State: <strong>{{vm.service.document.state|documentState}}</strong></h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4 class="pull-right">Issue date: <strong>{{vm.service.document.issueDate|date : 'yyyy-MM-dd'}}</strong></h4>
+                    </div>
                 </div>
-                <div class="col-md-4 text-left">
-                    <h4>State: <strong>{{vm.document.state|documentState}}</strong></h4>
-                </div>
-                <div class="col-md-4">
-                    <h4 class="pull-right">Issue date: <strong>{{vm.document.issueDate|date : 'yyyy-MM-dd'}}</strong></h4>
-                </div>
-            </div>
-                </div>
-           
+            </div>           
         </div>
 
         <div class="row">
@@ -75,16 +74,16 @@
             <textarea class="form-control" rows="4" ng-disabled="!vm.rules.canEdit" ng-model="vm.document.remarks"></textarea>
         </div>
         <div class="form-group" ng-if="vm.rules.canEdit">
-            <button type="button" class="btn btn-default btn-sm" ng-click="vm.addLine()">
+            <button type="button" class="btn btn-default btn-sm" ng-click="vm.service.openNewLineModal()">
                 <i class="fa fa-plus margin-r"></i> Add new line
             </button>
             <button type="button" class="btn btn-default btn-sm" 
-                ng-click="vm.addLine()"
+                ng-click="vm.service.openChangeLineModal(vm.selectedLine)"
                 ng-disabled="!vm.selectedLine">
                 <i class="fa fa-pencil margin-r"></i> Edit selected
             </button>
              <button type="button" class="btn btn-danger btn-sm" 
-                ng-click="vm.removeSelected()"
+                ng-click="vm.service.removeLine(vm.selectedLine)"
                 ng-disabled="!vm.selectedLine">
                 <i class="fa fa-times margin-r"></i> Remove selected
             </button>

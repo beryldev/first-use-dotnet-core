@@ -74,6 +74,7 @@ namespace Wrhs.Tests
             AssertSingleError(results, "DocumentId");
         }
 
+        [Fact]
         public void ShouldReturnErrorWhenDocumentNotFound()
         {
              documentSrvMock.Setup(m=>m.GetDocumentById(It.IsNotNull<int>()))
