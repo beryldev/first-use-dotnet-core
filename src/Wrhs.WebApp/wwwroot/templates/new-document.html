@@ -1,10 +1,10 @@
-<div class="row">
+<div class="row" cg-busy="documentBusy">
     <div class="col-xs-12">
          <div class="form-group">
             <button type="button" class="btn btn-success" ng-click="vm.service.save()"><i class="fa fa-check margin-r"></i> Save document</button>
-            <a ui-sref="documents.delivery" class="btn btn-default">
+            <button type="button" ng-click="vm.goBack()" class="btn btn-default">
                 <i class="fa fa-times margin-r"></i> Cancel
-            </a>
+            </button>
         </div>
         <hr>
         <div class="form-group">

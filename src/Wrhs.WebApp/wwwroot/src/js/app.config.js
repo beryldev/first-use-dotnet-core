@@ -81,7 +81,7 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return getNewDocCtrlConfig('delivery');
+                                return getDocCtrlConfig('delivery');
                             }
                         }
                     },
@@ -94,8 +94,13 @@
                 url: '/:id',
                 views: {
                     'wrapper@': {
-                        templateUrl: 'templates/delivery/editDeliveryDoc.html',
-                        controller: 'EditDeliveryDocCtrl as vm'
+                        templateUrl: 'templates/edit-document.html',
+                        controller: 'EditDocumentCtrl as vm',
+                        resolve: {
+                            config: function(){
+                                return getDocCtrlConfig('delivery');
+                            }
+                        }
                     },
                     'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Edit delivery document</strong>'
@@ -131,12 +136,29 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return getNewDocCtrlConfig('relocation');
+                                return getDocCtrlConfig('relocation');
                             }      
                         }
                     },
                      'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> New relocation document</strong>'
+                    }
+                }
+            })
+            .state('documents.relocation.edit', {
+                url: '/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/edit-document.html',
+                        controller: 'EditDocumentCtrl as vm',
+                        resolve: {
+                            config: function(){
+                                return getDocCtrlConfig('relocation');
+                            }
+                        }
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> Edit relocation document</strong>'
                     }
                 }
             })
@@ -170,12 +192,29 @@
                         controller: 'NewDocumentController as vm',
                         resolve: {
                             config: function(){
-                                return getNewDocCtrlConfig('release');
+                                return getDocCtrlConfig('release');
                             }
                         }
                     },
                      'context@': {
                         template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> New release document</strong>'
+                    }
+                }
+            })
+            .state('documents.release.edit', {
+                url: '/:id',
+                views: {
+                    'wrapper@': {
+                        templateUrl: 'templates/edit-document.html',
+                        controller: 'EditDocumentCtrl as vm',
+                        resolve: {
+                            config: function(){
+                                return getDocCtrlConfig('release');
+                            }
+                        }
+                    },
+                    'context@': {
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> Edit release document</strong>'
                     }
                 }
             })
@@ -232,7 +271,7 @@
                 }
             });
 
-            function getNewDocCtrlConfig(type){
+            function getDocCtrlConfig(type){
                 var config = {
                     columnDefs: [
                         { name: 'product.name', displayName: 'Product name', enableColumnMenu: false},
@@ -241,9 +280,10 @@
                     ],
                     docServiceConfig: {
                         baseUrl: 'api/document/'+type,
-                        goToAfterSave: 'documents.'+type,
+                        goBackState: 'documents.'+type, 
                         docLineModalTemplateUrl: 'templates/'+type+'/'+type+'DocLineModal.html'
-                    }
+                    },
+                    beginOperationState: 'operation.'+type
                 };
 
                 config.columnDefs = config.columnDefs.concat(getCustomColumns(type));

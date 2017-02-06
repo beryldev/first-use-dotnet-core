@@ -5,16 +5,16 @@
         .module('wrhs')
         .factory('documentServiceFactory', DocumentServiceFactory);
 
-    DocumentServiceFactory.$inject = ['$http', '$uibModal', '$state', 'messageService'];
+    DocumentServiceFactory.$inject = ['$http', '$uibModal', '$state', 'messageService', 'modalService'];
 
-    function DocumentServiceFactory($http, $uibModal, $state, messageService){
+    function DocumentServiceFactory($http, $uibModal, $state, messageService, modalService){
         var factory = {
             createService: createService
         }
 
         return factory;
 
-        function createService(config){
+        function createService(config, $scope){
             var service = {
                 baseUrl: config.baseUrl,
                 guid: '',
@@ -24,7 +24,11 @@
                 save: save,
                 update: update,
                 getDocument: getDocument,
+                deleteDocument: deleteDocument,
+                confirmDocument: confirmDocument,
+                cancelDocument: cancelDocument,
                 document: {},
+                rules: {}
             };
 
             initService();
@@ -115,16 +119,15 @@
                     remarks: service.document.remarks
                 };
 
-                $http.post(config.baseUrl, document)
-                    .then(onSuccess);
+                $scope.documentBusy = $http.post(config.baseUrl, document).then(onSuccess);
 
                 function onSuccess(response){
                     messageService.success("", "Created new document");
-                    $state.go(config.goToAfterSave);
+                    $state.go(config.goBackState);
                 }
             }
 
-            function update(){
+            function update(back){
                 var document = {
                     lines: service.document.lines.map(function(line){
                         return {
@@ -137,11 +140,13 @@
                     remarks: service.document.remarks
                 }
 
-                $http.put(config.baseUrl + '/' + service.document.id, service.document)
+                $scope.documentBusy = $http.put(config.baseUrl + '/' + service.document.id, document)
                     .then(successCallback);
                 
                 function successCallback(resp){
-                    console.log('success');
+                    messageService.success('', 'Document saved');
+                    if(back)
+                        $state.go(config.goBackState);
                 }
             }
 
@@ -151,6 +156,71 @@
 
                 function successCallback(resp){
                     service.document = resp.data;
+                    service.rules = {
+                        canBeginOperation: service.document.state===1,
+                        canConfirm: service.document.state === 0,
+                        canDelete: service.document.state === 0,
+                        canCancel: service.document.state === 1,
+                        canEdit: service.document.state === 0,
+                        hasAction: service.document.state !== 2 && service.document.state !== 3
+                    }    
+                }
+            }
+
+            function deleteDocument(id){
+                modalService.showConfirmModal({
+                    title: 'Document remove',
+                    message: 'Please confirm remove this document.',
+                    onConfirm: confirmDelete,
+                    onCancel: function(){return false;}
+                });
+
+                function confirmDelete(){
+                    $scope.documentBusy = $http.delete(config.baseUrl+'/'+id)
+                        .then(successCallback);
+
+                    function successCallback(resp){
+                        messageService.success('', 'Document was successfully deleted');
+                        $state.go(config.goBackState);
+                    }
+                }
+            }
+
+            function confirmDocument(id){
+                 modalService.showConfirmModal({
+                    title: 'Confirm document',
+                    message: 'Please confirm this operation.',
+                    onConfirm: confirmDoc,
+                    onCancel: function(){return false;}
+                });
+
+                function confirmDoc(){
+                     $scope.documentBusy = $http.put(config.baseUrl+'/'+id+'/state?state=1')
+                        .then(successCallback);
+
+                    function successCallback(resp){
+                        messageService.success('', "Document was confirmed");
+                        service.getDocument(id);
+                    }
+                }
+            }
+
+            function cancelDocument(id){
+                 modalService.showConfirmModal({
+                    title: 'Cancel document',
+                    message: 'Please confirm cancellation of this document.',
+                    onConfirm: confirmCancel,
+                    onCancel: function(){return false;}
+                });
+
+                function confirmCancel(){
+                    $scope.documentBusy = $http.put(config.baseUrl+'/'+id+'/state?state=3')
+                    .then(successCallback);
+
+                    function successCallback(){
+                        messageService.success('', "Document was cancelled");
+                        service.getDocument(id);
+                    }
                 }
             }
         }

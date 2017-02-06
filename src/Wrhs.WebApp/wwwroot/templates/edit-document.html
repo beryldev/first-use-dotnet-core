@@ -22,43 +22,43 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="btn-group" uib-dropdown ng-if="vm.rules.canEdit">
+                <div class="btn-group" uib-dropdown ng-if="vm.service.rules.canEdit">
                     <button id="split-button" type="button" class="btn btn-success" ng-click="vm.service.update()"><i class="fa fa-check margin-r"></i> Save changes</button>
                     <button type="button" class="btn btn-success" uib-dropdown-toggle>
                         <span class="caret"></span>
                         <span class="sr-only">Split button!</span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
-                        <li role="menuitem"><a href="" ng-click="vm.saveAndBack()"><i class="fa fa-check margin-r"></i> Save and back to list</a></li>
+                        <li role="menuitem"><a href="" ng-click="vm.service.update(true)"><i class="fa fa-check margin-r"></i> Save and back to list</a></li>
                     </ul>
                 </div>
                 
-                <a ui-sref="documents.delivery" class="btn btn-default"><i class="fa fa-times margin-r"></i> Cancel</a>
+                <button type="button" class="btn btn-default" ng-click="vm.goBack()"><i class="fa fa-times margin-r"></i> Cancel</button>
                 
-                <div class="pull-right" uib-dropdown ng-if="vm.rules.hasAction"> 
+                <div class="pull-right" uib-dropdown ng-if="vm.service.rules.hasAction"> 
                     <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle>
                         <i class="fa fa-flash margin-r"></i> Action <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button"> 
-                        <li role="menuitem" ng-if="vm.rules.canBeginOperation">
-                            <a ui-sref="operation.delivery({id: vm.document.id})" >
+                        <li role="menuitem" ng-if="vm.service.rules.canBeginOperation">
+                            <a href="" ng-click="vm.beginOperation()">
                                 <i class="fa fa-play margin-r" aria-hidden="true"></i> Begin operation
                             </a>
                         </li>
-                        <li role="menuitem" ng-if="vm.rules.canConfirm">
-                            <a href="" ng-click="vm.confirmDocument()">
+                        <li role="menuitem" ng-if="vm.service.rules.canConfirm">
+                            <a href="" ng-click="vm.service.confirmDocument(vm.service.document.id)">
                                 <i class="fa fa-check margin-r" aria-hidden="true"></i> Confirm document
                             </a>
                         </li>
-                        <li role="menuitem" ng-if="vm.rules.canDelete">
-                            <a href="" ng-click="vm.deleteDocument()">
+                        <li role="menuitem" ng-if="vm.service.rules.canDelete">
+                            <a href="" ng-click="vm.service.deleteDocument(vm.service.document.id)">
                                 <span class="text-danger">
                                     <i class="fa fa-trash-o margin-r" aria-hidden="true"></i> Delete document
                                 </span>
                             </a>
                         </li>
-                        <li role="menuitem" ng-if="vm.rules.canCancel">
-                            <a href="" ng-click="vm.cancelDocument()" >
+                        <li role="menuitem" ng-if="vm.service.rules.canCancel">
+                            <a href="" ng-click="vm.service.cancelDocument(vm.service.document.id)" >
                                 <span class="text-danger">
                                     <i class="fa fa-ban margin-r" aria-hidden="true"></i> Cancel document
                                 </span>
@@ -71,9 +71,9 @@
         <hr>
         <div class="form-group">
             <label>Remarks</label>
-            <textarea class="form-control" rows="4" ng-disabled="!vm.rules.canEdit" ng-model="vm.document.remarks"></textarea>
+            <textarea class="form-control" rows="4" ng-disabled="!vm.service.rules.canEdit" ng-model="vm.document.remarks"></textarea>
         </div>
-        <div class="form-group" ng-if="vm.rules.canEdit">
+        <div class="form-group" ng-if="vm.service.rules.canEdit">
             <button type="button" class="btn btn-default btn-sm" ng-click="vm.service.openNewLineModal()">
                 <i class="fa fa-plus margin-r"></i> Add new line
             </button>
