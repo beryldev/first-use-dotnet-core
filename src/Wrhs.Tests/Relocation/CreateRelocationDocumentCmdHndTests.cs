@@ -16,9 +16,10 @@ namespace Wrhs.Tests.Relocation
             };
         }
 
-        protected override ICommandHandler<CreateRelocationDocumentCommand> CreateCommandHandler(IValidator<CreateRelocationDocumentCommand> validator, IEventBus eventBus, IDocumentPersist docPersist)
+        protected override ICommandHandler<CreateRelocationDocumentCommand> CreateCommandHandler(IValidator<CreateRelocationDocumentCommand> validator,
+            IEventBus eventBus, IDocumentService docService)
         {
-            return new CreateRelocationDocumentCommandHandler(validator, eventBus, docPersist);
+            return new CreateRelocationDocumentCommandHandler(validator, eventBus, docService);
         }
 
         protected override DocumentType GetDocumentType()

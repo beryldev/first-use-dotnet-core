@@ -9,7 +9,7 @@ namespace Wrhs.Delivery
         : CreateDocumentCommandHandler<CreateDeliveryDocumentCommand, CreateDeliveryDocumentEvent>
     {
         public CreateDeliveryDocumentCommandHandler(IValidator<CreateDeliveryDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentPersist docPersist) : base(validator, eventBus, docPersist)
+            IDocumentService docService) : base(validator, eventBus, docService)
         {
         }
 
@@ -32,7 +32,7 @@ namespace Wrhs.Delivery
                 }).ToList()
             };
 
-            docPersist.Save(document);
+            docService.Save(document);
 
             return document;
         }

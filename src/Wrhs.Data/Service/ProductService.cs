@@ -56,6 +56,28 @@ namespace Wrhs.Data.Service
             return Filter(query, filter, page, pageSize);
         }
 
+        public void Delete(Product product)
+        {
+            if(product == null)
+                return;
+                
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
+
+        public int Save(Product product)
+        {
+            context.Products.Add(product);
+            context.SaveChanges();
+            return product.Id;
+        }
+
+        public void Update(Product product)
+        {
+            context.Products.Update(product);
+            context.SaveChanges();
+        }
+
         protected override IQueryable<Product> GetQuery()
         {
             return context.Products;

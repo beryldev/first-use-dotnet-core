@@ -15,7 +15,7 @@ namespace Wrhs.Tests
     {
         protected readonly Mock<IValidator<TCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
-        protected readonly Mock<IShiftPersist> shiftPersistMock;
+        protected readonly Mock<IStockService> stockServiceMock;
         protected readonly Mock<IOperationService> operationSrvMock;
         protected readonly ICommandHandler<TCommand> handler;
         protected readonly TCommand command;
@@ -25,19 +25,19 @@ namespace Wrhs.Tests
             validatorMock = new Mock<IValidator<TCommand>>();
             validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>())).Returns(new List<ValidationResult>());
             eventBusMock = new Mock<IEventBus>();
-            shiftPersistMock = new Mock<IShiftPersist>();
+            stockServiceMock = new Mock<IStockService>();
             operationSrvMock = new Mock<IOperationService>();
             operationSrvMock.Setup(m=>m.GetOperationByGuid("some-guid"))
                 .Returns(new Operation{Id = 1});
 
             handler = CreateHandler(validatorMock.Object, eventBusMock.Object,
-                shiftPersistMock.Object, operationSrvMock.Object);
+                stockServiceMock.Object, operationSrvMock.Object);
             command = CreateCommand();
             command.OperationGuid = "some-guid";
         }
 
         protected abstract ICommandHandler<TCommand> CreateHandler(IValidator<TCommand> validator,
-            IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv);
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv);
 
         protected abstract TCommand CreateCommand();
 
@@ -53,7 +53,7 @@ namespace Wrhs.Tests
                 handler.Handle(command);
             });
 
-            shiftPersistMock.Verify(m=>m.Save(It.IsAny<Shift>()), Times.Never());
+            stockServiceMock.Verify(m=>m.Save(It.IsAny<Shift>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsAny<ProcessOperationEvent>()), Times.Never());
         }
 
@@ -61,7 +61,7 @@ namespace Wrhs.Tests
         public void EachRegisteredShiftShouldHaveValidOperationId()
         {
             var shifts = new List<Shift>();
-            shiftPersistMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
                 .Callback((Shift shift)=>{ shifts.Add(shift); });
 
             handler.Handle(command);

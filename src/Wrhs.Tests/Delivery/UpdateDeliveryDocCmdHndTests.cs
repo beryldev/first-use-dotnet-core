@@ -13,7 +13,6 @@ namespace Wrhs.Tests.Delivery
     {
         private readonly Mock<IEventBus> eventBusMock;
         private readonly Mock<IDocumentService> docServiceMock;
-        private readonly Mock<IDocumentPersist> docPersistMock;
         private readonly Mock<IValidator<UpdateDeliveryDocumentCommand>> validatorMock;
     
         private readonly UpdateDeliveryDocumentCommand command;
@@ -23,7 +22,6 @@ namespace Wrhs.Tests.Delivery
         {
             eventBusMock = new Mock<IEventBus>();
             docServiceMock = new Mock<IDocumentService>();
-            docPersistMock = new Mock<IDocumentPersist>();
             validatorMock = new Mock<IValidator<UpdateDeliveryDocumentCommand>>();
             validatorMock.Setup(m=>m.Validate(It.IsNotNull<UpdateDeliveryDocumentCommand>()))
                 .Returns(new List<ValidationResult>());
@@ -39,7 +37,7 @@ namespace Wrhs.Tests.Delivery
                 Remarks = "some remarks"
             };
             handler = new UpdateDeliveryDocumentCommandHandler(validatorMock.Object, 
-                eventBusMock.Object, docPersistMock.Object, docServiceMock.Object);
+                eventBusMock.Object, docServiceMock.Object);
         }
 
         [Fact]
@@ -50,7 +48,7 @@ namespace Wrhs.Tests.Delivery
             var remarks = string.Empty;
             docServiceMock.Setup(m=>m.GetDocumentById(It.IsNotNull<int>()))
                 .Returns(new Document{ Id = 1, Lines = new List<DocumentLine>()});
-            docPersistMock.Setup(m=>m.Update(It.IsNotNull<Document>()))
+            docServiceMock.Setup(m=>m.Update(It.IsNotNull<Document>()))
                 .Callback((Document doc)=>{
                     docId = doc.Id;
                     lines = doc.Lines;
@@ -93,7 +91,7 @@ namespace Wrhs.Tests.Delivery
                 handler.Handle(command);
             });
 
-            docPersistMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
+            docServiceMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsNotNull<UpdateDeliveryDocumentEvent>()), Times.Never());
         }
     }

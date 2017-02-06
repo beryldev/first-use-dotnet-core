@@ -9,7 +9,7 @@ namespace Wrhs.Delivery
         : ProcessOperationCommandHandler<ProcessDeliveryOperationCommand, ProcessDeliveryOperationEvent>
     {
         public ProcessDeliveryOperationCommandHandler(IValidator<ProcessDeliveryOperationCommand> validator, IEventBus eventBus, 
-            IShiftPersist shiftPersist, IOperationService operationSrv) : base(validator, eventBus, shiftPersist, operationSrv)
+            IStockService stockService, IOperationService operationSrv) : base(validator, eventBus, stockService, operationSrv)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Wrhs.Delivery
                 Location = command.DstLocation
             };
 
-            shiftPersist.Save(shift);
+            stockService.Save(shift);
 
             return new Shift[] { shift };
         }

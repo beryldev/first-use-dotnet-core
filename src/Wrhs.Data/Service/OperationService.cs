@@ -29,6 +29,19 @@ namespace Wrhs.Data.Service
                 .FirstOrDefault();
         }
 
+        public int Save(Operation operation)
+        {
+            context.Operations.Add(operation);
+            context.SaveChanges();
+
+            return operation.Id;
+        }
+
+        public void Update(Operation operation)
+        {
+            context.SaveChanges();
+        }
+
         protected override Dictionary<string, Func<Operation, object, bool>> GetFilterMapping()
         {
             return new Dictionary<string, Func<Operation, object, bool>>

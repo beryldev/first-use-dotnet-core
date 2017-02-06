@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Wrhs.Data.Service;
 using Wrhs.Products;
@@ -201,6 +202,51 @@ namespace Wrhs.Data.Tests.Service
             var result = service.FilterProducts(filter);
 
             result.Items.Should().HaveCount(expected);
+        }
+
+        [Fact]
+        public void ShouldStoreInContextWhenSave()
+        {
+            var product = new Product{Name = "name", Code = "code"};
+
+            service.Save(product);
+
+            context.Products.Count().Should().Equals(1);
+        }
+
+        [Fact]
+        public void ShouldReplaceProductInCotextWhenUpdate()
+        {
+            var product = new Product { Name = "Name", Code = "Code"};
+            context.Products.Add(product);
+            context.SaveChanges();
+
+            product.Name = "NewName";
+            service.Update(product);
+
+            context.Products.Where(p=>p.Name == "NewName").Count().Should().Equals(1);
+        }
+
+        [Fact]
+        public void ShouldRemoveProductFromContextOnDelete()
+        {
+            var product = context.Products.First();
+
+            service.Delete(product);
+
+            context.Products.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public void ShouldNotFailWhenTryDeleteNull()
+        {
+            var product = new Product { Name = "Name", Code = "Code"};
+            context.Products.Add(product);
+            context.SaveChanges();
+
+            service.Delete(null);
+
+            context.Products.Should().NotBeNullOrEmpty();
         }
 
         protected override Product CreateEntity(int i)

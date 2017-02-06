@@ -1,4 +1,3 @@
-using System;
 using Moq;
 using Wrhs.Common;
 using Xunit;

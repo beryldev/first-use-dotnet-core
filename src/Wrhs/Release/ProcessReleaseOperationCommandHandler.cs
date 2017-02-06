@@ -9,8 +9,8 @@ namespace Wrhs.Release
         : ProcessOperationCommandHandler<ProcessReleaseOperationCommand, ProcessReleaseOperationEvent>
     {
         public ProcessReleaseOperationCommandHandler(IValidator<ProcessReleaseOperationCommand> validator, 
-            IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv) 
-            : base(validator, eventBus, shiftPersist, operationSrv)
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv) 
+            : base(validator, eventBus, stockService, operationSrv)
         {
         }
 
@@ -29,7 +29,7 @@ namespace Wrhs.Release
                 OperationId = GetOperationId(command.OperationGuid)
             };
 
-            shiftPersist.Save(shift);
+            stockService.Save(shift);
 
             return new Shift[]{ shift };
         }

@@ -7,14 +7,11 @@ namespace Wrhs.Common
     public class ChangeDocStateCommandHandler
         : CommandHandler<ChangeDocStateCommand, ChangeDocStateEvent>
     {
-        private readonly IDocumentPersist docPersist;
         private readonly IDocumentService docService;
 
-        public ChangeDocStateCommandHandler(IValidator<ChangeDocStateCommand> validator, IEventBus eventBus, 
-            IDocumentPersist docPersist, IDocumentService docService) 
+        public ChangeDocStateCommandHandler(IValidator<ChangeDocStateCommand> validator, IEventBus eventBus, IDocumentService docService) 
             : base(validator, eventBus)
         {
-            this.docPersist = docPersist;
             this.docService = docService;
         }
 
@@ -28,7 +25,7 @@ namespace Wrhs.Common
             var document = docService.GetDocumentById(command.DocumentId);
             var oldState = document.State;
             document.State = command.NewState;
-            docPersist.Update(document);
+            docService.Update(document);
 
             return new ChangeDocStateEvent
             {

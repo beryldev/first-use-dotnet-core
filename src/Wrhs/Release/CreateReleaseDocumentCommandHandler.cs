@@ -9,7 +9,7 @@ namespace Wrhs.Release
         : CreateDocumentCommandHandler<CreateReleaseDocumentCommand, CreateReleaseDocumentEvent>
     {
         public CreateReleaseDocumentCommandHandler(IValidator<CreateReleaseDocumentCommand> validator, IEventBus eventBus,
-            IDocumentPersist docPersist) : base(validator, eventBus, docPersist)
+            IDocumentService docService) : base(validator, eventBus, docService)
         {
         }
 
@@ -32,7 +32,7 @@ namespace Wrhs.Release
                 }).ToList()
             };
 
-            docPersist.Save(document);
+            docService.Save(document);
 
             return document;
         }

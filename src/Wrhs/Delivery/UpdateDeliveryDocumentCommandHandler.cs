@@ -11,14 +11,12 @@ namespace Wrhs.Delivery
         : CommandHandler<UpdateDeliveryDocumentCommand, UpdateDeliveryDocumentEvent>
     {
         private readonly IDocumentService docService;
-        private readonly IDocumentPersist docPersist;
 
         public UpdateDeliveryDocumentCommandHandler(IValidator<UpdateDeliveryDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentPersist docPersist, IDocumentService docService) 
+            IDocumentService docService) 
             : base(validator, eventBus)
         {
             this.docService = docService;
-            this.docPersist = docPersist;
         }
 
         protected override void ProcessInvalidCommand(UpdateDeliveryDocumentCommand command, IEnumerable<ValidationResult> results)

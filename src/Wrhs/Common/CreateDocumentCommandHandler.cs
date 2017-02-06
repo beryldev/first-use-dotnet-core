@@ -11,12 +11,12 @@ namespace Wrhs.Common
         where TEvent : IEvent
     {
         
-        protected readonly IDocumentPersist docPersist;
+        protected readonly IDocumentService docService;
 
         public CreateDocumentCommandHandler(IValidator<TCommand> validator, IEventBus eventBus, 
-            IDocumentPersist docPersist) : base(validator, eventBus)
+            IDocumentService docService) : base(validator, eventBus)
         {
-            this.docPersist = docPersist;
+            this.docService = docService;
         }
 
         protected abstract Document SaveDocument(TCommand command);

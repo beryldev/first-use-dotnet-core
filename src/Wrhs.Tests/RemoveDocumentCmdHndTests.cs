@@ -12,7 +12,6 @@ namespace Wrhs.Tests
     {
         private readonly Mock<IEventBus> eventBusMock;
         private readonly Mock<IValidator<RemoveDocumentCommand>> validatorMock;
-        private readonly Mock<IDocumentPersist> docPersistMock;
         private readonly Mock<IDocumentService> docServiceMock;
         private readonly RemoveDocumentCommand command;
         private readonly RemoveDocumentCommandHandler handler;
@@ -21,12 +20,11 @@ namespace Wrhs.Tests
         {
             eventBusMock = new Mock<IEventBus>();
             validatorMock = new Mock<IValidator<RemoveDocumentCommand>>();
-            docPersistMock = new Mock<IDocumentPersist>();
             docServiceMock = new Mock<IDocumentService>();
             docServiceMock.Setup(m=>m.GetDocumentById(It.IsNotNull<int>())).Returns(new Document(){Id = 1});
 
             command = new RemoveDocumentCommand { DocumentId = 1};
-            handler = new RemoveDocumentCommandHandler(validatorMock.Object, eventBusMock.Object, docPersistMock.Object, docServiceMock.Object);
+            handler = new RemoveDocumentCommandHandler(validatorMock.Object, eventBusMock.Object, docServiceMock.Object);
         }
 
         [Fact]
@@ -36,7 +34,7 @@ namespace Wrhs.Tests
 
             handler.Handle(command);
 
-            docPersistMock.Verify(m=>m.Delete(It.IsNotNull<Document>()), Times.Once());
+            docServiceMock.Verify(m=>m.Delete(It.IsNotNull<Document>()), Times.Once());
         }
 
         [Fact]
@@ -63,7 +61,7 @@ namespace Wrhs.Tests
                 handler.Handle(command);
             });
 
-            docPersistMock.Verify(m=>m.Delete(It.IsAny<Document>()), Times.Never);
+            docServiceMock.Verify(m=>m.Delete(It.IsAny<Document>()), Times.Never);
             eventBusMock.Verify(m=>m.Publish(It.IsAny<RemoveDocumentEvent>()), Times.Never);
         }
 

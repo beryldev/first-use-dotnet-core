@@ -28,5 +28,11 @@ namespace Wrhs.Services
         ResultPage<Product> FilterProducts(Dictionary<string, object> filter);
 
         ResultPage<Product> FilterProducts(Dictionary<string, object> filter, int page, int pageSize);
+    
+        int Save(Product product);
+
+        void Update(Product product);
+
+        void Delete(Product Product);
     }
 }

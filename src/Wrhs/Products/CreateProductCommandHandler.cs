@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using Wrhs.Core;
 using Wrhs.Core.Exceptions;
+using Wrhs.Services;
 
 namespace Wrhs.Products
 {
     public class CreateProductCommandHandler : CommandHandler<CreateProductCommand, CreateProductEvent>
     {
-        private readonly IProductPersist persist;
+        private readonly IProductService service;
 
         public CreateProductCommandHandler(IValidator<CreateProductCommand> validator,
-             IEventBus eventBus, IProductPersist persist) : base(validator, eventBus)
+             IEventBus eventBus, IProductService service) : base(validator, eventBus)
         {
-            this.persist = persist;
+            this.service = service;
         }
 
         protected override CreateProductEvent ProcessValidCommand(CreateProductCommand command)
@@ -39,7 +40,7 @@ namespace Wrhs.Products
                 Description = command.Description
             };
 
-            persist.Save(product);
+            service.Save(product);
             return product;
         }
     }

@@ -16,9 +16,8 @@ namespace Wrhs.Tests
         protected readonly Mock<IValidator<ExecuteOperationCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly Mock<IOperationService> operationSrvMock;
-        protected readonly Mock<IDocumentPersist> docPersistMock;
-        protected readonly Mock<IShiftPersist> shiftPersistMock;
-        protected readonly Mock<IOperationPersist> operationPersistMock;
+        protected readonly Mock<IDocumentService> docServiceMock;
+        protected readonly Mock<IStockService> stockServiceMock;
 
         public ExecuteOperationCmdHndTests()
         {
@@ -29,17 +28,15 @@ namespace Wrhs.Tests
                 .Returns(new List<ValidationResult>());
 
             operationSrvMock = new Mock<IOperationService>();
-            docPersistMock = new Mock<IDocumentPersist>();
-            shiftPersistMock = new Mock<IShiftPersist>();
-            operationPersistMock = new Mock<IOperationPersist>();
+            docServiceMock = new Mock<IDocumentService>();
+            stockServiceMock = new Mock<IStockService>();
 
             command = CreateCommand();
             var parameters = new HandlerParameters
             {
                 OperationService = operationSrvMock.Object,
-                OperationPersist = operationPersistMock.Object,
-                DocumentPersist = docPersistMock.Object,
-                ShiftPersist = shiftPersistMock.Object
+                DocumentService = docServiceMock.Object,
+                StockService = stockServiceMock.Object
             };
             handler = CreateHandler(validatorMock.Object, eventBusMock.Object, parameters);
         }
@@ -75,7 +72,7 @@ namespace Wrhs.Tests
             handler.Handle(command);
 
             operation.Document.State.Should().Be(DocumentState.Executed);
-            docPersistMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Once());
+            docServiceMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Once());
         }
 
         [Fact]
@@ -88,7 +85,7 @@ namespace Wrhs.Tests
             handler.Handle(command);
 
             operation.Shifts.Where(s=>!s.Confirmed).Should().BeEmpty();
-            shiftPersistMock.Verify(m=>m.Update(It.IsNotNull<Shift>()), Times.Exactly(2));
+            stockServiceMock.Verify(m=>m.Update(It.IsNotNull<Shift>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -101,7 +98,7 @@ namespace Wrhs.Tests
             handler.Handle(command);
 
             operation.Status.Should().Be(OperationStatus.Done);
-            operationPersistMock.Verify(m=>m.Update(It.IsNotNull<Operation>()), Times.Once());
+            operationSrvMock.Verify(m=>m.Update(It.IsNotNull<Operation>()), Times.Once());
         }
 
         [Fact]
@@ -129,9 +126,9 @@ namespace Wrhs.Tests
                 handler.Handle(command);
             });
 
-            docPersistMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
-            shiftPersistMock.Verify(m=>m.Update(It.IsNotNull<Shift>()), Times.Never());
-            operationPersistMock.Verify(m=>m.Update(It.IsNotNull<Operation>()), Times.Never());
+            docServiceMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
+            stockServiceMock.Verify(m=>m.Update(It.IsNotNull<Shift>()), Times.Never());
+            operationSrvMock.Verify(m=>m.Update(It.IsNotNull<Operation>()), Times.Never());
         }
 
         protected Operation CreateOperation()

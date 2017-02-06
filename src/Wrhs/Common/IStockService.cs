@@ -10,5 +10,9 @@ namespace Wrhs.Common
          IEnumerable<Stock> GetProductStock(int productId);
 
          ResultPage<Stock> GetStocks(int page, int pageSize);
+
+         int Save(Shift shift);
+
+         void Update(Shift shift);
     }
 }

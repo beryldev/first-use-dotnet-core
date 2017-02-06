@@ -19,7 +19,7 @@ namespace Wrhs.Tests.Products
             command = new DeleteProductCommand();
             validatorMock = new Mock<IValidator<DeleteProductCommand>>();
             handler = new DeleteProductCommandHandler(validatorMock.Object, eventBusMock.Object,
-                productSrvMock.Object, productPersistMock.Object);
+                productSrvMock.Object);
         }
         
         [Fact]
@@ -30,7 +30,7 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            productPersistMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Once());
+            productSrvMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Once());
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Wrhs.Tests.Products
                 handler.Handle(command);
             });
 
-            productPersistMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Never());
+            productSrvMock.Verify(m=>m.Delete(It.IsAny<Product>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsNotNull<DeleteProductEvent>()), Times.Never());
         }
     }

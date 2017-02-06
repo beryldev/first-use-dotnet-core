@@ -9,17 +9,15 @@ namespace Wrhs.Common
         : CommandHandler<ExecuteOperationCommand, ExecuteOperationEvent>
     {
         protected readonly IOperationService operationSrv;
-        protected readonly IOperationPersist operationPersist;
-        protected readonly IDocumentPersist docPersist;
-        protected readonly IShiftPersist shiftPersist;  
+        protected readonly IDocumentService docService;
+        protected readonly IStockService stockService;  
 
        public ExecuteOperationCommandHandler(IValidator<ExecuteOperationCommand> validator, IEventBus eventBus,
             HandlerParameters parameters) : base(validator, eventBus)
         {
             this.operationSrv = parameters.OperationService;
-            this.operationPersist = parameters.OperationPersist;
-            this.docPersist = parameters.DocumentPersist;
-            this.shiftPersist = parameters.ShiftPersist;           
+            this.docService = parameters.DocumentService;
+            this.stockService = parameters.StockService;           
         }   
 
         protected override void ProcessInvalidCommand(ExecuteOperationCommand command, IEnumerable<ValidationResult> results)
@@ -34,14 +32,14 @@ namespace Wrhs.Common
             foreach (var shift in operation.Shifts)
             {
                 shift.Confirmed = true;
-                shiftPersist.Update(shift);
+                stockService.Update(shift);
             }
 
             operation.Document.State = DocumentState.Executed;
-            docPersist.Update(operation.Document);
+            docService.Update(operation.Document);
 
             operation.Status = OperationStatus.Done;
-            operationPersist.Update(operation);
+            operationSrv.Update(operation);
 
             return CreateEvent(operation, DateTime.UtcNow);
         }
@@ -58,8 +56,7 @@ namespace Wrhs.Common
     public class HandlerParameters
     {
         public IOperationService OperationService { get; set; }
-        public IOperationPersist OperationPersist { get; set; }
-        public IDocumentPersist DocumentPersist { get; set; }
-        public IShiftPersist ShiftPersist { get; set; }
+        public IDocumentService DocumentService { get; set; }
+        public IStockService StockService { get; set; }
     }
 }

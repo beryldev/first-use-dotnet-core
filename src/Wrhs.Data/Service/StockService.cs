@@ -63,5 +63,19 @@ namespace Wrhs.Data.Service
 
             return new ResultPage<Stock>(result, page, pageSize);    
         }
+
+        public int Save(Shift shift)
+        {
+            context.Shifts.Add(shift);
+            context.SaveChanges();
+
+            return shift.Id;
+        }
+
+        public void Update(Shift shift)
+        {
+            context.Shifts.Update(shift);
+            context.SaveChanges();
+        }
     }
 }

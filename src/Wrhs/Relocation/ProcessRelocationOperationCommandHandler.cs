@@ -9,8 +9,8 @@ namespace Wrhs.Relocation
         : ProcessOperationCommandHandler<ProcessRelocationOperationCommand, ProcessRelocationOperationEvent>
     {
         public ProcessRelocationOperationCommandHandler(IValidator<ProcessRelocationOperationCommand> validator,
-            IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv) 
-            : base(validator, eventBus, shiftPersist, operationSrv)
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv) 
+            : base(validator, eventBus, stockService, operationSrv)
         {
         }
 
@@ -38,8 +38,8 @@ namespace Wrhs.Relocation
                 OperationId = operationId
             };
 
-            shiftPersist.Save(shiftOut);
-            shiftPersist.Save(shiftIn);
+            stockService.Save(shiftOut);
+            stockService.Save(shiftIn);
             
             return new Shift[]{ shiftOut, shiftIn};
         }

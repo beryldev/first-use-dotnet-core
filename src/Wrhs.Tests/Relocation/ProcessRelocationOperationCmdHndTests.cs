@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -18,10 +17,10 @@ namespace Wrhs.Tests.Relocation
         }
 
         protected override ICommandHandler<ProcessRelocationOperationCommand> CreateHandler(IValidator<ProcessRelocationOperationCommand> validator,
-            IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv)
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
         {
             return new ProcessRelocationOperationCommandHandler(validator,
-                eventBus, shiftPersist, operationSrv);
+                eventBus, stockService, operationSrv);
         }
 
         [Fact]
@@ -29,7 +28,7 @@ namespace Wrhs.Tests.Relocation
         {
             handler.Handle(command);
 
-            shiftPersistMock.Verify(m=>m.Save(It.IsNotNull<Shift>()), Times.Exactly(2));
+            stockServiceMock.Verify(m=>m.Save(It.IsNotNull<Shift>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -38,7 +37,7 @@ namespace Wrhs.Tests.Relocation
             var shiftOut = 0M;
             command.Quantity = 10;
             command.SrcLocation = "srcLocation";
-            shiftPersistMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
                 .Callback((Shift shift)=>{
                     if(shift.Location==command.SrcLocation)
                         shiftOut = shift.Quantity;
@@ -55,7 +54,7 @@ namespace Wrhs.Tests.Relocation
             var shiftIn = 0M;
             command.Quantity = 10;
             command.DstLocation = "dstLocation";
-            shiftPersistMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
                 .Callback((Shift shift)=>{
                     if(shift.Location==command.DstLocation)
                         shiftIn = shift.Quantity;
