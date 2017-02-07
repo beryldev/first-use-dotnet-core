@@ -153,6 +153,16 @@ namespace Wrhs.WebApp
                         var validator = new UpdateDeliveryDocumentCommandValidator(innerValid);
                         return new UpdateDeliveryDocumentCommandHandler(validator, eventBus, docSrv);
                     }},
+                    { typeof(UpdateRelocationDocumentCommand), ()=>{
+                        var innerValid = new CreateRelocationDocumentCommandValidator(productSrv, stockSrv);
+                        var validator = new UpdateRelocationDocumentCommandValidator(innerValid);
+                        return new UpdateRelocationDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(UpdateReleaseDocumentCommand), ()=>{
+                        var innerValid = new CreateReleaseDocumentCommandValidator(productSrv, stockSrv);
+                        var validator = new UpdateReleaseDocumentCommandValidator(innerValid);
+                        return new UpdateReleaseDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
                     { typeof(CreateProductCommand), ()=>{
                         var validator = new CreateProductCommandValidator(productSrv);
                         return new CreateProductCommandHandler(validator, eventBus, productSrv);

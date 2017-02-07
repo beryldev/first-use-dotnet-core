@@ -3,24 +3,25 @@ using System.Linq;
 using FluentAssertions;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Delivery;
+using Wrhs.Relocation;
 
 namespace Wrhs.Tests.Relocation
 {
-    public class UpdateDeliveryDocumentCmdHndTest
-        : UpdateDocumentCmdHndTestsBase<UpdateDeliveryDocumentCommand>
+    public class UpdateRelocationDocumentCmdHndTest
+        : UpdateDocumentCmdHndTestsBase<UpdateRelocationDocumentCommand>
     {
-        protected override UpdateDeliveryDocumentCommand CreateCommand()
+        protected override UpdateRelocationDocumentCommand CreateCommand()
         {
-            return new UpdateDeliveryDocumentCommand
+            return new UpdateRelocationDocumentCommand
             {
                 DocumentId = 1,
                 Lines =  new List<CreateDocumentCommand.DocumentLine>
                 {
-                    new CreateDocumentCommand.DocumentLine
+                    new CreateRelocationDocumentCommand.DocumentLine
                     {
                         ProductId = 1,
                         Quantity = 10,
+                        SrcLocation = "src",
                         DstLocation = "dst"
                     }
                 },
@@ -28,9 +29,9 @@ namespace Wrhs.Tests.Relocation
             };
         }
 
-        protected override ICommandHandler<UpdateDeliveryDocumentCommand> CreateHandler()
+        protected override ICommandHandler<UpdateRelocationDocumentCommand> CreateHandler()
         {
-            return new UpdateDeliveryDocumentCommandHandler(validatorMock.Object, 
+            return new UpdateRelocationDocumentCommandHandler(validatorMock.Object, 
                 eventBusMock.Object, docServiceMock.Object);
         }
 
@@ -40,6 +41,7 @@ namespace Wrhs.Tests.Relocation
             var line = document.Lines.First();
             line.ProductId.Should().Be(1);
             line.Quantity.Should().Be(10);
+            line.SrcLocation.Should().Be("src");
             line.DstLocation.Should().Be("dst");
         }
     }

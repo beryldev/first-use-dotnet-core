@@ -68,6 +68,20 @@ namespace Wrhs.WebApp.Controllers.Documents
             return HandleRequest<UpdateDeliveryDocumentCommand>(command);
         }
 
+        [HttpPut("relocation/{documentId}")]
+        public IActionResult UpdateRelocationDocument(int documentId, [FromBody]UpdateRelocationDocumentCommand command)
+        {
+            command.DocumentId = documentId;
+            return HandleRequest<UpdateRelocationDocumentCommand>(command);
+        }
+
+        [HttpPut("release/{documentId}")]
+        public IActionResult UpdateReleaseDocument(int documentId, [FromBody]UpdateReleaseDocumentCommand command)
+        {
+            command.DocumentId = documentId;
+            return HandleRequest<UpdateReleaseDocumentCommand>(command);
+        }
+
         protected IActionResult HandleRequest<T>(T command) where T : ICommand
         {
             IActionResult result;

@@ -1,11 +1,11 @@
 using System;
 using Wrhs.Core;
 
-namespace Wrhs.Delivery
+namespace Wrhs.Common
 {
-    public class UpdateDeliveryDocumentEvent : IEvent
+    public class UpdateDocumentEvent : IEvent
     {
-        public UpdateDeliveryDocumentEvent(int documentId, DateTime updatedAt)
+        public UpdateDocumentEvent(int documentId, DateTime updatedAt)
         {
             this.DocumentId = documentId;
             this.UpdatedAt = updatedAt;
