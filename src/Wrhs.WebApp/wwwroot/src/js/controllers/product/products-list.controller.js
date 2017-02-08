@@ -9,14 +9,19 @@
 
     function ProductsListCtrl($scope, $http, $state, uiGridConstants){
         var vm = this;
+        vm.selected = null;
         vm.filter = {
             page: 1,
             perPage: 10
         };
+        vm.openSelected = openSelected;
 
         $scope.myAppScopeProvider = {
             showInfo : function(row) {
                 $state.go('products.details', {id: row.entity.id});
+            },
+            selectRow: function(row) {
+                vm.selected = row.entity
             }
         }
 
@@ -63,7 +68,7 @@
                 });
             },
             appScopeProvider: $scope.myAppScopeProvider,
-            rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
+            rowTemplate: '<div ng-click=\'grid.appScope.selectRow(row)\' ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
         }
         
         init();
@@ -81,6 +86,11 @@
                     vm.gridConfig.data = data.items;
                     vm.gridConfig.totalItems = data.total;
                 });
+        }
+
+        function openSelected(){
+            if(vm.selected !== null)
+                $state.go('products.details', {id: vm.selected.id});
         }
     }
 })();

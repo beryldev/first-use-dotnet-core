@@ -20,7 +20,7 @@
                         controller: 'ProductsListCtrl as vm'
                     },
                     'context@': {
-                        templateUrl: 'templates/product/productsListContext.html'
+                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> Products</strong>'
                     }
                 }
             })

@@ -14,10 +14,10 @@
         vm.stocksSelect = stocksSelect;
         vm.gridConfig = {
             data: loadData(), 
-            enableFiltering: false,
+            enableFiltering: true,
             columnDefs: [
                 { name: 'location'},
-                { name: 'quantity'},
+                { name: 'quantity', enableFiltering: false},
             ],
         }
 

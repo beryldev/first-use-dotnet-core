@@ -1,5 +1,16 @@
 <div class="row">
     <div class="col-xs-12">
+        <a ui-sref="products.new" class="btn btn-default btn-sm">
+            <i class="fa fa-plus-circle margin-r"></i> New product
+        </a>
+        <button class="btn btn-default btn-sm" ng-click="vm.openSelected()" ng-disabled="vm.selected === null">
+            <i class="fa fa-search margin-r"></i> Open selected
+        </button>
+    </div>
+</div>
+
+<div class="row margin-top">
+    <div class="col-xs-12">
         <div ui-grid="vm.gridConfig" ui-grid-pagination ui-grid-selection class="myGrid" cg-busy="vm.productsBusy"></div>
     </div>
 </div>
