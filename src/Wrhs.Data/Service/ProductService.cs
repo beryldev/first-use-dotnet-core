@@ -89,6 +89,7 @@ namespace Wrhs.Data.Service
             {
                 {"name", (Product p, object val) => p.Name != null && p.Name.ToLower().Contains((val as string).ToLower()) },
                 {"code", (Product p, object val) => p.Code != null && p.Code.ToLower().Contains((val as string).ToLower()) },
+                {"ean", (Product p, object val) => p.Ean != null && p.Ean.ToLower().Contains((val as string).ToLower()) }
             };
 
             return mapping;

@@ -124,21 +124,23 @@ namespace Wrhs.Data.Tests.Service
             result.Should().BeNull();
         }
 
-        [Fact]
-        public void ShouldReturnFilteredProducts()
+        [Theory]
+        [InlineData("Name", "Product 9", 2)]
+        [InlineData("Ean", "1111", 1)]
+        public void ShouldReturnFilteredProducts(string field, object value, int expectedCount)
         {
-            context.Products.Add(new Product { Name="Product 1", Code= "PROD1"});
-            context.Products.Add(new Product { Name="Product 9", Code= "PROD9"});
+            context.Products.Add(new Product { Name="Product 1", Code= "PROD1", Ean="1111"});
+            context.Products.Add(new Product { Name="Product 9", Code= "PROD9", Ean="9999"});
             context.Products.Add(new Product { Name="Product 91", Code= "PROD91"});
             context.Products.Add(new Product { Name="Product 82", Code= "PROD82"});
             context.SaveChanges();
 
             var filter = new Dictionary<string, object>();
-            filter.Add("Name", "Product 9");
+            filter.Add(field, value);
 
             var result = service.FilterProducts(filter);
 
-            result.Items.Should().HaveCount(2);
+            result.Items.Should().HaveCount(expectedCount);
         }
 
         [Fact]
