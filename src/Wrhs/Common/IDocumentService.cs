@@ -13,14 +13,11 @@ namespace Wrhs.Common
 
         ResultPage<Document> GetDocuments(DocumentType type);
 
-        ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter);
+        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter);
 
-        ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter, int page);
+        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page);
 
-        ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter, int page, int pageSize);
+        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page, int pageSize);
 
         int Save(Document document);
 

@@ -131,12 +131,38 @@ namespace Wrhs.Data.Tests.Service
             var filter = new Dictionary<string, object>();
             filter.Add("FullNumber", "DLV-1");
             filter.Add("IssueDate", new DateTime(2016, 12, 1));
+            filter.Add("Type", DocumentType.Delivery);
 
-            var result = service.FilterDocuments(DocumentType.Delivery, filter, page, pageSize);
+            var result = service.FilterDocuments(filter, page, pageSize);
 
             result.Page.Should().Be(page);
             result.PageSize.Should().Be(pageSize);
             result.Items.Should().HaveCount(expected);
+        }
+
+        [Theory]
+        [InlineData(DocumentType.Release, "State", DocumentState.Confirmed, 1)]
+        [InlineData(DocumentType.Release, "State", DocumentState.Canceled, 1)]
+        [InlineData(DocumentType.Release, "FullNumber", null, 3)]
+        public void ShouldReturnFilteredResultsOnFilterDocuments(DocumentType type, string field, object value, int expectedCount)
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Canceled, FullNumber="RLS-1", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Open, FullNumber="RLS-2", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Confirmed, FullNumber="RLS-3", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-1", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-12",IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-22", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
+            context.SaveChanges();
+
+            var filter = new Dictionary<string, object> 
+            { 
+                { field, value },
+                { "type", type}
+            };
+            var result = service.FilterDocuments(filter);
+
+            result.Items.Should().HaveCount(expectedCount);
         }
 
         [Fact]

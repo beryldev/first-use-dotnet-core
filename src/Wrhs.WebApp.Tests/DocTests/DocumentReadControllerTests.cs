@@ -47,96 +47,68 @@ namespace Wrhs.WebApp.Tests
             documentSrvMock.Setup(m=>m.GetDocuments(It.IsNotNull<DocumentType>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentType>(), It.IsNotNull<Dictionary<string, object>>()))
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentType>(), It.IsNotNull<Dictionary<string, object>>(),
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>(),
                 It.IsNotNull<int>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentType>(), It.IsNotNull<Dictionary<string, object>>(),
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>(),
                 It.IsNotNull<int>(), It.IsNotNull<int>()))
                 .Returns(result);
         }
 
         [Theory]
-        [InlineData("GetDeliveryDocuments")]
-        [InlineData("GetRelocationDocuments")]
-        [InlineData("GetReleaseDocuments")]
-        public void ShouldReturnOkWithDocumentsOnGetWithoutParameters(string variant)
+        [InlineData(null, null, null, null)]
+        [InlineData(DocumentType.Delivery, null, null, null)]
+        [InlineData(DocumentType.Release, null, DocumentState.Canceled, "")]
+        [InlineData(DocumentType.Relocation, null, null, "some-number")]
+        public void ShouldReturnOkWithResultOnGetDocuments(DocumentType? type, DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var controllerType = controller.GetType();
-            var methodUnderTest  = controllerType.GetMethod(variant);
+            var result = controller.GetDocuments(type, issueDate, state, fullNumber);
 
-            var parameters = new object[]{null, null, null, null};
-            var result = methodUnderTest.Invoke(controller, parameters) as OkObjectResult;
-
-            Assert.IsType<ResultPage<Document>>(result.Value);
-            (result.Value as ResultPage<Document>).Items.Should().NotBeEmpty();
+            result.Should().BeOfType<OkObjectResult>();
+            (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
         }
 
         [Theory]
-        [InlineData("GetDeliveryDocuments")]
-        [InlineData("GetRelocationDocuments")]
-        [InlineData("GetReleaseDocuments")]
-        public void ShouldReturnOkWithDocumentsOnGetWithFullNumberParameter(string variant)
+        [InlineData(null, null, null)]
+        [InlineData(null, null, null)]
+        [InlineData(null, DocumentState.Canceled, "")]
+        [InlineData(null, null, "some-number")]
+        public void ShouldReturnOkWithResultOnGetDeliveryDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var controllerType = controller.GetType();
-            var methodUnderTest  = controllerType.GetMethod(variant);
+            var result = controller.GetDeliveryDocuments(issueDate, state, fullNumber);
 
-            var parameters = new object[]{null, "some-number", null, null};
-            var result = methodUnderTest.Invoke(controller, parameters) as OkObjectResult;
-
-            Assert.IsType<ResultPage<Document>>(result.Value);
-            (result.Value as ResultPage<Document>).Items.Should().NotBeEmpty();
+            result.Should().BeOfType<OkObjectResult>();
+            (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
         }
 
         [Theory]
-        [InlineData("GetDeliveryDocuments")]
-        [InlineData("GetRelocationDocuments")]
-        [InlineData("GetReleaseDocuments")]
-        public void ShouldReturnOkWithDocumentsOnGetWithIssueDateParameter(string variant)
+        [InlineData(null, null, null)]
+        [InlineData(null, null, null)]
+        [InlineData(null, DocumentState.Canceled, "")]
+        [InlineData(null, null, "some-number")]
+        public void ShouldReturnOkWithResultOnGetRelocationDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var controllerType = controller.GetType();
-            var methodUnderTest  = controllerType.GetMethod(variant);
+            var result = controller.GetRelocationDocuments(issueDate, state, fullNumber);
 
-            var parameters = new object[]{new DateTime(2016,1,1), null, null, null};
-            var result = methodUnderTest.Invoke(controller, parameters) as OkObjectResult;
-
-            Assert.IsType<ResultPage<Document>>(result.Value);
-            (result.Value as ResultPage<Document>).Items.Should().NotBeEmpty();
+            result.Should().BeOfType<OkObjectResult>();
+            (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
         }
 
         [Theory]
-        [InlineData("GetDeliveryDocuments")]
-        [InlineData("GetRelocationDocuments")]
-        [InlineData("GetReleaseDocuments")]
-        public void ShouldReturnOkWithRequestedPageOnGet(string variant)
+        [InlineData(null, null, null)]
+        [InlineData(null, null, null)]
+        [InlineData(null, DocumentState.Canceled, "")]
+        [InlineData(null, null, "some-number")]
+        public void ShouldReturnOkWithResultOnGetReleaseDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var controllerType = controller.GetType();
-            var methodUnderTest  = controllerType.GetMethod(variant);
+            var result = controller.GetReleaseDocuments(issueDate, state, fullNumber);
 
-            var parameters = new object[]{null, null, 2, null};
-            var result = methodUnderTest.Invoke(controller, parameters) as OkObjectResult;
-
-            Assert.IsType<ResultPage<Document>>(result.Value);
-            (result.Value as ResultPage<Document>).Items.Should().NotBeEmpty();
-        }
-
-        [Theory]
-        [InlineData("GetDeliveryDocuments")]
-        [InlineData("GetRelocationDocuments")]
-        [InlineData("GetReleaseDocuments")]
-        public void ShouldReturnOkWithRequestedPageSize(string variant)
-        {
-            var controllerType = controller.GetType();
-            var methodUnderTest  = controllerType.GetMethod(variant);
-
-            var parameters = new object[]{null, null, null, 30};
-            var result = methodUnderTest.Invoke(controller, parameters) as OkObjectResult;
-
-            Assert.IsType<ResultPage<Document>>(result.Value);
-            (result.Value as ResultPage<Document>).Items.Should().NotBeEmpty();
+            result.Should().BeOfType<OkObjectResult>();
+            (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
         }
 
         [Fact]

@@ -52,22 +52,19 @@ namespace Wrhs.Data.Service
             return PaginateQuery(query, page, pageSize);
         }
 
-        public ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter)
+        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter)
         {
-            return FilterDocuments(type, filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
+            return FilterDocuments(filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
         }
 
-        public ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter, int page)
+        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page)
         {
-            return FilterDocuments(type, filter, page, DEFAULT_PAGE_SIZE);
+            return FilterDocuments(filter, page, DEFAULT_PAGE_SIZE);
         }
 
-        public ResultPage<Document> FilterDocuments(DocumentType type,
-            Dictionary<string, object> filter, int page, int pageSize)
+        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page, int pageSize)
         {
-            var query = context.Documents.Where(d => d.Type == type);
+            var query = context.Documents;
             return Filter(query, filter, page, pageSize);
         }
 
@@ -100,8 +97,10 @@ namespace Wrhs.Data.Service
         {
             var mapping = new Dictionary<string, Func<Document, object, bool>>
             {
-                {"fullnumber", (Document p, object val) => p.FullNumber.Contains(val as string) },
+                {"fullnumber", (Document p, object val) => p.FullNumber.Contains(val as string ?? String.Empty) },
                 {"issuedate", (Document p, object val) => p.IssueDate == (DateTime)val },
+                {"state", (Document p, object val) => p.State == (DocumentState)val},
+                {"type", (Document p, object val) => p.Type == (DocumentType)val }
             };
 
             return mapping;

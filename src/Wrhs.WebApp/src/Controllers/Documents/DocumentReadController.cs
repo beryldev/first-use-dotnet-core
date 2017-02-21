@@ -17,32 +17,41 @@ namespace Wrhs.WebApp.Controllers.Documents
         }
 
         [HttpGet("delivery")]
-        public IActionResult GetDeliveryDocuments(DateTime? issueDate, string fullNumber="",
+        public IActionResult GetDeliveryDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="", 
             int page=1, int pageSize=20)
         {
-            var result = GetDocuments(issueDate, fullNumber, page, pageSize,
-                DocumentType.Delivery);
-                
-            return Ok(result);
+            return GetDocuments(DocumentType.Delivery, issueDate, state, fullNumber, page, pageSize);
         }
 
         [HttpGet("relocation")]
-        public IActionResult GetRelocationDocuments(DateTime? issueDate, string fullNumber="",
+        public IActionResult GetRelocationDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="",
             int page=1, int pageSize=20)
         {
-            var result = GetDocuments(issueDate, fullNumber, page, pageSize,
-                DocumentType.Relocation);
-                
-            return Ok(result);
+            return GetDocuments(DocumentType.Relocation, issueDate, state, fullNumber, page, pageSize);
         }
 
         [HttpGet("release")]
-        public IActionResult GetReleaseDocuments(DateTime? issueDate, string fullNumber="",
+        public IActionResult GetReleaseDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="",
             int page=1, int pageSize=20)
         {
-            var result = GetDocuments(issueDate, fullNumber, page, pageSize,
-                DocumentType.Release);
-                
+            return GetDocuments(DocumentType.Release, issueDate, state, fullNumber, page, pageSize);
+        }
+
+        public IActionResult GetDocuments(DocumentType? type, DateTime? issueDate, DocumentState? state, 
+            string fullNumber="", int page=1, int pageSize=20)
+        {
+            var filter = new Dictionary<string, object>();
+            filter.Add("fullNumber", fullNumber);
+
+            if(type != null)
+                filter.Add("type", type);
+            if(issueDate != null)
+                filter.Add("issuedate", issueDate);
+            if(state != null)
+                filter.Add("state", state);
+
+            var result = documentSrv.FilterDocuments(filter);
+
             return Ok(result);
         }
 
@@ -56,20 +65,6 @@ namespace Wrhs.WebApp.Controllers.Documents
             return Ok(document);
         }
 
-        protected ResultPage<Document> GetDocuments(DateTime? issueDate, string fullNumber, 
-            int page, int pageSize, DocumentType type)
-        {
-            page = page < 1 ? 1 : page;
-            pageSize = (pageSize < 1 || pageSize > 100) ? 20 : pageSize; 
-
-            var filter = new Dictionary<string, object>
-            {
-                {"fullNumber", fullNumber}
-            };
-            if(issueDate != null)
-                filter.Add("issueDate", issueDate);
-
-            return documentSrv.FilterDocuments(type, filter, page, pageSize);
-        }
+        
     }
 }
