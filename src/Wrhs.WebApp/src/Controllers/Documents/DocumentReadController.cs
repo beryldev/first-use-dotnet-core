@@ -37,17 +37,8 @@ namespace Wrhs.WebApp.Controllers.Documents
 
         public IActionResult GetDocuments(DocumentFilter filter, int page=1, int pageSize=20)
         {
-            var f = new Dictionary<string, object>();
-            f.Add("fullNumber", filter.FullNumber);
 
-            if(filter.Type != null)
-                f.Add("type", filter.Type);
-            if(filter.IssueDate != null)
-                f.Add("issuedate", filter.IssueDate);
-            if(filter.State != null)
-                f.Add("state", filter.State);
-
-            var result = documentSrv.FilterDocuments(f);
+            var result = documentSrv.FilterDocuments(filter);
 
             return Ok(result);
         }

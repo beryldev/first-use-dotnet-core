@@ -16,18 +16,11 @@ namespace Wrhs.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get(string name="", string code="", string ean="",
+        public IActionResult Get(ProductFilter filter,
             int page=1, int pageSize=20)
         {
             page = page < 1 ? 1 : page;
             pageSize = (pageSize < 1 || pageSize > 100) ? 20 : pageSize;
-
-            var filter = new Dictionary<string, object>
-            {
-                {"name", name ?? string.Empty},
-                {"code", code ?? string.Empty},
-                {"ean", ean ?? string.Empty}
-            };
 
             var result = productSrv.FilterProducts(filter, page, pageSize);
             return Ok(result);

@@ -46,14 +46,14 @@ namespace Wrhs.WebApp.Tests
             documentSrvMock.Setup(m=>m.GetDocuments(It.IsNotNull<DocumentType>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>()))
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentFilter>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>(),
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentFilter>(),
                 It.IsNotNull<int>()))
                 .Returns(result);
 
-            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<Dictionary<string, object>>(),
+            documentSrvMock.Setup(m=>m.FilterDocuments(It.IsNotNull<DocumentFilter>(),
                 It.IsNotNull<int>(), It.IsNotNull<int>()))
                 .Returns(result);
         }
