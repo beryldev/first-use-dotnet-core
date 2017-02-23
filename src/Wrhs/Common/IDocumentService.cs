@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Wrhs.Core;
 
@@ -24,5 +25,14 @@ namespace Wrhs.Common
         void Update(Document document);
 
         void Delete(Document document);
+    }
+
+
+    public class DocumentFilter
+    {
+        public DocumentType? Type { get; set; }
+        public DocumentState? State { get; set; }
+        public DateTime? IssueDate { get; set; }
+        public string FullNumber { get; set; } = string.Empty;
     }
 }

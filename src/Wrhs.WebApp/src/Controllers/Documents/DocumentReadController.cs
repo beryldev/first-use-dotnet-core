@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
-using Wrhs.Core;
 
 namespace Wrhs.WebApp.Controllers.Documents
 {
@@ -17,40 +15,39 @@ namespace Wrhs.WebApp.Controllers.Documents
         }
 
         [HttpGet("delivery")]
-        public IActionResult GetDeliveryDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="", 
-            int page=1, int pageSize=20)
+        public IActionResult GetDeliveryDocuments(DocumentFilter filter, int page=1, int pageSize=20)
         {
-            return GetDocuments(DocumentType.Delivery, issueDate, state, fullNumber, page, pageSize);
+            filter.Type = DocumentType.Delivery;
+            return GetDocuments(filter, page, pageSize);
         }
 
         [HttpGet("relocation")]
-        public IActionResult GetRelocationDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="",
-            int page=1, int pageSize=20)
+        public IActionResult GetRelocationDocuments(DocumentFilter filter, int page=1, int pageSize=20)
         {
-            return GetDocuments(DocumentType.Relocation, issueDate, state, fullNumber, page, pageSize);
+            filter.Type = DocumentType.Relocation;
+            return GetDocuments(filter, page, pageSize);
         }
 
         [HttpGet("release")]
-        public IActionResult GetReleaseDocuments(DateTime? issueDate, DocumentState? state, string fullNumber="",
-            int page=1, int pageSize=20)
+        public IActionResult GetReleaseDocuments(DocumentFilter filter, int page=1, int pageSize=20)
         {
-            return GetDocuments(DocumentType.Release, issueDate, state, fullNumber, page, pageSize);
+            filter.Type = DocumentType.Release;
+            return GetDocuments(filter, page, pageSize);
         }
 
-        public IActionResult GetDocuments(DocumentType? type, DateTime? issueDate, DocumentState? state, 
-            string fullNumber="", int page=1, int pageSize=20)
+        public IActionResult GetDocuments(DocumentFilter filter, int page=1, int pageSize=20)
         {
-            var filter = new Dictionary<string, object>();
-            filter.Add("fullNumber", fullNumber);
+            var f = new Dictionary<string, object>();
+            f.Add("fullNumber", filter.FullNumber);
 
-            if(type != null)
-                filter.Add("type", type);
-            if(issueDate != null)
-                filter.Add("issuedate", issueDate);
-            if(state != null)
-                filter.Add("state", state);
+            if(filter.Type != null)
+                f.Add("type", filter.Type);
+            if(filter.IssueDate != null)
+                f.Add("issuedate", filter.IssueDate);
+            if(filter.State != null)
+                f.Add("state", filter.State);
 
-            var result = documentSrv.FilterDocuments(filter);
+            var result = documentSrv.FilterDocuments(f);
 
             return Ok(result);
         }
@@ -63,8 +60,6 @@ namespace Wrhs.WebApp.Controllers.Documents
                 return NotFound();
 
             return Ok(document);
-        }
-
-        
+        } 
     }
 }

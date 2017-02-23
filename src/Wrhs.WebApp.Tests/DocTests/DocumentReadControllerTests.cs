@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -66,7 +65,16 @@ namespace Wrhs.WebApp.Tests
         [InlineData(DocumentType.Relocation, null, null, "some-number")]
         public void ShouldReturnOkWithResultOnGetDocuments(DocumentType? type, DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var result = controller.GetDocuments(type, issueDate, state, fullNumber);
+            var filter = new DocumentFilter
+            {
+                Type = type,
+                State = state,
+                IssueDate = issueDate,
+                FullNumber = fullNumber
+            };
+
+
+            var result = controller.GetDocuments(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
@@ -79,7 +87,14 @@ namespace Wrhs.WebApp.Tests
         [InlineData(null, null, "some-number")]
         public void ShouldReturnOkWithResultOnGetDeliveryDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var result = controller.GetDeliveryDocuments(issueDate, state, fullNumber);
+            var filter = new DocumentFilter
+            {
+                State = state,
+                IssueDate = issueDate,
+                FullNumber = fullNumber
+            };
+
+            var result = controller.GetDeliveryDocuments(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
@@ -92,7 +107,14 @@ namespace Wrhs.WebApp.Tests
         [InlineData(null, null, "some-number")]
         public void ShouldReturnOkWithResultOnGetRelocationDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var result = controller.GetRelocationDocuments(issueDate, state, fullNumber);
+            var filter = new DocumentFilter
+            {
+                State = state,
+                IssueDate = issueDate,
+                FullNumber = fullNumber
+            };
+
+            var result = controller.GetRelocationDocuments(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();
@@ -105,7 +127,14 @@ namespace Wrhs.WebApp.Tests
         [InlineData(null, null, "some-number")]
         public void ShouldReturnOkWithResultOnGetReleaseDocuments(DateTime? issueDate, DocumentState? state, string fullNumber)
         {
-            var result = controller.GetReleaseDocuments(issueDate, state, fullNumber);
+            var filter = new DocumentFilter
+            {
+                State = state,
+                IssueDate = issueDate,
+                FullNumber = fullNumber
+            };
+
+            var result = controller.GetReleaseDocuments(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             (result as OkObjectResult).Value.Should().BeOfType<ResultPage<Document>>();

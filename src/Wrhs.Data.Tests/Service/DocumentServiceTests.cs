@@ -128,10 +128,17 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object>();
-            filter.Add("FullNumber", "DLV-1");
-            filter.Add("IssueDate", new DateTime(2016, 12, 1));
-            filter.Add("Type", DocumentType.Delivery);
+            // var filter = new Dictionary<string, object>();
+            // filter.Add("FullNumber", "DLV-1");
+            // filter.Add("IssueDate", new DateTime(2016, 12, 1));
+            // filter.Add("Type", DocumentType.Delivery);
+
+            var filter = new DocumentFilter
+            {
+                Type = DocumentType.Delivery,
+                IssueDate = new DateTime(2016, 12, 1),
+                FullNumber = "DLV-1"
+            };
 
             var result = service.FilterDocuments(filter, page, pageSize);
 
