@@ -1,5 +1,3 @@
-
-using System.Collections.Generic;
 using Wrhs.Core;
 using Wrhs.Products;
 
@@ -25,14 +23,22 @@ namespace Wrhs.Services
 
         ResultPage<Product> Get(int page, int pageSize);
 
-        ResultPage<Product> FilterProducts(Dictionary<string, object> filter);
+        ResultPage<Product> FilterProducts(ProductFilter filter);
 
-        ResultPage<Product> FilterProducts(Dictionary<string, object> filter, int page, int pageSize);
+        ResultPage<Product> FilterProducts(ProductFilter filter, int page, int pageSize);
     
         int Save(Product product);
 
         void Update(Product product);
 
         void Delete(Product Product);
+    }
+
+
+    public class ProductFilter
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Code { get; set; } = string.Empty;
+        public string Ean { get; set; } = string.Empty;
     }
 }

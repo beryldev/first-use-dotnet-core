@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Wrhs.Data.Service;
 using Wrhs.Products;
+using Wrhs.Services;
 using Xunit;
 
 namespace Wrhs.Data.Tests.Service
@@ -125,18 +125,21 @@ namespace Wrhs.Data.Tests.Service
         }
 
         [Theory]
-        [InlineData("Name", "Product 9", 2)]
-        [InlineData("Ean", "1111", 1)]
-        public void ShouldReturnFilteredProducts(string field, object value, int expectedCount)
+        [InlineData("Product 9", null, 2)]
+        [InlineData(null, "1111", 1)]
+        public void ShouldReturnFilteredProducts(string name, string ean, int expectedCount)
         {
             context.Products.Add(new Product { Name="Product 1", Code= "PROD1", Ean="1111"});
             context.Products.Add(new Product { Name="Product 9", Code= "PROD9", Ean="9999"});
-            context.Products.Add(new Product { Name="Product 91", Code= "PROD91"});
-            context.Products.Add(new Product { Name="Product 82", Code= "PROD82"});
+            context.Products.Add(new Product { Name="Product 91", Code= "PROD91", Ean="8888"});
+            context.Products.Add(new Product { Name="Product 82", Code= "PROD82", Ean="4444"});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object>();
-            filter.Add(field, value);
+            var filter = new ProductFilter
+            {
+                Name = name,
+                Ean = ean
+            };
 
             var result = service.FilterProducts(filter);
 
@@ -154,9 +157,12 @@ namespace Wrhs.Data.Tests.Service
 
             context.Products.Add(new Product { Name="Product 7", Code="XPROD1"});
             context.SaveChanges();
-            var filter = new Dictionary<string, object>();
-            filter.Add("Name", "Product 7");
-            filter.Add("Code", "XPROD1");
+
+            var filter = new ProductFilter
+            {
+                Name = "Product 7",
+                Code = "XPROD1"
+            };
 
             var result = service.FilterProducts(filter);
 
@@ -175,8 +181,13 @@ namespace Wrhs.Data.Tests.Service
             context.Products.Add(new Product { Name="Product 32", Code= "PROD32"});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object>();
-            filter.Add("Name", "Product 3");
+            // var filter = new Dictionary<string, object>();
+            // filter.Add("Name", "Product 3");
+
+            var filter = new ProductFilter
+            {
+                Name = "Product 3"
+            };
 
             var result = service.FilterProducts(filter, page, pageSize);
 
@@ -197,9 +208,11 @@ namespace Wrhs.Data.Tests.Service
             context.Products.Add(new Product { Name="Product 2", Code= "PRD2"});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object>();
-            filter.Add("Name", name);
-            filter.Add("Code", code);
+            var filter = new ProductFilter
+            {
+                Name = name,
+                Code = code
+            };
 
             var result = service.FilterProducts(filter);
 

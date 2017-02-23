@@ -148,10 +148,11 @@ namespace Wrhs.Data.Tests.Service
         }
 
         [Theory]
-        [InlineData(DocumentType.Release, "State", DocumentState.Confirmed, 1)]
-        [InlineData(DocumentType.Release, "State", DocumentState.Canceled, 1)]
-        [InlineData(DocumentType.Release, "FullNumber", null, 3)]
-        public void ShouldReturnFilteredResultsOnFilterDocuments(DocumentType type, string field, object value, int expectedCount)
+        [InlineData(DocumentType.Release, DocumentState.Confirmed, null, 1)]
+        [InlineData(null, DocumentState.Canceled, null, 1)]
+        [InlineData(DocumentType.Release, null, null, 3)]
+        public void ShouldReturnFilteredResultsOnFilterDocuments(DocumentType? type, DocumentState? state, 
+            string fullNumber, int expectedCount)
         {
             context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Canceled, FullNumber="RLS-1", IssueDate=new DateTime(2016, 1, 2)});
             context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Open, FullNumber="RLS-2", IssueDate=new DateTime(2016, 1, 2)});
@@ -162,11 +163,13 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object> 
-            { 
-                { field, value },
-                { "type", type}
+            var filter = new DocumentFilter
+            {
+                Type = type,
+                State = state,
+                FullNumber = fullNumber
             };
+
             var result = service.FilterDocuments(filter);
 
             result.Items.Should().HaveCount(expectedCount);

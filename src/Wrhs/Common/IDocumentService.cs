@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Wrhs.Core;
 
 namespace Wrhs.Common
@@ -14,11 +13,11 @@ namespace Wrhs.Common
 
         ResultPage<Document> GetDocuments(DocumentType type);
 
-        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter);
+        ResultPage<Document> FilterDocuments(DocumentFilter filter);
 
-        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page);
+        ResultPage<Document> FilterDocuments(DocumentFilter filter, int page);
 
-        ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page, int pageSize);
+        ResultPage<Document> FilterDocuments(DocumentFilter filter, int page, int pageSize);
 
         int Save(Document document);
 

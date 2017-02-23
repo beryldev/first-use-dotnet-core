@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Wrhs.Common;
@@ -52,20 +51,26 @@ namespace Wrhs.Data.Service
             return PaginateQuery(query, page, pageSize);
         }
 
-        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter)
+        public ResultPage<Document> FilterDocuments(DocumentFilter filter)
         {
             return FilterDocuments(filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
         }
 
-        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page)
+        public ResultPage<Document> FilterDocuments(DocumentFilter filter, int page)
         {
             return FilterDocuments(filter, page, DEFAULT_PAGE_SIZE);
         }
 
-        public ResultPage<Document> FilterDocuments(Dictionary<string, object> filter, int page, int pageSize)
+        public ResultPage<Document> FilterDocuments(DocumentFilter filter, int page, int pageSize)
         {
-            var query = context.Documents;
-            return Filter(query, filter, page, pageSize);
+            var query = context.Documents
+                .Where(x => !filter.State.HasValue || x.State == filter.State)
+                .Where(x => !filter.Type.HasValue || x.Type == filter.Type)
+                .Where(x => !filter.IssueDate.HasValue || x.IssueDate == filter.IssueDate)
+                .Where(x => string.IsNullOrWhiteSpace(filter.FullNumber) 
+                    || x.FullNumber.ToUpper().Contains(filter.FullNumber.ToUpper()));
+
+            return PaginateQuery(query, page, pageSize);
         }
 
         public int Save(Document document)
@@ -91,19 +96,6 @@ namespace Wrhs.Data.Service
                 context.Documents.Remove(document);
                 context.SaveChanges();
             }
-        }
-
-        protected override Dictionary<string, Func<Document, object, bool>> GetFilterMapping()
-        {
-            var mapping = new Dictionary<string, Func<Document, object, bool>>
-            {
-                {"fullnumber", (Document p, object val) => p.FullNumber.Contains(val as string ?? String.Empty) },
-                {"issuedate", (Document p, object val) => p.IssueDate == (DateTime)val },
-                {"state", (Document p, object val) => p.State == (DocumentState)val},
-                {"type", (Document p, object val) => p.Type == (DocumentType)val }
-            };
-
-            return mapping;
         }
 
         protected override IQueryable<Document> GetQuery()
