@@ -5,7 +5,7 @@
     <AssemblyName>Wrhs.WebApp.Tests</AssemblyName>
     <PackageId>Wrhs.WebApp.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>

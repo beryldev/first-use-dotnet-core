@@ -6,7 +6,7 @@
     <AssemblyName>Wrhs.WebApp</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Wrhs.WebApp</PackageId>
-    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
   </PropertyGroup>
 
