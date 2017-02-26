@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ../Wrhs.WebApp;
+cd ./src/Wrhs.WebApp;
 dotnet restore;
 dotnet build;
 cd ../../;
