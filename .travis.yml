@@ -15,5 +15,6 @@ matrix:
 script:
     - pushd src/Wrhs.Tests
     - dotnet restore
+    - dotnet build
     - dotnet test
     - popd
