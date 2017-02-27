@@ -22,7 +22,7 @@ namespace Wrhs.Tests.Products
             command = new CreateProductCommand();
             validatorMock = new Mock<IValidator<CreateProductCommand>>();
             handler = new CreateProductCommandHandler(validatorMock.Object,
-                eventBusMock.Object, productPersistMock.Object);  
+                eventBusMock.Object, productSrvMock.Object);  
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Wrhs.Tests.Products
             command.Sku = "some-sku";
             validatorMock.Setup(m=>m.Validate(It.IsAny<CreateProductCommand>()))
                 .Returns(new List<ValidationResult>());
-            productPersistMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
+            productSrvMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
                 .Callback((Product p)=>{
                     passedEan = p.Ean == "some-ean";
                     passedSku = p.Sku == "some-sku";
@@ -43,7 +43,7 @@ namespace Wrhs.Tests.Products
 
             handler.Handle(command);
 
-            productPersistMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Once());
+            productSrvMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Once());
             passedEan.Should().BeTrue();
             passedSku.Should().BeTrue();
         }
@@ -70,7 +70,7 @@ namespace Wrhs.Tests.Products
                 handler.Handle(command);
             });
 
-            productPersistMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Never());
+            productSrvMock.Verify(m=>m.Save(It.IsAny<Product>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsAny<CreateProductEvent>()), Times.Never());
         }
 
@@ -81,7 +81,7 @@ namespace Wrhs.Tests.Products
         public void ShouldSaveProductWithUpperCaseCode(string code)
         {
             var validCase = false;
-            productPersistMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
+            productSrvMock.Setup(m=>m.Save(It.IsNotNull<Product>()))
                 .Callback((Product p) => {
                     validCase = p.Code.Equals(code.ToUpper(), StringComparison.CurrentCulture);
                 });

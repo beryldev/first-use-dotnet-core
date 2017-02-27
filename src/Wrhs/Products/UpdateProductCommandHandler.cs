@@ -8,15 +8,12 @@ namespace Wrhs.Products
 {
     public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand, UpdateProductEvent>
     {
-        private readonly IProductPersist persist;
-
         private readonly IProductService service;
 
         public UpdateProductCommandHandler(IValidator<UpdateProductCommand> validator, IEventBus eventBus,
-            IProductPersist persist, IProductService service) 
+            IProductService service) 
             : base(validator, eventBus)
         {
-            this.persist = persist;
             this.service = service;
         }
 
@@ -40,7 +37,7 @@ namespace Wrhs.Products
             product.Sku = command.Sku;
             product.Description = command.Description;
             
-            persist.Update(product);
+            service.Update(product);
             return product;
         }
     }

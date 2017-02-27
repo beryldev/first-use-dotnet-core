@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
+using Moq;
 using Wrhs.Common;
 using Wrhs.Data.Service;
 using Wrhs.Products;
@@ -11,13 +13,21 @@ namespace Wrhs.Data.Tests.Service
     public class DocumentServiceTests : ServiceTestsBase<Document>
     {
         private readonly DocumentService service;
+        private readonly Mock<IDocumentNumerator> docNumeratorMock;
 
         public DocumentServiceTests() : base()
         {       
+            docNumeratorMock = new Mock<IDocumentNumerator>();
+            docNumeratorMock.Setup(m=>m.AssignNumber(It.IsNotNull<Document>()))
+                .Returns((Document doc)=>{ 
+                    doc.FullNumber = "some-number";
+                    return doc;
+                 });
+
             context.Products.Add(new Product());
             context.SaveChanges();
 
-            service = new DocumentService(context);
+            service = new DocumentService(context, docNumeratorMock.Object);
         }
 
         protected override BaseService<Document> GetService()
@@ -118,15 +128,128 @@ namespace Wrhs.Data.Tests.Service
             context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
             context.SaveChanges();
 
-            var filter = new Dictionary<string, object>();
-            filter.Add("FullNumber", "DLV-1");
-            filter.Add("IssueDate", new DateTime(2016, 12, 1));
+            // var filter = new Dictionary<string, object>();
+            // filter.Add("FullNumber", "DLV-1");
+            // filter.Add("IssueDate", new DateTime(2016, 12, 1));
+            // filter.Add("Type", DocumentType.Delivery);
 
-            var result = service.FilterDocuments(DocumentType.Delivery, filter, page, pageSize);
+            var filter = new DocumentFilter
+            {
+                Type = DocumentType.Delivery,
+                IssueDate = new DateTime(2016, 12, 1),
+                FullNumber = "DLV-1"
+            };
+
+            var result = service.FilterDocuments(filter, page, pageSize);
 
             result.Page.Should().Be(page);
             result.PageSize.Should().Be(pageSize);
             result.Items.Should().HaveCount(expected);
+        }
+
+        [Theory]
+        [InlineData(DocumentType.Release, DocumentState.Confirmed, null, 1)]
+        [InlineData(null, DocumentState.Canceled, null, 1)]
+        [InlineData(DocumentType.Release, null, null, 3)]
+        public void ShouldReturnFilteredResultsOnFilterDocuments(DocumentType? type, DocumentState? state, 
+            string fullNumber, int expectedCount)
+        {
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Canceled, FullNumber="RLS-1", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Open, FullNumber="RLS-2", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Release, State = DocumentState.Confirmed, FullNumber="RLS-3", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-1", IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-12",IssueDate=new DateTime(2016, 12, 1)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-22", IssueDate=new DateTime(2016, 1, 2)});
+            context.Documents.Add(new Document{ Type = DocumentType.Delivery, FullNumber="DLV-15", IssueDate=new DateTime(2016, 1, 2)});
+            context.SaveChanges();
+
+            var filter = new DocumentFilter
+            {
+                Type = type,
+                State = state,
+                FullNumber = fullNumber
+            };
+
+            var result = service.FilterDocuments(filter);
+
+            result.Items.Should().HaveCount(expectedCount);
+        }
+
+        [Fact]
+        public void ShouldStoreDocumentWithLinesInContextOnSave()
+        {
+            var document = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10},
+                    new DocumentLine { ProductId = 1, Quantity = 20}
+                }
+            };
+
+            service.Save(document);
+
+            context.Documents.Should().HaveCount(5);
+            context.DocumentLines.Should().HaveCount(10);
+            context.Documents.First().Type.Should()
+                .Be(DocumentType.Delivery);
+            context.Documents.Last().State.Should()
+                .Be(DocumentState.Confirmed);
+        }
+
+        [Fact]
+        public void ShouldAssignNumberToDocumentOnSave()
+        {
+            var document = new Document { Type = DocumentType.Delivery};
+
+            service.Save(document);
+
+            var saved = context.Documents.First();
+            saved.FullNumber.Should().NotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public void ShouldUpdateDataInContextOnUpdate()
+        {
+            context.Products.Add(new Product());
+            context.Products.Add(new Product());
+            context.SaveChanges();
+            var document = new Document
+            {
+                Type = DocumentType.Delivery,
+                State = DocumentState.Confirmed,
+                Lines = new List<DocumentLine>
+                {
+                    new DocumentLine { ProductId = 1, Quantity = 10},
+                    new DocumentLine { ProductId = 1, Quantity = 20}
+                }
+            };
+            context.Documents.Add(document);
+            context.SaveChanges();
+
+            document.State = DocumentState.Executed;
+            document.Lines.Last().Quantity = 99;
+            service.Update(document);
+
+            var upDoc = context.Documents.Last();
+            var upLine = context.DocumentLines.Last();
+            upDoc.Type.Should().Be(DocumentType.Delivery);
+            upDoc.State.Should().Be(DocumentState.Executed);
+            upLine.ProductId.Should().Be(1);
+            upLine.Quantity.Should().Be(99);
+        }
+
+        [Fact]
+        public void ShouldRemoveEntityFromContextOnDelete()
+        {
+            var doc = context.Documents.First();
+            
+            service.Delete(doc);
+
+            context.Documents.Should().HaveCount(3);
+            context.DocumentLines.Should().HaveCount(6);
         }
 
         protected override Document CreateEntity(int i)

@@ -14,7 +14,7 @@ namespace Wrhs.Data.ContextFactory
             var optionsBuilder = new DbContextOptionsBuilder<WrhsContext>();
             optionsBuilder.UseSqlite(connectionstring);
             
-            return  new WrhsContext(optionsBuilder.Options);
+            return new WrhsContext(optionsBuilder.Options);
         }
     }
 }

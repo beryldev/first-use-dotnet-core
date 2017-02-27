@@ -22,7 +22,7 @@ namespace Wrhs.WebApp.Tests
             
             productSrvMock = new Mock<IProductService>();
             
-            productSrvMock.Setup(m=>m.FilterProducts(It.IsAny<Dictionary<string, object>>(), 
+            productSrvMock.Setup(m=>m.FilterProducts(It.IsAny<ProductFilter>(), 
                 It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(new ResultPage<Product>(new List<Product>{new Product()}, 1, 20));
             
@@ -34,8 +34,10 @@ namespace Wrhs.WebApp.Tests
 
         [Fact]
         public void ShouldReturnOkWithProductsAsPaginateResultWhenNoRequestParams()
-        {            
-            var result = controller.Get();
+        {      
+            var filter = new ProductFilter();
+
+            var result = controller.Get(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;
@@ -45,8 +47,9 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithPageWhenRequestedPage()
         {
+            var filter = new ProductFilter();
 
-            var result = controller.Get(page: 3);
+            var result = controller.Get(filter: filter, page: 3);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;
@@ -56,7 +59,9 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnOkWithPageWhenRequestedPageSize()
         {
-            var result = controller.Get(pageSize: 25);
+            var filter = new ProductFilter();
+
+            var result = controller.Get(filter, pageSize: 25);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;
@@ -66,7 +71,9 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnFilteredResultWhenPassNameRequestParam()
         {
-            var result = controller.Get(name:"Product 1");
+            var filter = new ProductFilter { Name = "Product 1" };
+
+            var result = controller.Get(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;
@@ -76,7 +83,9 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnFilteredResultWhenPassCodeRequestParam()
         {
-            var result = controller.Get(code:"PROD1");
+            var filter = new ProductFilter { Code = "PROD1" };
+
+            var result = controller.Get(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;
@@ -86,7 +95,9 @@ namespace Wrhs.WebApp.Tests
         [Fact]
         public void ShouldReturnFilteredResultWhenPassEANRequestParam()
         {
-            var result = controller.Get(ean:"1111");
+            var filter = new ProductFilter { Ean = "1111" };
+
+            var result = controller.Get(filter);
 
             result.Should().BeOfType<OkObjectResult>();
             var page = (result as OkObjectResult).Value as ResultPage<Product>;

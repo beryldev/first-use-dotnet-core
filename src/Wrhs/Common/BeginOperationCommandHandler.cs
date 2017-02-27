@@ -8,12 +8,12 @@ namespace Wrhs.Common
     public class BeginOperationCommandHandler 
         : CommandHandler<BeginOperationCommand, BeginOperationEvent>
     {
-        protected readonly IOperationPersist operationPersist;
+        protected readonly IOperationService operationService;
 
         public BeginOperationCommandHandler(IValidator<BeginOperationCommand> validator, IEventBus eventBus,
-            IOperationPersist operationPersist) : base(validator, eventBus)
+            IOperationService operationService) : base(validator, eventBus)
         {
-            this.operationPersist = operationPersist;
+            this.operationService = operationService;
         }
 
         protected override void ProcessInvalidCommand(BeginOperationCommand command, IEnumerable<ValidationResult> results)
@@ -41,7 +41,7 @@ namespace Wrhs.Common
                 OperationGuid = command.OperationGuid
             };
 
-            operationPersist.Save(operation);
+            operationService.Save(operation);
 
             return operation;
         }

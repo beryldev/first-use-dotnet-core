@@ -5,9 +5,9 @@
         .module('wrhs')
         .factory('documentListFactory', documentListFactory);
 
-    documentListFactory.$inject = ['$http'];
+    documentListFactory.$inject = ['$http', 'messageService', 'modalService'];
 
-    function documentListFactory($http){
+    function documentListFactory($http, messageService, modalService){
         var factory = {
             createService: createService
         };
@@ -18,7 +18,14 @@
             var service = {
                 gridConfig: {},
                 filter: {},
-                loadData: loadData
+                selectedRow: null,
+                loadData: loadData,
+                openSelected: openSelected,
+                removeSelected: removeSelected,
+                rules: {
+                    canOpen: false,
+                    canRemove: false
+                }
             }
 
             initService();
@@ -28,7 +35,13 @@
             function initService(){
                 $scope.myAppScopeProvider = {
                     showInfo : function(row) {
-                        onRowDoubleClick(row);
+                        if(row.entity)
+                            onRowDoubleClick(row);
+                    },
+                    selectRow: function(row) {
+                        service.selectedRow = row;
+                        service.rules.canOpen = true;
+                        service.rules.canRemove = true;//= row.entity.state === 0;
                     }
                 }
                 service.gridConfig = gridConfig();
@@ -36,13 +49,39 @@
             }
 
             function loadData(){
-                $http.get(documentUrl, { params: service.filter})
+                $scope.documentsBusy = $http.get(documentUrl, { params: service.filter})
                     .then(onSuccess);
 
                 function onSuccess(response){
                     service.gridConfig.data = response.data.items;
                     service.gridConfig.totalItems = response.data.total;
                 }
+            }
+
+            function openSelected(){
+                onRowDoubleClick(service.selectedRow);
+            }
+
+            function removeSelected(){
+                modalService.showConfirmModal({
+                    title: 'Document remove',
+                    message: 'Please confirm remove this document.',
+                    onConfirm: confirmDelete,
+                    onCancel: function(){return false;}
+                });
+
+                function confirmDelete(){
+                    var id = service.selectedRow.entity.id;
+                
+                    var url = documentUrl+'/'+id;
+                    $scope.documentsBusy = $http.delete(url)
+                        .then(function(resp){
+                            service.rules.canOpen = false;
+                            service.rules.canRemove = false;
+                            messageService.success("", "Document was successfully deleted");
+                            service.loadData();
+                        });
+                }  
             }
 
            
@@ -62,6 +101,7 @@
                     columnDefs: [
                         { name: 'fullNumber', displayName: 'Number'},
                         { name: 'issueDate', displayName: 'Issue date', type: 'date',  cellFilter: 'date:\'yyyy-MM-dd\'' },
+                        { name: 'state', displayName: 'State', cellFilter: 'documentState'},
                         { name: 'remarks'}
                     ],
                     onRegisterApi: function(gridApi) {
@@ -88,7 +128,7 @@
                         });
                     },
                     appScopeProvider: $scope.myAppScopeProvider,
-                    rowTemplate: '<div ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
+                    rowTemplate: '<div ng-click=\'grid.appScope.selectRow(row)\' ng-dblclick=\'grid.appScope.showInfo(row)\' ng-repeat=\'(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name\' class=\'ui-grid-cell\' ng-class=\'{ "ui-grid-row-header-cell": col.isRowHeader }\' ui-grid-cell></div>'
                 }
             }
 

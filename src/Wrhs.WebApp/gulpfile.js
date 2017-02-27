@@ -15,10 +15,12 @@ var paths = {
 paths.appJs = [
   paths.webroot + 'src/js/app.js',
   paths.webroot + 'src/js/message.service.js',
+  paths.webroot + 'src/js/modal.service.js',
   paths.webroot + 'src/js/http-interceptor.service.js',
   paths.webroot + 'src/js/doc-list.service.js',
-  paths.webroot + 'src/js/new-document.service.js',
+  paths.webroot + 'src/js/document.service.js',
   paths.webroot + 'src/js/operation.service.js',
+  paths.webroot + 'src/js/document-state.filter.js',
   paths.webroot + 'src/js/app.config.js',
   paths.webroot + 'src/js/controllers/**/*.js'
 ]
@@ -40,7 +42,8 @@ paths.libJs = [
     paths.webroot + 'lib/toastr/toastr.js',
     paths.webroot + 'lib/angular-bootstrap/ui-bootstrap.js',
     paths.webroot + 'lib/angular-bootstrap/ui-bootstrap-tpls.js',
-    paths.webroot + 'lib/angular-ui-select/dist/select.js'
+    paths.webroot + 'lib/angular-ui-select/dist/select.js',
+    paths.webroot + 'lib/angular-busy/dist/angular-busy.js'
 ];
 
 paths.libCss = [
@@ -49,7 +52,8 @@ paths.libCss = [
     paths.webroot + 'lib/angular-ui-grid/ui-grid.css',
     paths.webroot + 'lib/toastr/toastr.css',
     paths.webroot + 'lib/angular-ui-select/dist/select.css',
-    paths.webroot + 'lib/font-awesome/css/font-awesome.css'
+    paths.webroot + 'lib/font-awesome/css/font-awesome.css',
+    paths.webroot + 'lib/angular-busy/dist/angular-busy.css'
 ];
 
 paths.libRes = [

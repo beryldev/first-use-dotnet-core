@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -17,9 +16,10 @@ namespace Wrhs.Tests.Release
             return new ProcessReleaseOperationCommand();
         }
 
-        protected override ICommandHandler<ProcessReleaseOperationCommand> CreateHandler(IValidator<ProcessReleaseOperationCommand> validator, IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv)
+        protected override ICommandHandler<ProcessReleaseOperationCommand> CreateHandler(IValidator<ProcessReleaseOperationCommand> validator, 
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
         {
-            return new ProcessReleaseOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+            return new ProcessReleaseOperationCommandHandler(validator, eventBus, stockService, operationSrv);
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Wrhs.Tests.Release
             command.ProductId = 1;
             command.Quantity = 10;
             command.SrcLocation = "SrcLocation";
-            shiftPersistMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
                 .Callback((Shift shift)=>{
                     quantity = shift.Quantity;
                 });
@@ -47,7 +47,7 @@ namespace Wrhs.Tests.Release
             command.Quantity = 10;
             command.SrcLocation = "SrcLocation";
             command.DstLocation = "DstLocation";
-            shiftPersistMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsNotNull<Shift>()))
                 .Callback((Shift shift)=>{
                     location = shift.Location;
                 });

@@ -9,7 +9,7 @@ namespace Wrhs.Relocation
         : CreateDocumentCommandHandler<CreateRelocationDocumentCommand, CreateRelocationDocumentEvent>
     {
         public CreateRelocationDocumentCommandHandler(IValidator<CreateRelocationDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentPersist docPersist) : base(validator, eventBus, docPersist)
+            IDocumentService docService) : base(validator, eventBus, docService)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Wrhs.Relocation
                 }).ToList()
             };
 
-            docPersist.Save(document);
+            docService.Save(document);
 
             return document;
         }

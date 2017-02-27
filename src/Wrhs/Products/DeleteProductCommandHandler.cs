@@ -10,14 +10,12 @@ namespace Wrhs.Products
         : CommandHandler<DeleteProductCommand, DeleteProductEvent>
     {
         private readonly IProductService prodSrv;
-        private readonly IProductPersist prodPersist;
 
         public DeleteProductCommandHandler(IValidator<DeleteProductCommand> validator, 
-            IEventBus eventBus, IProductService prodSrv, IProductPersist prodPersist) 
+            IEventBus eventBus, IProductService prodSrv) 
             : base(validator, eventBus)
         {
             this.prodSrv = prodSrv;
-            this.prodPersist = prodPersist;
         }
 
         protected override void ProcessInvalidCommand(DeleteProductCommand command, IEnumerable<ValidationResult> results)
@@ -28,7 +26,7 @@ namespace Wrhs.Products
         protected override DeleteProductEvent ProcessValidCommand(DeleteProductCommand command)
         {
             var product = prodSrv.GetProductById(command.ProductId);
-            prodPersist.Delete(product);
+            prodSrv.Delete(product);
 
             return new DeleteProductEvent(product, DateTime.UtcNow);
         }

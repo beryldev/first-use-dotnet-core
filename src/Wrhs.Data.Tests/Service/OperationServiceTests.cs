@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -72,6 +71,74 @@ namespace Wrhs.Data.Tests.Service
             result.Shifts.Where(s=>s.Location=="loc").Should().HaveCount(2);
             result.Document.Type.Should().Be(DocumentType.Delivery);
             result.Document.Lines.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void ShouldStoreInContextOperationWithShiftsOnSave()
+        {
+
+            var operation = new Operation
+            {
+                DocumentId = 1,
+                OperationGuid = "guid",
+                Type = OperationType.Delivery,
+                Status = OperationStatus.InProgress,
+                Shifts = new List<Shift>
+                {
+                    new Shift
+                    {
+                        ProductId = 1,
+                        Quantity = 10,
+                        Location = "loc"
+                    }
+                }
+            };
+
+            operationSrv.Save(operation);
+
+            context.Operations.Should().HaveCount(5);
+            context.Shifts.Should().HaveCount(1);
+            context.Operations.Last().OperationGuid.Should().Be("guid");
+            context.Operations.Last().DocumentId.Should().Be(1);
+            context.Operations.Last().Type.Should().Be(OperationType.Delivery);
+            context.Operations.Last().Status.Should().Be(OperationStatus.InProgress);            
+            context.Shifts.Last().ProductId.Should().Be(1);
+            context.Shifts.Last().Quantity.Should().Be(10);
+            context.Shifts.Last().Location.Should().Be("loc");
+        }
+
+        [Fact]
+        public void ShouldUpdateDataInContextOnUpdate()
+        {
+            var operation = new Operation
+            {
+                DocumentId = 1,
+                OperationGuid = "guid",
+                Type = OperationType.Delivery,
+                Status = OperationStatus.InProgress,
+                Shifts = new List<Shift>
+                {
+                    new Shift
+                    {
+                        ProductId = 1,
+                        Quantity = 10,
+                        Location = "loc"
+                    }
+                }
+            };
+            context.Operations.Add(operation);
+            context.SaveChanges();
+
+            operation.Status = OperationStatus.Done;
+            operation.Shifts.First().Confirmed = true;
+            operationSrv.Update(operation);
+
+            context.Operations.Should().HaveCount(5);
+            context.Shifts.Should().HaveCount(1);
+            var updated = context.Operations.Last();
+            updated.Status.Should().Be(OperationStatus.Done);
+            updated.Shifts.Last().Confirmed.Should().BeTrue();
+
         }
 
         protected override Operation CreateEntity(int i)

@@ -12,7 +12,7 @@ namespace Wrhs.Tests
     {
         protected readonly Mock<IValidator<BeginOperationCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
-        protected readonly Mock<IOperationPersist> operationPersistMock;
+        protected readonly Mock<IOperationService> operationServiceMock;
         protected readonly BeginOperationCommandHandler handler;
         protected readonly BeginOperationCommand command;
 
@@ -24,12 +24,12 @@ namespace Wrhs.Tests
 
             eventBusMock = new Mock<IEventBus>();
 
-            operationPersistMock = new Mock<IOperationPersist>();
+            operationServiceMock = new Mock<IOperationService>();
             
             command = CreateCommand();
 
             handler = CreateCommandHandler(validatorMock.Object, eventBusMock.Object,
-                operationPersistMock.Object);
+                operationServiceMock.Object);
         }
 
         protected BeginOperationCommand CreateCommand()
@@ -43,9 +43,9 @@ namespace Wrhs.Tests
         }
 
         protected BeginOperationCommandHandler CreateCommandHandler(IValidator<BeginOperationCommand> validator,
-            IEventBus eventBus, IOperationPersist operationPersist)
+            IEventBus eventBus, IOperationService operationService)
         {
-            return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
+            return new BeginOperationCommandHandler(validator, eventBus, operationService);
         }
 
         protected OperationType GetValidOperationType()
@@ -57,7 +57,7 @@ namespace Wrhs.Tests
         public void ShouldRegisterNewOperationWhenCommandValid()
         {   
             var wasValidOperation = false;
-            operationPersistMock.Setup(m=>m.Save(It.IsAny<Operation>()))
+            operationServiceMock.Setup(m=>m.Save(It.IsAny<Operation>()))
                 .Callback((Operation oper) =>
                 { 
                     wasValidOperation = oper.Type == GetValidOperationType();
@@ -66,7 +66,7 @@ namespace Wrhs.Tests
 
             handler.Handle(command); 
 
-            operationPersistMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Once());
+            operationServiceMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Once());
             wasValidOperation.Should().BeTrue();
         }
 
@@ -102,7 +102,7 @@ namespace Wrhs.Tests
                 handler.Handle(command);
             });
 
-            operationPersistMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Never());
+            operationServiceMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsAny<BeginOperationEvent>()), Times.Never());
         }  
     }

@@ -14,26 +14,26 @@ namespace Wrhs.Tests
     {
         protected readonly TCommand command;
         protected readonly Mock<IValidator<TCommand>> validatorMock;
-        protected readonly Mock<IDocumentPersist> docPersistMock;
+        protected readonly Mock<IDocumentService> docServiceMock;
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly ICommandHandler<TCommand> handler;
 
         protected CreateDocumentCmdHndTestsBase()
         {
             eventBusMock = new Mock<IEventBus>();
-            docPersistMock = new Mock<IDocumentPersist>();
+            docServiceMock = new Mock<IDocumentService>();
             validatorMock = new Mock<IValidator<TCommand>>();
             validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
                 .Returns(new List<ValidationResult>());
 
             command = CreateCommand();
             handler = CreateCommandHandler(validatorMock.Object, 
-                eventBusMock.Object, docPersistMock.Object);
+                eventBusMock.Object, docServiceMock.Object);
         }
 
         protected abstract TCommand CreateCommand();
         protected abstract ICommandHandler<TCommand> CreateCommandHandler(IValidator<TCommand> validator,
-            IEventBus eventBus, IDocumentPersist docPersist);
+            IEventBus eventBus, IDocumentService docService);
         protected abstract DocumentType GetDocumentType();
         
         [Fact]
@@ -41,18 +41,20 @@ namespace Wrhs.Tests
         { 
             var isValidDocumentType = false;
             var passedRemarks = false;
+            var isValidState = false;
             validatorMock.Setup(m=>m.Validate(It.IsNotNull<TCommand>()))
                 .Returns(new List<ValidationResult>());
-            docPersistMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
+            docServiceMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
                 .Callback((Document doc) => {
                     isValidDocumentType = doc.Type == GetDocumentType();
                     passedRemarks = !string.IsNullOrEmpty(doc.Remarks);
+                    isValidState = doc.State == DocumentState.Open;
                  });
 
             command.Remarks = "some remarks";
             handler.Handle(command);
 
-            docPersistMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Once());
+            docServiceMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Once());
             isValidDocumentType.Should().BeTrue();
             passedRemarks.Should().BeTrue();
         }
@@ -79,7 +81,7 @@ namespace Wrhs.Tests
                 handler.Handle(command);
             });
 
-            docPersistMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Never());
+            docServiceMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Never());
             eventBusMock.Verify(m=>m.Publish(It.IsNotNull<TEvent>()), Times.Never());
         }
     }

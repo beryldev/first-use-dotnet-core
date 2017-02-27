@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Core;
 using Wrhs.Products;
@@ -44,32 +42,46 @@ namespace Wrhs.Data.Service
             return context.Products.FirstOrDefault(p => p.Name == name);
         }
 
-        public ResultPage<Product> FilterProducts(Dictionary<string, object> filter)
+        public ResultPage<Product> FilterProducts(ProductFilter filter)
         {
             return FilterProducts(filter, DEFAULT_PAGE, DEFAULT_PAGE_SIZE);
         }
 
-        public ResultPage<Product> FilterProducts(Dictionary<string, object> filter, int page, int pageSize)
+        public ResultPage<Product> FilterProducts(ProductFilter filter, int page, int pageSize)
         {
-            var query = context.Products.AsQueryable();
-            
-            return Filter(query, filter, page, pageSize);
+            var query = context.Products
+                .Where(x => string.IsNullOrWhiteSpace(filter.Name) || x.Name.ToUpper().Contains(filter.Name.ToUpper()))
+                .Where(x => string.IsNullOrWhiteSpace(filter.Code) || x.Code.ToUpper().Contains(filter.Code.ToUpper()))
+                .Where(x => string.IsNullOrWhiteSpace(filter.Ean) || x.Ean.ToUpper().Contains(filter.Ean.ToUpper()));
+
+            return PaginateQuery(query, page, pageSize);
+        }
+
+        public void Delete(Product product)
+        {
+            if(product == null)
+                return;
+                
+            context.Products.Remove(product);
+            context.SaveChanges();
+        }
+
+        public int Save(Product product)
+        {
+            context.Products.Add(product);
+            context.SaveChanges();
+            return product.Id;
+        }
+
+        public void Update(Product product)
+        {
+            context.Products.Update(product);
+            context.SaveChanges();
         }
 
         protected override IQueryable<Product> GetQuery()
         {
             return context.Products;
-        }
-
-        protected override Dictionary<string, Func<Product, object, bool>> GetFilterMapping()
-        {
-            var mapping = new Dictionary<string, Func<Product, object, bool>>
-            {
-                {"name", (Product p, object val) => p.Name != null && p.Name.ToLower().Contains((val as string).ToLower()) },
-                {"code", (Product p, object val) => p.Code != null && p.Code.ToLower().Contains((val as string).ToLower()) },
-            };
-
-            return mapping;
         }
     }
 }

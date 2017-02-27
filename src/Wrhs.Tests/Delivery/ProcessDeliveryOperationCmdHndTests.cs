@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -26,7 +25,7 @@ namespace Wrhs.Tests.Delivery
             command.OperationGuid = "guid";
             operationSrvMock.Setup(m=>m.GetOperationByGuid(command.OperationGuid))
                 .Returns(operation);
-            shiftPersistMock.Setup(m=>m.Save(It.IsAny<Shift>()))
+            stockServiceMock.Setup(m=>m.Save(It.IsAny<Shift>()))
                 .Callback((Shift shift)=>{
                     validOperationId = shift.OperationId == operation.Id;
                     validProductId = shift.ProductId == command.ProductId;
@@ -36,7 +35,7 @@ namespace Wrhs.Tests.Delivery
 
             handler.Handle(command);
 
-            shiftPersistMock.Verify(m=>m.Save(It.IsAny<Shift>()), Times.Once());
+            stockServiceMock.Verify(m=>m.Save(It.IsAny<Shift>()), Times.Once());
             validOperationId.Should().BeTrue();
             validProductId.Should().BeTrue();
             validQuantity.Should().BeTrue();
@@ -79,9 +78,9 @@ namespace Wrhs.Tests.Delivery
         }
 
         protected override ICommandHandler<ProcessDeliveryOperationCommand> CreateHandler(IValidator<ProcessDeliveryOperationCommand> validator, 
-            IEventBus eventBus, IShiftPersist shiftPersist, IOperationService operationSrv)
+            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
         {
-            return new ProcessDeliveryOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+            return new ProcessDeliveryOperationCommandHandler(validator, eventBus, stockService, operationSrv);
         }
 
         protected override ProcessDeliveryOperationCommand CreateCommand()

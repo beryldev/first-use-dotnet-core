@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Wrhs.Common;
@@ -29,12 +27,17 @@ namespace Wrhs.Data.Service
                 .FirstOrDefault();
         }
 
-        protected override Dictionary<string, Func<Operation, object, bool>> GetFilterMapping()
+        public int Save(Operation operation)
         {
-            return new Dictionary<string, Func<Operation, object, bool>>
-            {
-                {"operationGuid", (Operation o, object value) => o.OperationGuid == (String)value}
-            };
+            context.Operations.Add(operation);
+            context.SaveChanges();
+
+            return operation.Id;
+        }
+
+        public void Update(Operation operation)
+        {
+            context.SaveChanges();
         }
 
         protected override IQueryable<Operation> GetQuery()

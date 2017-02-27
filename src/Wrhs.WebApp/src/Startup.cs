@@ -11,7 +11,6 @@ using Wrhs.Common;
 using Wrhs.Core;
 using Wrhs.Data;
 using Wrhs.Data.ContextFactory;
-using Wrhs.Data.Persist;
 using Wrhs.Data.Service;
 using Wrhs.Delivery;
 using Wrhs.Products;
@@ -90,19 +89,7 @@ namespace Wrhs.WebApp
                 return new ProductService(context);
             });
 
-            services.AddTransient(typeof(IProductPersist), (IServiceProvider provider)=>
-            {
-                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
-                return new ProductPersist(context);
-            });
-
             services.AddTransient(typeof(IDocumentService), (IServiceProvider provider)=>
-            {
-                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
-                return new DocumentService(context);
-            });
-
-            services.AddTransient(typeof(IDocumentPersist), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
                 var numerator = new DocumentNumerator(new Dictionary<DocumentType, string>
@@ -111,7 +98,7 @@ namespace Wrhs.WebApp
                     {DocumentType.Relocation, "RLC"},
                     {DocumentType.Release, "RLS"}
                 });
-                return new DocumentPersist(context, numerator);
+                return new DocumentService(context, numerator);
             });
 
             services.AddTransient(typeof(IOperationService), (IServiceProvider provider)=>
@@ -120,22 +107,10 @@ namespace Wrhs.WebApp
                 return new OperationService(context);
             });
 
-            services.AddTransient(typeof(IOperationPersist), (IServiceProvider provider)=>
-            {
-                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
-                return new OperationPersist(context);
-            });
-
             services.AddTransient(typeof(IStockService), (IServiceProvider provider)=>
             {
                 var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
                 return new StockService(context);
-            });
-
-            services.AddTransient(typeof(IShiftPersist), (IServiceProvider provider)=>
-            {
-                var context = provider.GetService(typeof(WrhsContext)) as WrhsContext;
-                return new ShiftPersist(context);
             });
 
             services.AddTransient(typeof(IEventBus), (IServiceProvider provider)=>
@@ -147,64 +122,82 @@ namespace Wrhs.WebApp
             services.AddTransient(typeof(ICommandBus), (IServiceProvider provider)=>
             {
                 var operationSrv = provider.GetService(typeof(IOperationService)) as IOperationService;
-                var operationPersist = provider.GetService(typeof(IOperationPersist)) as IOperationPersist;
                 var productSrv = provider.GetService(typeof(IProductService)) as IProductService;
-                var productPersist = provider.GetService(typeof(IProductPersist)) as IProductPersist;
                 var stockSrv = provider.GetService(typeof(IStockService)) as IStockService;
-                var docPersist = provider.GetService(typeof(IDocumentPersist)) as IDocumentPersist;
                 var docSrv = provider.GetService(typeof(IDocumentService)) as IDocumentService;
                 var eventBus = provider.GetService(typeof(IEventBus)) as IEventBus;
-                var shiftPersist = provider.GetService(typeof(IShiftPersist)) as IShiftPersist;
                 var commands = new Dictionary<Type, Func<ICommandHandler>>
                 {
                     { typeof(CreateDeliveryDocumentCommand), ()=>{
                         var validator = new CreateDeliveryDocumentCommandValidator(productSrv);
-                        return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docPersist);
+                        return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docSrv);
                     }},
                     { typeof(CreateRelocationDocumentCommand), ()=>{
                         var validator = new CreateRelocationDocumentCommandValidator(productSrv, stockSrv);
-                        return new CreateRelocationDocumentCommandHandler(validator, eventBus, docPersist);
+                        return new CreateRelocationDocumentCommandHandler(validator, eventBus, docSrv);
                     }},
                     { typeof(CreateReleaseDocumentCommand), ()=>{
                         var validator = new CreateReleaseDocumentCommandValidator(productSrv, stockSrv);
-                        return new CreateReleaseDocumentCommandHandler(validator, eventBus, docPersist);
+                        return new CreateReleaseDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(RemoveDocumentCommand), ()=>{
+                        var validator = new RemoveDocumentCommandValidator(docSrv);
+                        return new RemoveDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(ChangeDocStateCommand), ()=>{
+                        var validator = new ChangeDocStateCommandValidator(docSrv);
+                        return new ChangeDocStateCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(UpdateDeliveryDocumentCommand), ()=>{
+                        var innerValid = new CreateDeliveryDocumentCommandValidator(productSrv);
+                        var validator = new UpdateDeliveryDocumentCommandValidator(innerValid);
+                        return new UpdateDeliveryDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(UpdateRelocationDocumentCommand), ()=>{
+                        var innerValid = new CreateRelocationDocumentCommandValidator(productSrv, stockSrv);
+                        var validator = new UpdateRelocationDocumentCommandValidator(innerValid);
+                        return new UpdateRelocationDocumentCommandHandler(validator, eventBus, docSrv);
+                    }},
+                    { typeof(UpdateReleaseDocumentCommand), ()=>{
+                        var innerValid = new CreateReleaseDocumentCommandValidator(productSrv, stockSrv);
+                        var validator = new UpdateReleaseDocumentCommandValidator(innerValid);
+                        return new UpdateReleaseDocumentCommandHandler(validator, eventBus, docSrv);
                     }},
                     { typeof(CreateProductCommand), ()=>{
                         var validator = new CreateProductCommandValidator(productSrv);
-                        return new CreateProductCommandHandler(validator, eventBus, productPersist);
+                        return new CreateProductCommandHandler(validator, eventBus, productSrv);
                     }},
                     { typeof(UpdateProductCommand), ()=>{
                         var validator = new UpdateProductCommandValidator(productSrv);
-                        return new UpdateProductCommandHandler(validator, eventBus, productPersist, productSrv);
+                        return new UpdateProductCommandHandler(validator, eventBus, productSrv);
                     }},
                     { typeof(DeleteProductCommand), ()=>{
                         var validator = new DeleteProductCommandValidator();
-                        return new DeleteProductCommandHandler(validator, eventBus, productSrv, productPersist);
+                        return new DeleteProductCommandHandler(validator, eventBus, productSrv);
                     }},
                     { typeof(BeginOperationCommand), ()=>{
                         var validator = new BeginOperationCommandValidator(docSrv, operationSrv);
-                        return new BeginOperationCommandHandler(validator, eventBus, operationPersist);
+                        return new BeginOperationCommandHandler(validator, eventBus, operationSrv);
                     }},
                     { typeof(ProcessDeliveryOperationCommand), ()=>{
                         var validator = new ProcessDeliveryOperationCommandValidator(operationSrv, productSrv);
-                        return new ProcessDeliveryOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+                        return new ProcessDeliveryOperationCommandHandler(validator, eventBus, stockSrv, operationSrv);
                     }},
                     { typeof(ProcessRelocationOperationCommand), ()=>{
                         var validator = new ProcessRelocationOperationCommandValidator(operationSrv, productSrv);
-                        return new ProcessRelocationOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+                        return new ProcessRelocationOperationCommandHandler(validator, eventBus, stockSrv, operationSrv);
                     }},
                     { typeof(ProcessReleaseOperationCommand), ()=>{
                         var validator = new ProcessReleaseOperationCommandValidator(operationSrv, productSrv);
-                        return new ProcessReleaseOperationCommandHandler(validator, eventBus, shiftPersist, operationSrv);
+                        return new ProcessReleaseOperationCommandHandler(validator, eventBus, stockSrv, operationSrv);
                     }},
                     { typeof(ExecuteOperationCommand), ()=>{
                         var validator = new ExecuteOperationCommandValidator(operationSrv);
                         var parameters = new HandlerParameters
                         {
                             OperationService = operationSrv,
-                            OperationPersist = operationPersist,
-                            DocumentPersist = docPersist,
-                            ShiftPersist = shiftPersist
+                            DocumentService = docSrv,
+                            StockService = stockSrv
                         };
                         return new ExecuteOperationCommandHandler(validator, eventBus, parameters);
                     }}

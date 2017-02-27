@@ -9,13 +9,13 @@ namespace Wrhs.Common
         where TCommand : ProcessOperationCommand
         where TEvent : ProcessOperationEvent
     {
-        protected readonly IShiftPersist shiftPersist;
+        protected readonly IStockService stockService;
         protected readonly IOperationService operationSrv;
 
         public ProcessOperationCommandHandler(IValidator<TCommand> validator, IEventBus eventBus,
-            IShiftPersist shiftPersist, IOperationService operationSrv) : base(validator, eventBus)
+            IStockService stockService, IOperationService operationSrv) : base(validator, eventBus)
         {
-            this.shiftPersist = shiftPersist;
+            this.stockService = stockService;
             this.operationSrv = operationSrv;
         }
 

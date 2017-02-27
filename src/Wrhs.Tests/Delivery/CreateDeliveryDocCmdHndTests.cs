@@ -23,7 +23,7 @@ namespace Wrhs.Tests.Delivery
             {
                 DstLocation = "loc001"
             });
-            docPersistMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
+            docServiceMock.Setup(m=>m.Save(It.IsNotNull<Document>()))
                 .Callback((Document doc)=>{
                     validDstLocation = doc.Lines.First().DstLocation == "loc001";
                 });
@@ -41,9 +41,9 @@ namespace Wrhs.Tests.Delivery
             };
         }
 
-        protected override ICommandHandler<CreateDeliveryDocumentCommand> CreateCommandHandler(IValidator<CreateDeliveryDocumentCommand> validator, IEventBus eventBus, IDocumentPersist docPersist)
+        protected override ICommandHandler<CreateDeliveryDocumentCommand> CreateCommandHandler(IValidator<CreateDeliveryDocumentCommand> validator, IEventBus eventBus, IDocumentService docService)
         {
-            return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docPersist);
+            return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docService);
         }
 
         protected override DocumentType GetDocumentType()

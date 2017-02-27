@@ -13,5 +13,9 @@ namespace Wrhs.Common
         ResultPage<Operation> Get(int page);
 
         ResultPage<Operation> Get(int page, int pageSize);
+
+        int Save(Operation operation);
+
+        void Update(Operation operation);
     }
 }
