@@ -13,7 +13,10 @@ matrix:
           dotnet: 1.0.0-preview2-1-003177
 
 script:
-    - pushd src/Wrhs.Tests
+    - pushd src/Wrhs
+    - dotnet restore
+    - dotnet build
+    - pushd ../Wrhs.Tests
     - dotnet restore
     - dotnet build
     - dotnet test
