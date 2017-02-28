@@ -9,25 +9,4 @@ matrix:
           env: DOTNETCORE=1
           dotnet: 1.0.0-preview2-1-003177
 script:
-    - pushd src/Wrhs
-    - dotnet restore
-    - dotnet build
-    - pushd ../Wrhs.Tests
-    - dotnet restore
-    - dotnet build
-    - dotnet test
-    - pushd ../Wrhs.Data
-    - dotnet restore
-    - dotnet build
-    - pushd ../Wrhs.Data.Tests
-    - dotnet restore
-    - dotnet build
-    - dotnet test
-    - pushd ../Wrhs.WebApp
-    - dotnet restore
-    - dotnet build
-    - pushd ../Wrhs.WebApp.Tests
-    - dotnet restore
-    - dotnet build
-    - dotnet test
-    - popd
+    - ./check.sh

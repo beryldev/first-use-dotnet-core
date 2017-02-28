@@ -1,19 +1,25 @@
 #!/bin/bash
 
-cd ./src/Wrhs;
+pushd ./src/Wrhs;
 dotnet restore;
-cd ../Wrhs.Tests;
+dotnet build;
+pushd ../Wrhs.Tests;
 dotnet restore;
+dotnet build;
 dotnet test;
-cd ../Wrhs.Data;
+pushd ../Wrhs.Data;
 dotnet restore;
-cd ../Wrhs.Data.Tests;
+dotnet build;
+pushd ../Wrhs.Data.Tests;
 dotnet restore;
+dotnet build;
 dotnet test;
-cd ../Wrhs.WebApp;
+pushd ../Wrhs.WebApp;
 dotnet restore;
-cd ../Wrhs.WebApp.Tests;
+dotnet build;
+pushd ../Wrhs.WebApp.Tests;
 dotnet restore;
+dotnet build;
 dotnet test;
-cd ../../;
-echo "Done.";
+popd;
+popd;
