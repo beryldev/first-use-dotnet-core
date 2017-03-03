@@ -20,6 +20,8 @@ using Wrhs.Release;
 using Wrhs.Relocation;
 using Wrhs.Services;
 using Wrhs.WebApp.Utils;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace Wrhs.WebApp
 {
@@ -58,21 +60,41 @@ namespace Wrhs.WebApp
             services.AddMemoryCache();
             
             ConfigureDI(services);
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Cookies.ApplicationCookie.LoginPath="/Account/Login";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IdentityDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory, IdentityDbContext dbContext, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 dbContext.Database.Migrate(); //this will generate the db if it does not exist
             }
+
+           
+              
+
             app.UseIdentity();
             app.UseStaticFiles();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if(!dbContext.Users.Any(u=>u.UserName=="admin"))
+            {
+                var result = userManager.CreateAsync(new IdentityUser
+                {
+                    UserName = "admin",
+                    Email = "admin@local.pl"
+                }, "Admin123!@#");
+
+            }
                 
             app.UseMvc(routes =>
             {
