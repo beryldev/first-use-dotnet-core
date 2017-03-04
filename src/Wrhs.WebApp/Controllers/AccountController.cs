@@ -21,9 +21,6 @@ namespace Wrhs.WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-           
-
-  
             return View();
         }
 
@@ -31,16 +28,15 @@ namespace Wrhs.WebApp.Controllers
         public async Task<IActionResult> Auth(string username, string password)
         {
             var user = await userManager.FindByNameAsync(username);
-            var result = await signInManager.PasswordSignInAsync(user, password, isPersistent: true, lockoutOnFailure: false);
-            
-            return RedirectToAction("Index", "Home");
+
+            if(user != null)
+            {
+                var result = await signInManager.PasswordSignInAsync(user, password, isPersistent: true, lockoutOnFailure: false);
+                if(result.Succeeded)
+                    return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Login");        
         }
-    }
-
-
-    public class AuthModel
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
     }
 }
