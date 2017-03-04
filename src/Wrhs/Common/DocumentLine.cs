@@ -11,7 +11,7 @@ namespace Wrhs.Common
         public string SrcLocation { get; set; } = string.Empty;
         public string DstLocation { get; set; } = string.Empty;
 
-        public virtual Document Document { get; set; }
         public virtual Product Product { get; set; }
+        public virtual Document Document { get; set; }
     }
 }
