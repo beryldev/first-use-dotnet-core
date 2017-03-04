@@ -20,7 +20,6 @@ using Wrhs.Release;
 using Wrhs.Relocation;
 using Wrhs.Services;
 using Wrhs.WebApp.Utils;
-using System.Linq;
 using Microsoft.AspNetCore.Identity;
 
 namespace Wrhs.WebApp
@@ -64,6 +63,11 @@ namespace Wrhs.WebApp
             services.Configure<IdentityOptions>(options =>
             {
                 options.Cookies.ApplicationCookie.LoginPath="/Account/Login";
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.SignIn.RequireConfirmedEmail = false;
             });
         }
 
@@ -77,25 +81,12 @@ namespace Wrhs.WebApp
                 dbContext.Database.Migrate(); //this will generate the db if it does not exist
             }
 
-           
-              
-
             app.UseIdentity();
             app.UseStaticFiles();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            if(!dbContext.Users.Any(u=>u.UserName=="admin"))
-            {
-                var result = userManager.CreateAsync(new IdentityUser
-                {
-                    UserName = "admin",
-                    Email = "admin@local.pl"
-                }, "Admin123!@#");
-
-            }
-                
+    
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}");

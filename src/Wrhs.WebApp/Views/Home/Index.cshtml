@@ -17,9 +17,23 @@
 					<a class="navbar-brand" href="#">WRHS</a>
 				</div>
 			</div>
-			<div class="navbar-collapse collapse" ui-view="context">
-				
+			<div class="col-sm-9 col-md-10">
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="navbar-text context-title" ui-view="context"></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#" onclick="document.getElementById('logout').submit();">Logout</a></li>
+					</ul>
+					<form action="@Url.Action("Logout", "Account")" method="post" id="logout">
+					</form>
+				</div>
 			</div>
+			
+			
+			
+			
+			
 		</div>
 		<div class="container-fluid">
 			<div class="row">

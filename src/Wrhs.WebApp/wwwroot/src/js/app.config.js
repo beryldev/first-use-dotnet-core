@@ -20,7 +20,7 @@
                         controller: 'ProductsListCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> Products</strong>'
+                        template: '<i class="fa fa-barcode margin-r" aria-hidden="true"></i> Products'
                     }
                 }
             })
@@ -32,7 +32,7 @@
                         controller: 'NewProductCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> New product</strong>'
+                        template: '<i class="fa fa-barcode margin-r" aria-hidden="true"></i> New product'
                     }
                 }
             })
@@ -44,7 +44,7 @@
                         controller: 'ProductDetailsCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-barcode margin-r" aria-hidden="true"></i> Product details</strong>'
+                        template: '<i class="fa fa-barcode margin-r" aria-hidden="true"></i> Product details'
                     }
                 }
             })
@@ -69,7 +69,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Delivery documents</strong>'
+                        template: '<i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Delivery documents'
                     }
                 }
             })
@@ -86,7 +86,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> New delivery document</strong>'
+                        template: '<i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> New delivery document'
                     }
                 }
             })
@@ -103,7 +103,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Edit delivery document</strong>'
+                        template: '<i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Edit delivery document'
                     }
                 }
             })
@@ -124,7 +124,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Relocation documents</strong>'
+                        template: '<i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Relocation documents'
                     }
                 }
             })
@@ -141,7 +141,7 @@
                         }
                     },
                      'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> New relocation document</strong>'
+                        template: '<i class="fa fa-refresh margin-r" aria-hidden="true"></i> New relocation document'
                     }
                 }
             })
@@ -158,7 +158,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-refresh margin-r" aria-hidden="true"></i> Edit relocation document</strong>'
+                        template: '<i class="fa fa-refresh margin-r" aria-hidden="true"></i> Edit relocation document'
                     }
                 }
             })
@@ -180,7 +180,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Release documents</strong>'
+                        template: '<i class="fa fa-arrow-down margin-r" aria-hidden="true"></i> Release documents'
                     }
                 }
             })
@@ -197,7 +197,7 @@
                         }
                     },
                      'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> New release document</strong>'
+                        template: '<i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> New release document'
                     }
                 }
             })
@@ -214,7 +214,7 @@
                         }
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> Edit release document</strong>'
+                        template: '<i class="fa fa-arrow-up margin-r" aria-hidden="true"></i> Edit release document'
                     }
                 }
             })
@@ -266,7 +266,7 @@
                         controller: 'StocksListCtrl as vm'
                     },
                     'context@': {
-                        template: '<strong class="navbar-text context-title"><i class="fa fa-cubes margin-r" aria-hidden="true"></i> Stocks</strong>'
+                        template: '<i class="fa fa-cubes margin-r" aria-hidden="true"></i> Stocks'
                     }
                 }
             });
