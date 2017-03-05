@@ -1,25 +1,9 @@
 #!/bin/bash
 
-pushd ./src/Wrhs;
+pushd ./src;
 dotnet restore;
 dotnet build;
-pushd ../Wrhs.Tests;
-dotnet restore;
-dotnet build;
-dotnet test;
-pushd ../Wrhs.Data;
-dotnet restore;
-dotnet build;
-pushd ../Wrhs.Data.Tests;
-dotnet restore;
-dotnet build;
-dotnet test;
-pushd ../Wrhs.WebApp;
-dotnet restore;
-dotnet build;
-pushd ../Wrhs.WebApp.Tests;
-dotnet restore;
-dotnet build;
-dotnet test;
-popd;
+dotnet test ./Wrhs.Tests/Wrhs.Tests.csproj;
+dotnet test ./Wrhs.Data.Tests/Wrhs.Data.Tests.csproj;
+dotnet test ./Wrhs.WebApp.Tests/Wrhs.WebApp.Tests.csproj;
 popd;
