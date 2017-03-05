@@ -7,6 +7,6 @@ matrix:
           sudo: required
           mono: none
           env: DOTNETCORE=1
-          dotnet: 1.0.0-preview4-004233
+          dotnet: 1.0.0-rc4-004911
 script:
     - ./check.sh
