@@ -1,10 +1,16 @@
 #!/bin/bash
 
-cd ./src/Wrhs.WebApp;
+result=0;
+pushd src;
 dotnet restore;
+if [ $? -ne "0" ]; then result=1; fi
+
 dotnet build;
-cd ../../;
-echo "Done...";
+if [ $? -ne "0" ]; then result=1; fi
+
+popd;
+
+exit $result;
 
 
 
