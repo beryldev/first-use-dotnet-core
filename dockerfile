@@ -10,7 +10,7 @@ RUN ./build.sh
 
 WORKDIR /opt/app/src/Wrhs.WebApp/
 RUN npm install -g bower gulp
-RUN npm install
+RUN npm install --no-bin-links
 RUN bower install --allow-root
 RUN gulp all
 
