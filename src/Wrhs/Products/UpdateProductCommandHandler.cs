@@ -1,31 +1,25 @@
 using System;
-using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Wrhs.Services;
 
 namespace Wrhs.Products
 {
-    public class UpdateProductCommandHandler : CommandHandler<UpdateProductCommand, UpdateProductEvent>
+    public class UpdateProductCommandHandler : ICommandHandler<UpdateProductCommand>
     {
+        private readonly IEventBus eventBus;
         private readonly IProductService service;
 
-        public UpdateProductCommandHandler(IValidator<UpdateProductCommand> validator, IEventBus eventBus,
-            IProductService service) 
-            : base(validator, eventBus)
+        public UpdateProductCommandHandler(IEventBus eventBus, IProductService service) 
         {
+            this.eventBus = eventBus;
             this.service = service;
         }
 
-        protected override void ProcessInvalidCommand(UpdateProductCommand command, IEnumerable<ValidationResult> results)
-        {
-            throw new CommandValidationException("Ivalid update product command.", command, results);
-        }
-
-        protected override UpdateProductEvent ProcessValidCommand(UpdateProductCommand command)
+        public void Handle(UpdateProductCommand command)
         {
             var product = UpdateProduct(command);
-            return new UpdateProductEvent(product, DateTime.UtcNow);
+            var evt = new UpdateProductEvent(product, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
 
         private Product UpdateProduct(UpdateProductCommand command)

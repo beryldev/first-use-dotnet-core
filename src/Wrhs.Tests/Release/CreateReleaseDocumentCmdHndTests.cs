@@ -19,7 +19,7 @@ namespace Wrhs.Tests.Release
         protected override ICommandHandler<CreateReleaseDocumentCommand> CreateCommandHandler(IValidator<CreateReleaseDocumentCommand> validator, 
             IEventBus eventBus, IDocumentService docService)
         {
-            return new CreateReleaseDocumentCommandHandler(validator, eventBus, docService);
+            return new CreateReleaseDocumentCommandHandler(eventBus, docService);
         }
 
         protected override DocumentType GetDocumentType()

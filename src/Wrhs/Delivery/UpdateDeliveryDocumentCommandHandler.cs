@@ -1,32 +1,24 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Delivery
 {
-    public class UpdateDeliveryDocumentCommandHandler
-        : CommandHandler<UpdateDeliveryDocumentCommand, UpdateDocumentEvent>
+    public class UpdateDeliveryDocumentCommandHandler : ICommandHandler<UpdateDeliveryDocumentCommand>
     {
-        private readonly IDocumentService docService;
+        private readonly IEventBus eventBus;
+        private readonly IDocumentService docSrv;
 
-        public UpdateDeliveryDocumentCommandHandler(IValidator<UpdateDeliveryDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentService docService) 
-            : base(validator, eventBus)
+        public UpdateDeliveryDocumentCommandHandler(IEventBus eventBus, IDocumentService docSrv)
         {
-            this.docService = docService;
+            this.eventBus = eventBus;
+            this.docSrv = docSrv;
         }
 
-        protected override void ProcessInvalidCommand(UpdateDeliveryDocumentCommand command, IEnumerable<ValidationResult> results)
+        public void Handle(UpdateDeliveryDocumentCommand command)
         {
-            throw new CommandValidationException("Invalid command", command, results);
-        }
-
-        protected override UpdateDocumentEvent ProcessValidCommand(UpdateDeliveryDocumentCommand command)
-        {
-            var document = docService.GetDocumentById(command.DocumentId);
+            var document = docSrv.GetDocumentById(command.DocumentId);
 
             document.Remarks = command.Remarks;
 
@@ -39,9 +31,10 @@ namespace Wrhs.Delivery
                 Quantity = l.Quantity,
             }));
 
-            docService.Update(document);
+            docSrv.Update(document);
 
-            return new UpdateDocumentEvent(document.Id, DateTime.UtcNow);
+            var evt = new UpdateDocumentEvent(document.Id, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
     }
 }

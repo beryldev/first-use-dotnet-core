@@ -77,10 +77,10 @@ namespace Wrhs.Tests.Delivery
             unconfirmed.Should().BeTrue();
         }
 
-        protected override ICommandHandler<ProcessDeliveryOperationCommand> CreateHandler(IValidator<ProcessDeliveryOperationCommand> validator, 
-            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
+        protected override ICommandHandler<ProcessDeliveryOperationCommand> CreateHandler(IEventBus eventBus, 
+            IStockService stockService, IOperationService operationSrv)
         {
-            return new ProcessDeliveryOperationCommandHandler(validator, eventBus, stockService, operationSrv);
+            return new ProcessDeliveryOperationCommandHandler(eventBus, stockService, operationSrv);
         }
 
         protected override ProcessDeliveryOperationCommand CreateCommand()

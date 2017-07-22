@@ -8,9 +8,8 @@ namespace Wrhs.Relocation
     public class ProcessRelocationOperationCommandHandler
         : ProcessOperationCommandHandler<ProcessRelocationOperationCommand, ProcessRelocationOperationEvent>
     {
-        public ProcessRelocationOperationCommandHandler(IValidator<ProcessRelocationOperationCommand> validator,
-            IEventBus eventBus, IStockService stockService, IOperationService operationSrv) 
-            : base(validator, eventBus, stockService, operationSrv)
+        public ProcessRelocationOperationCommandHandler(IEventBus eventBus, IStockService stockService, 
+            IOperationService operationSrv) : base(eventBus, stockService, operationSrv)
         {
         }
 

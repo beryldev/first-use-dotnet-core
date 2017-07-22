@@ -13,7 +13,7 @@ namespace Wrhs.Core
 
         public void Send<TCommand>(TCommand command) where TCommand : ICommand
         {
-            var handler = handlersFactory(typeof(TCommand)) as ICommandHandler<TCommand>;
+            var handler = (ICommandHandler<TCommand>)handlersFactory(typeof(TCommand));
             handler.Handle(command);
         }
     }

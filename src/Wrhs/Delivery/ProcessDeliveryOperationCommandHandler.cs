@@ -8,8 +8,8 @@ namespace Wrhs.Delivery
     public class ProcessDeliveryOperationCommandHandler 
         : ProcessOperationCommandHandler<ProcessDeliveryOperationCommand, ProcessDeliveryOperationEvent>
     {
-        public ProcessDeliveryOperationCommandHandler(IValidator<ProcessDeliveryOperationCommand> validator, IEventBus eventBus, 
-            IStockService stockService, IOperationService operationSrv) : base(validator, eventBus, stockService, operationSrv)
+        public ProcessDeliveryOperationCommandHandler(IEventBus eventBus,IStockService stockService, 
+            IOperationService operationSrv) : base(eventBus, stockService, operationSrv)
         {
         }
 

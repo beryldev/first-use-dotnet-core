@@ -6,8 +6,7 @@ namespace Wrhs.Core
     }
 
 
-    public interface ICommandHandler<TCommand> : ICommandHandler
-        where TCommand : ICommand
+    public interface ICommandHandler<TCommand> : ICommandHandler where TCommand : ICommand
     {
         void Handle(TCommand command);
     }

@@ -5,20 +5,18 @@ using Wrhs.Core;
 
 namespace Wrhs.Release
 {
-    public class CreateReleaseDocumentCommandHandler
-        : CreateDocumentCommandHandler<CreateReleaseDocumentCommand, CreateReleaseDocumentEvent>
+    public class CreateReleaseDocumentCommandHandler : ICommandHandler<CreateReleaseDocumentCommand>
     {
-        public CreateReleaseDocumentCommandHandler(IValidator<CreateReleaseDocumentCommand> validator, IEventBus eventBus,
-            IDocumentService docService) : base(validator, eventBus, docService)
+        private readonly IEventBus eventBus;
+        private readonly IDocumentService docSrv;
+
+        public CreateReleaseDocumentCommandHandler(IEventBus eventBus, IDocumentService docSrv)
         {
+            this.eventBus = eventBus;
+            this.docSrv = docSrv;
         }
 
-        protected override CreateReleaseDocumentEvent CreateEvent(Document document, DateTime createdAt)
-        {
-            return new CreateReleaseDocumentEvent(document, createdAt);
-        }
-
-        protected override Document SaveDocument(CreateReleaseDocumentCommand command)
+        public void Handle(CreateReleaseDocumentCommand command)
         {
             var document = new Document
             {
@@ -32,9 +30,10 @@ namespace Wrhs.Release
                 }).ToList()
             };
 
-            docService.Save(document);
+            docSrv.Save(document);
 
-            return document;
+            var evt = new CreateReleaseDocumentEvent(document, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
     }
 }

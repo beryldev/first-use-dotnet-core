@@ -3,3 +3,5 @@
 ################################################################################
 
 *.ncrunchproject
+/src/wrhs.v3.ncrunchsolution.user
+*.ncrunchsolution

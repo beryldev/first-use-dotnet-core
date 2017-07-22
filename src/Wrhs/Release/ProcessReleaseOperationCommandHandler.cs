@@ -8,9 +8,8 @@ namespace Wrhs.Release
     public class ProcessReleaseOperationCommandHandler
         : ProcessOperationCommandHandler<ProcessReleaseOperationCommand, ProcessReleaseOperationEvent>
     {
-        public ProcessReleaseOperationCommandHandler(IValidator<ProcessReleaseOperationCommand> validator, 
-            IEventBus eventBus, IStockService stockService, IOperationService operationSrv) 
-            : base(validator, eventBus, stockService, operationSrv)
+        public ProcessReleaseOperationCommandHandler(IEventBus eventBus, IStockService stockService, 
+            IOperationService operationSrv) : base(eventBus, stockService, operationSrv)
         {
         }
 

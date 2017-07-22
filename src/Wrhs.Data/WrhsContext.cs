@@ -8,7 +8,7 @@ namespace Wrhs.Data
     {
         public WrhsContext() { }
         
-        public WrhsContext(DbContextOptions options) : base(options)
+        public WrhsContext(DbContextOptions<WrhsContext> options) : base(options)
         {
         }
 

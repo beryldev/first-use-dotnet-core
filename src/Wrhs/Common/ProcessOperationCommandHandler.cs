@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public abstract class ProcessOperationCommandHandler<TCommand, TEvent> : CommandHandler<TCommand, TEvent>
+    public abstract class ProcessOperationCommandHandler<TCommand, TEvent> :ICommandHandler<TCommand>
         where TCommand : ProcessOperationCommand
         where TEvent : ProcessOperationEvent
     {
         protected readonly IStockService stockService;
         protected readonly IOperationService operationSrv;
+        protected readonly IEventBus eventBus;
 
-        public ProcessOperationCommandHandler(IValidator<TCommand> validator, IEventBus eventBus,
-            IStockService stockService, IOperationService operationSrv) : base(validator, eventBus)
+        public ProcessOperationCommandHandler(IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
         {
+            this.eventBus = eventBus;
             this.stockService = stockService;
             this.operationSrv = operationSrv;
         }
@@ -25,21 +25,17 @@ namespace Wrhs.Common
 
             return operation.Id;
         }
-
-        protected override void ProcessInvalidCommand(TCommand command, IEnumerable<ValidationResult> results)
-        {
-            throw new CommandValidationException("Invalid command", command, results);
-        }
-
-        protected override TEvent ProcessValidCommand(TCommand command)
+    
+        public void Handle(TCommand command)
         {
             var shifts = RegisterShifts(command);
-            return CreateEvent(shifts, DateTime.UtcNow);
+            var evt = CreateEvent(shifts, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
 
         protected abstract IEnumerable<Shift> RegisterShifts(TCommand command);
 
         protected abstract TEvent CreateEvent(IEnumerable<Shift> shifts, DateTime createdAt);
-   
+
     }
 }

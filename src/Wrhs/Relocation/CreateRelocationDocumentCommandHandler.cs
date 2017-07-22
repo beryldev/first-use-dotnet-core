@@ -5,20 +5,18 @@ using Wrhs.Core;
 
 namespace Wrhs.Relocation
 {
-    public class CreateRelocationDocumentCommandHandler
-        : CreateDocumentCommandHandler<CreateRelocationDocumentCommand, CreateRelocationDocumentEvent>
+    public class CreateRelocationDocumentCommandHandler : ICommandHandler<CreateRelocationDocumentCommand>
     {
-        public CreateRelocationDocumentCommandHandler(IValidator<CreateRelocationDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentService docService) : base(validator, eventBus, docService)
+        private readonly IEventBus eventBus;
+        private readonly IDocumentService docSrv;
+
+        public CreateRelocationDocumentCommandHandler(IEventBus eventBus, IDocumentService docSrv)
         {
+            this.eventBus = eventBus;
+            this.docSrv = docSrv;
         }
 
-        protected override CreateRelocationDocumentEvent CreateEvent(Document document, DateTime createdAt)
-        {
-            return new CreateRelocationDocumentEvent(document, createdAt);
-        }
-
-        protected override Document SaveDocument(CreateRelocationDocumentCommand command)
+        public void Handle(CreateRelocationDocumentCommand command)
         {
             var document = new Document
             {
@@ -33,9 +31,10 @@ namespace Wrhs.Relocation
                 }).ToList()
             };
 
-            docService.Save(document);
+            docSrv.Save(document);
 
-            return document;
+            var evt = new CreateRelocationDocumentEvent(document, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
     }
 }

@@ -10,26 +10,19 @@ namespace Wrhs.Tests
 {
     public class BeginOperationCmdHndTests
     {
-        protected readonly Mock<IValidator<BeginOperationCommand>> validatorMock;
-        protected readonly Mock<IEventBus> eventBusMock;
-        protected readonly Mock<IOperationService> operationServiceMock;
-        protected readonly BeginOperationCommandHandler handler;
-        protected readonly BeginOperationCommand command;
+        private readonly Mock<IOperationService> fakeOperationService;
+        private readonly Mock<IEventBus> fakeEventBus;
+        private readonly BeginOperationCommandHandler handler;
+        private readonly BeginOperationCommand command;
 
         public BeginOperationCmdHndTests()
         {
-            validatorMock = new Mock<IValidator<BeginOperationCommand>>();
-            validatorMock.Setup(m=>m.Validate(It.IsAny<BeginOperationCommand>()))
-                .Returns(new List<ValidationResult>());
-
-            eventBusMock = new Mock<IEventBus>();
-
-            operationServiceMock = new Mock<IOperationService>();
+            fakeOperationService = new Mock<IOperationService>();
+            fakeEventBus = new Mock<IEventBus>();
             
             command = CreateCommand();
 
-            handler = CreateCommandHandler(validatorMock.Object, eventBusMock.Object,
-                operationServiceMock.Object);
+            handler = new BeginOperationCommandHandler(fakeEventBus.Object, fakeOperationService.Object);
         }
 
         protected BeginOperationCommand CreateCommand()
@@ -42,12 +35,6 @@ namespace Wrhs.Tests
             };
         }
 
-        protected BeginOperationCommandHandler CreateCommandHandler(IValidator<BeginOperationCommand> validator,
-            IEventBus eventBus, IOperationService operationService)
-        {
-            return new BeginOperationCommandHandler(validator, eventBus, operationService);
-        }
-
         protected OperationType GetValidOperationType()
         {
             return OperationType.Delivery;
@@ -57,7 +44,7 @@ namespace Wrhs.Tests
         public void ShouldRegisterNewOperationWhenCommandValid()
         {   
             var wasValidOperation = false;
-            operationServiceMock.Setup(m=>m.Save(It.IsAny<Operation>()))
+            fakeOperationService.Setup(m=>m.Save(It.IsAny<Operation>()))
                 .Callback((Operation oper) =>
                 { 
                     wasValidOperation = oper.Type == GetValidOperationType();
@@ -66,44 +53,8 @@ namespace Wrhs.Tests
 
             handler.Handle(command); 
 
-            operationServiceMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Once());
+            fakeOperationService.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Once());
             wasValidOperation.Should().BeTrue();
         }
-
-        [Fact]
-        public void ShouldPublishEventAfterRegister()
-        {
-            var validDocumentId = false;
-            var validOperationGuid = false;
-            var validOperationType = false;
-            
-            eventBusMock.Setup(m=>m.Publish(It.IsAny<BeginOperationEvent>()))
-                .Callback((BeginOperationEvent @event)=>{
-                    validDocumentId = @event.Operation.DocumentId == command.DocumentId;
-                    validOperationGuid = @event.Operation.OperationGuid == command.OperationGuid;
-                    validOperationType = @event.Operation.Type == GetValidOperationType();  
-                });
-
-            handler.Handle(command);
-
-            eventBusMock.Verify(m=>m.Publish(It.IsAny<BeginOperationEvent>()), Times.Once());
-            validDocumentId.Should().BeTrue();
-            validOperationGuid.Should().BeTrue();
-            validOperationType.Should().BeTrue();
-        }
-
-        [Fact]
-        public void ShouldOnlyThrowValidationExceptionWhenValidationFails()
-        {
-            validatorMock.Setup(m=>m.Validate(It.IsAny<BeginOperationCommand>()))
-                .Returns(new List<ValidationResult>{new ValidationResult("Field", "Message")});
-
-            Assert.Throws<CommandValidationException>(()=>{
-                handler.Handle(command);
-            });
-
-            operationServiceMock.Verify(m=>m.Save(It.IsAny<Operation>()), Times.Never());
-            eventBusMock.Verify(m=>m.Publish(It.IsAny<BeginOperationEvent>()), Times.Never());
-        }  
     }
 }

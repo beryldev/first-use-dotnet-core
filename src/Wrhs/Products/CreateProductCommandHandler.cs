@@ -1,32 +1,25 @@
 using System;
-using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Wrhs.Services;
 
 namespace Wrhs.Products
 {
-    public class CreateProductCommandHandler : CommandHandler<CreateProductCommand, CreateProductEvent>
+    public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand>
     {
+        private readonly IEventBus eventBus;
         private readonly IProductService service;
 
-        public CreateProductCommandHandler(IValidator<CreateProductCommand> validator,
-             IEventBus eventBus, IProductService service) : base(validator, eventBus)
+        public CreateProductCommandHandler(IEventBus eventBus, IProductService service)
         {
+            this.eventBus = eventBus;
             this.service = service;
         }
 
-        protected override CreateProductEvent ProcessValidCommand(CreateProductCommand command)
+        public void Handle(CreateProductCommand command)
         {
             var product = SaveProduct(command);
-            return new CreateProductEvent(product, DateTime.UtcNow);
-        }
-
-        protected override void ProcessInvalidCommand(CreateProductCommand command, 
-            IEnumerable<ValidationResult> results)
-        {
-             throw new CommandValidationException("Invalid create product command.",
-                    command, results);
+            var evt = new CreateProductEvent(product, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
 
         private Product SaveProduct(CreateProductCommand command)

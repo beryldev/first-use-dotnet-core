@@ -13,7 +13,6 @@ namespace Wrhs.Tests
     {
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly Mock<IDocumentService> docServiceMock;
-        protected readonly Mock<IValidator<TCommand>> validatorMock;
     
         protected readonly TCommand command;
         protected readonly ICommandHandler<TCommand> handler;
@@ -22,10 +21,7 @@ namespace Wrhs.Tests
         {
             eventBusMock = new Mock<IEventBus>();
             docServiceMock = new Mock<IDocumentService>();
-            validatorMock = new Mock<IValidator<TCommand>>();
-            validatorMock.Setup(m=>m.Validate(It.IsNotNull<TCommand>()))
-                .Returns(new List<ValidationResult>());
-
+            
             command = CreateCommand();
             handler = CreateHandler();
         }
@@ -37,7 +33,7 @@ namespace Wrhs.Tests
         protected abstract void AssertUpdatedDocument(Document document);
 
         [Fact]
-        public void ShouldUpdateDocumentOnWHandleWhenValidCommand()
+        public void ShouldUpdateDocumentOnWHandle()
         {
             Document document = null;
 
@@ -54,7 +50,7 @@ namespace Wrhs.Tests
         }
 
         [Fact]
-        public void ShouldPublishEventAfterHandleValidCommand()
+        public void ShouldPublishEventAfterHandle()
         {
             var docId = 0;
             docServiceMock.Setup(m=>m.GetDocumentById(It.IsNotNull<int>()))
@@ -68,22 +64,6 @@ namespace Wrhs.Tests
             handler.Handle(command);
             
             docId.Should().Be(1);
-        }
-
-        [Fact]
-        public void ShouldOnlyThrowExceptionOnHandleInvalidCommand()
-        {
-            docServiceMock.Setup(m=>m.GetDocumentById(It.IsNotNull<int>()))
-                .Returns(new Document{ Id = 1, Lines = new List<DocumentLine>()});
-            validatorMock.Setup(m=>m.Validate(It.IsNotNull<TCommand>()))
-                .Returns(new List<ValidationResult>{new ValidationResult("F", "M")});
-
-            Assert.Throws<CommandValidationException>(()=>{
-                handler.Handle(command);
-            });
-
-            docServiceMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
-            eventBusMock.Verify(m=>m.Publish(It.IsNotNull<UpdateDocumentEvent>()), Times.Never());
         }
     }
 }

@@ -1,38 +1,20 @@
 using System;
-using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public class BeginOperationCommandHandler 
-        : CommandHandler<BeginOperationCommand, BeginOperationEvent>
+    public class BeginOperationCommandHandler : ICommandHandler<BeginOperationCommand>
     {
-        protected readonly IOperationService operationService;
+        private readonly IOperationService operationService;
+        private readonly IEventBus eventBus;
 
-        public BeginOperationCommandHandler(IValidator<BeginOperationCommand> validator, IEventBus eventBus,
-            IOperationService operationService) : base(validator, eventBus)
+        public BeginOperationCommandHandler(IEventBus eventBus, IOperationService operationService)
         {
+            this.eventBus = eventBus;
             this.operationService = operationService;
         }
 
-        protected override void ProcessInvalidCommand(BeginOperationCommand command, IEnumerable<ValidationResult> results)
-        {
-            throw new CommandValidationException("Invalid command.", command, results);
-        }
-
-        protected override BeginOperationEvent ProcessValidCommand(BeginOperationCommand command)
-        {
-            var operation = RegisterOperation(command);
-            return CreateEvent(operation, DateTime.UtcNow);
-        }
-
-         protected BeginOperationEvent CreateEvent(Operation operation, DateTime createdAt)
-        {
-            return new BeginOperationEvent(operation, createdAt);
-        }
-
-        protected Operation RegisterOperation(BeginOperationCommand command)
+        public void Handle(BeginOperationCommand command)
         {
             var operation = new Operation
             {
@@ -43,7 +25,8 @@ namespace Wrhs.Common
 
             operationService.Save(operation);
 
-            return operation;
+            var evt = new BeginOperationEvent(operation, DateTime.UtcNow);
+            eventBus.Publish<BeginOperationEvent>(evt);
         }
     }
 }

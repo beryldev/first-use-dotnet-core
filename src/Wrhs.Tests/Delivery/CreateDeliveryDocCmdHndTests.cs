@@ -43,7 +43,7 @@ namespace Wrhs.Tests.Delivery
 
         protected override ICommandHandler<CreateDeliveryDocumentCommand> CreateCommandHandler(IValidator<CreateDeliveryDocumentCommand> validator, IEventBus eventBus, IDocumentService docService)
         {
-            return new CreateDeliveryDocumentCommandHandler(validator, eventBus, docService);
+            return new CreateDeliveryDocumentCommandHandler(eventBus, docService);
         }
 
         protected override DocumentType GetDocumentType()

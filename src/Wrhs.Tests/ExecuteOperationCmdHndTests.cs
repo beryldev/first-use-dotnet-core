@@ -4,7 +4,6 @@ using FluentAssertions;
 using Moq;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Xunit;
 
 namespace Wrhs.Tests
@@ -13,7 +12,6 @@ namespace Wrhs.Tests
     {
         protected readonly ExecuteOperationCommand command;
         protected readonly ICommandHandler<ExecuteOperationCommand> handler;
-        protected readonly Mock<IValidator<ExecuteOperationCommand>> validatorMock;
         protected readonly Mock<IEventBus> eventBusMock;
         protected readonly Mock<IOperationService> operationSrvMock;
         protected readonly Mock<IDocumentService> docServiceMock;
@@ -22,11 +20,6 @@ namespace Wrhs.Tests
         public ExecuteOperationCmdHndTests()
         {
             eventBusMock = new Mock<IEventBus>();
-            
-            validatorMock = new Mock<IValidator<ExecuteOperationCommand>>();
-            validatorMock.Setup(m=>m.Validate(It.IsAny<ExecuteOperationCommand>()))
-                .Returns(new List<ValidationResult>());
-
             operationSrvMock = new Mock<IOperationService>();
             docServiceMock = new Mock<IDocumentService>();
             stockServiceMock = new Mock<IStockService>();
@@ -38,7 +31,7 @@ namespace Wrhs.Tests
                 DocumentService = docServiceMock.Object,
                 StockService = stockServiceMock.Object
             };
-            handler = CreateHandler(validatorMock.Object, eventBusMock.Object, parameters);
+            handler = CreateHandler(eventBusMock.Object, parameters);
         }
 
         protected ExecuteOperationCommand CreateCommand()
@@ -46,10 +39,9 @@ namespace Wrhs.Tests
             return new ExecuteOperationCommand { OperationGuid = "some-guid"};
         }
 
-        protected ICommandHandler<ExecuteOperationCommand> CreateHandler(IValidator<ExecuteOperationCommand> validator,
-            IEventBus eventBus, HandlerParameters parameters)
+        protected ICommandHandler<ExecuteOperationCommand> CreateHandler(IEventBus eventBus, HandlerParameters parameters)
         {
-            return new ExecuteOperationCommandHandler(validator, eventBus, parameters);
+            return new ExecuteOperationCommandHandler(eventBus, parameters);
         }
 
         protected OperationType GetExpectedOperationType()
@@ -114,21 +106,6 @@ namespace Wrhs.Tests
             handler.Handle(command);
 
             publishedOperation.Should().Be(operation);
-        }
-
-        [Fact]
-        public void ShouldOnlyThrowValidationExceptionWhenValidationFail()
-        {
-            validatorMock.Setup(m=>m.Validate(It.IsAny<ExecuteOperationCommand>()))
-                .Returns(new List<ValidationResult>{new ValidationResult("Field", "Message")});
-
-            Assert.Throws<CommandValidationException>(()=>{
-                handler.Handle(command);
-            });
-
-            docServiceMock.Verify(m=>m.Update(It.IsNotNull<Document>()), Times.Never());
-            stockServiceMock.Verify(m=>m.Update(It.IsNotNull<Shift>()), Times.Never());
-            operationSrvMock.Verify(m=>m.Update(It.IsNotNull<Operation>()), Times.Never());
         }
 
         protected Operation CreateOperation()

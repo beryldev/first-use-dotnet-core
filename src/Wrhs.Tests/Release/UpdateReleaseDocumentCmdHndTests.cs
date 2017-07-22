@@ -39,8 +39,7 @@ namespace Wrhs.Tests.Release
 
         protected override ICommandHandler<UpdateReleaseDocumentCommand> CreateHandler()
         {
-            return new UpdateReleaseDocumentCommandHandler(validatorMock.Object, 
-                eventBusMock.Object, docServiceMock.Object);
+            return new UpdateReleaseDocumentCommandHandler(eventBusMock.Object, docServiceMock.Object);
         }
     }
 }

@@ -16,15 +16,14 @@ namespace Wrhs.Tests.Relocation
             return new ProcessRelocationOperationCommand();
         }
 
-        protected override ICommandHandler<ProcessRelocationOperationCommand> CreateHandler(IValidator<ProcessRelocationOperationCommand> validator,
-            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
+        protected override ICommandHandler<ProcessRelocationOperationCommand> CreateHandler(IEventBus eventBus, 
+            IStockService stockService, IOperationService operationSrv)
         {
-            return new ProcessRelocationOperationCommandHandler(validator,
-                eventBus, stockService, operationSrv);
+            return new ProcessRelocationOperationCommandHandler(eventBus, stockService, operationSrv);
         }
 
         [Fact]
-        public void ShouldRegisterTwoShiftsWhenValidCommand()
+        public void ShouldRegisterTwoShiftsOnHandle()
         {
             handler.Handle(command);
 

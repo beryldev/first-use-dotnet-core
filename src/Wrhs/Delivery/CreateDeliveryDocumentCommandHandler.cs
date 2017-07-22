@@ -5,20 +5,18 @@ using Wrhs.Core;
 
 namespace Wrhs.Delivery
 {
-    public class CreateDeliveryDocumentCommandHandler 
-        : CreateDocumentCommandHandler<CreateDeliveryDocumentCommand, CreateDeliveryDocumentEvent>
+    public class CreateDeliveryDocumentCommandHandler : ICommandHandler<CreateDeliveryDocumentCommand>
     {
-        public CreateDeliveryDocumentCommandHandler(IValidator<CreateDeliveryDocumentCommand> validator, IEventBus eventBus, 
-            IDocumentService docService) : base(validator, eventBus, docService)
+        private readonly IEventBus eventBus;
+        private readonly IDocumentService docSrv;
+
+        public CreateDeliveryDocumentCommandHandler(IEventBus eventBus, IDocumentService docSrv)
         {
+            this.eventBus = eventBus;
+            this.docSrv = docSrv;
         }
 
-        protected override CreateDeliveryDocumentEvent CreateEvent(Document document, DateTime createdAt)
-        {
-            return new CreateDeliveryDocumentEvent(document, createdAt);
-        }
-
-        protected override Document SaveDocument(CreateDeliveryDocumentCommand command)
+        public void Handle(CreateDeliveryDocumentCommand command)
         {
             var document = new Document
             {
@@ -32,9 +30,10 @@ namespace Wrhs.Delivery
                 }).ToList()
             };
 
-            docService.Save(document);
-
-            return document;
+            docSrv.Save(document);
+            
+            var evt = new CreateDeliveryDocumentEvent(document, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
     }
 }

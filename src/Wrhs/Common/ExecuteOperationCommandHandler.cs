@@ -5,27 +5,22 @@ using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public class ExecuteOperationCommandHandler
-        : CommandHandler<ExecuteOperationCommand, ExecuteOperationEvent>
+    public class ExecuteOperationCommandHandler : ICommandHandler<ExecuteOperationCommand>
     {
+        private readonly IEventBus eventBus;
         protected readonly IOperationService operationSrv;
         protected readonly IDocumentService docService;
         protected readonly IStockService stockService;  
 
-       public ExecuteOperationCommandHandler(IValidator<ExecuteOperationCommand> validator, IEventBus eventBus,
-            HandlerParameters parameters) : base(validator, eventBus)
+       public ExecuteOperationCommandHandler(IEventBus eventBus, HandlerParameters parameters)
         {
-            this.operationSrv = parameters.OperationService;
-            this.docService = parameters.DocumentService;
-            this.stockService = parameters.StockService;           
+            this.eventBus = eventBus;
+            operationSrv = parameters.OperationService;
+            docService = parameters.DocumentService;
+            stockService = parameters.StockService;           
         }   
 
-        protected override void ProcessInvalidCommand(ExecuteOperationCommand command, IEnumerable<ValidationResult> results)
-        {
-            throw new CommandValidationException("Invalid command.", command, results);
-        } 
-
-        protected override ExecuteOperationEvent ProcessValidCommand(ExecuteOperationCommand command)
+        public void Handle(ExecuteOperationCommand command)
         {
             var operation = operationSrv.GetOperationByGuid(command.OperationGuid);
 
@@ -41,15 +36,9 @@ namespace Wrhs.Common
             operation.Status = OperationStatus.Done;
             operationSrv.Update(operation);
 
-            return CreateEvent(operation, DateTime.UtcNow);
+            var evt = new ExecuteOperationEvent(operation, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
-
-
-        protected ExecuteOperationEvent CreateEvent(Operation operation, DateTime executedAt)
-        {
-            return new ExecuteOperationEvent(operation, executedAt);
-        }
-
     }
 
 

@@ -1,32 +1,26 @@
 using System;
-using System.Collections.Generic;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.Common
 {
-    public class RemoveDocumentCommandHandler 
-        : CommandHandler<RemoveDocumentCommand, RemoveDocumentEvent>
+    public class RemoveDocumentCommandHandler : ICommandHandler<RemoveDocumentCommand>
     {
-        private readonly IDocumentService docService;
+        private readonly IEventBus eventBus;
+        private readonly IDocumentService docSrv;
 
-        public RemoveDocumentCommandHandler(IValidator<RemoveDocumentCommand> validator, IEventBus eventBus, IDocumentService docService) 
-            : base(validator, eventBus)
+        public RemoveDocumentCommandHandler(IEventBus eventBus, IDocumentService docSrv) 
         {
-            this.docService = docService;
+            this.eventBus = eventBus;
+            this.docSrv = docSrv;
         }
 
-        protected override void ProcessInvalidCommand(RemoveDocumentCommand command, IEnumerable<ValidationResult> results)
+        public void Handle(RemoveDocumentCommand command)
         {
-            throw new CommandValidationException("Invalid command", command, results);
-        }
+            var document = docSrv.GetDocumentById(command.DocumentId);
+            docSrv.Delete(document);
 
-        protected override RemoveDocumentEvent ProcessValidCommand(RemoveDocumentCommand command)
-        {
-            var document = docService.GetDocumentById(command.DocumentId);
-            docService.Delete(document);
-
-            return new RemoveDocumentEvent(document, DateTime.UtcNow);
+            var evt = new RemoveDocumentEvent(document, DateTime.UtcNow);
+            eventBus.Publish(evt);
         }
     }
 }

@@ -3,7 +3,6 @@ using FluentAssertions;
 using Moq;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Xunit;
 
 namespace Wrhs.Tests
@@ -68,21 +67,6 @@ namespace Wrhs.Tests
             handler.Handle(command);
 
             eventBusMock.Verify(m=>m.Publish(It.IsAny<TEvent>()), Times.Once());
-        }
-
-        [Fact]
-        public void ShouldOnlyThrowCommandValidationExceptionWhenValidationFails()
-        {
-            validatorMock.Setup(m=>m.Validate(It.IsAny<TCommand>()))
-                .Returns(new List<ValidationResult>{new ValidationResult("SomeField", "Some message.")});
-
-            Assert.Throws<CommandValidationException>(()=>
-            {
-                handler.Handle(command);
-            });
-
-            docServiceMock.Verify(m=>m.Save(It.IsNotNull<Document>()), Times.Never());
-            eventBusMock.Verify(m=>m.Publish(It.IsNotNull<TEvent>()), Times.Never());
         }
     }
 }

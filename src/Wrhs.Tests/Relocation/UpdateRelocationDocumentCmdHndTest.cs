@@ -31,8 +31,7 @@ namespace Wrhs.Tests.Relocation
 
         protected override ICommandHandler<UpdateRelocationDocumentCommand> CreateHandler()
         {
-            return new UpdateRelocationDocumentCommandHandler(validatorMock.Object, 
-                eventBusMock.Object, docServiceMock.Object);
+            return new UpdateRelocationDocumentCommandHandler(eventBusMock.Object, docServiceMock.Object);
         }
 
         protected override void AssertUpdatedDocument(Document document)

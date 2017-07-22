@@ -16,10 +16,10 @@ namespace Wrhs.Tests.Release
             return new ProcessReleaseOperationCommand();
         }
 
-        protected override ICommandHandler<ProcessReleaseOperationCommand> CreateHandler(IValidator<ProcessReleaseOperationCommand> validator, 
-            IEventBus eventBus, IStockService stockService, IOperationService operationSrv)
+        protected override ICommandHandler<ProcessReleaseOperationCommand> CreateHandler(IEventBus eventBus, 
+            IStockService stockService, IOperationService operationSrv)
         {
-            return new ProcessReleaseOperationCommandHandler(validator, eventBus, stockService, operationSrv);
+            return new ProcessReleaseOperationCommandHandler(eventBus, stockService, operationSrv);
         }
 
         [Fact]
