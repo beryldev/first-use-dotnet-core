@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
@@ -38,18 +37,9 @@ namespace Wrhs.WebApp.Controllers.Operations
 
         protected IActionResult HandleCommand<T>(T command) where T : BeginOperationCommand
         {
-            IActionResult result;
-
-            try
-            {
-                command.OperationGuid = GenerateGuid();
-                cmdBus.Send(command);
-                result = Ok(command.OperationGuid);
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
+            command.OperationGuid = GenerateGuid();
+            cmdBus.Send(command);
+            var result = Ok(command.OperationGuid);
 
             return result;
         }

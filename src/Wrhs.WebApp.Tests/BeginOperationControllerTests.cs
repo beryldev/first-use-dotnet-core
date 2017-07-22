@@ -26,17 +26,6 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnBeginDeliveryWhenValidationFail()
-        {
-            var command = new BeginOperationCommand();
-            SetupCmdBusValidationFails(command);
-
-            var result = controller.BeginDelivery(command);
-
-            AssertBadRequest(result);
-        }
-
-        [Fact]
         public void ShouldReturnOkWithGuidOnBeginRelocation()
         {
             var command = new BeginOperationCommand();
@@ -47,17 +36,6 @@ namespace Wrhs.WebApp.Tests
         }
 
         [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnBeginRelocationWhenValidationFail()
-        {
-            var command = new BeginOperationCommand();
-            SetupCmdBusValidationFails(command);
-
-            var result = controller.BeginRelocation(command);
-
-            AssertBadRequest(result);
-        }
-
-        [Fact]
         public void ShouldReturnOkWithGuidOnBeginRelease()
         {
             var command = new BeginOperationCommand();
@@ -65,17 +43,6 @@ namespace Wrhs.WebApp.Tests
             var result = controller.BeginRelease(command);
 
             AssertOk(result);
-        }
-
-        [Fact]
-        public void ShouldReturnBadRequestWithErrorsOnBeginReleaseWhenValidationFail()
-        {
-            var command = new BeginOperationCommand();
-            SetupCmdBusValidationFails(command);
-
-            var result = controller.BeginRelease(command);
-
-            AssertBadRequest(result);
         }
 
         protected void AssertOk(IActionResult result)

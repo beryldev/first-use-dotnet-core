@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 using Wrhs.Delivery;
 using Wrhs.Release;
 using Wrhs.Relocation;
@@ -18,41 +17,24 @@ namespace Wrhs.WebApp.Controllers.Operations
         }
 
         [HttpPost("delivery/{guid}/shift")]
-        public IActionResult ProcessDelivery(string guid, [FromBody]ProcessDeliveryOperationCommand command)
+        public void ProcessDelivery(string guid, [FromBody]ProcessDeliveryOperationCommand command)
         {
             command.OperationGuid = guid;
-            return HandleCommand<ProcessDeliveryOperationCommand>(command);     
+            cmdBus.Send(command);
         }
 
         [HttpPost("relocation/{guid}/shift")]
-        public IActionResult ProcessRelocation(string guid, [FromBody]ProcessRelocationOperationCommand command)
+        public void ProcessRelocation(string guid, [FromBody]ProcessRelocationOperationCommand command)
         {
             command.OperationGuid = guid;
-            return HandleCommand<ProcessRelocationOperationCommand>(command);
+            cmdBus.Send(command);
         }
 
         [HttpPost("release/{guid}/shift")]
-        public IActionResult ProcessRelease(string guid, [FromBody]ProcessReleaseOperationCommand command)
+        public void ProcessRelease(string guid, [FromBody]ProcessReleaseOperationCommand command)
         {
             command.OperationGuid = guid;
-            return HandleCommand<ProcessReleaseOperationCommand>(command);
-        }
-
-        protected IActionResult HandleCommand<T>(T command) where T : ICommand
-        {
-            IActionResult result;
-
-            try
-            {          
-                cmdBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result =  BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            cmdBus.Send(command);
         }
     }
 }

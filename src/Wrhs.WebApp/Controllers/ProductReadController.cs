@@ -42,39 +42,5 @@ namespace Wrhs.WebApp.Controllers
             var result = stockSrv.GetProductStock(productId);
             return Ok(result);
         }
-
-        // [HttpPost]
-        // public IActionResult CreateProduct([FromBody]CreateProductCommand cmd, [FromServices]IValidator<CreateProductCommand> validator, 
-        //     [FromServices]ICommandHandler<CreateProductCommand> handler)
-        // {            
-        //     return HandleCommand<CreateProductCommand>(handler, validator, cmd);
-        // }
-
-        // [HttpDelete("{id}")]
-        // public IActionResult Delete(int id, [FromBody] DeleteProductCommand cmd, 
-        //     [FromServices]IValidator<DeleteProductCommand> validator, [FromServices]ICommandHandler<DeleteProductCommand> handler)
-        // {
-        //     cmd.ProductId = id;
-        //     return HandleCommand<DeleteProductCommand>(handler, validator, cmd);
-        // }
-
-        // [HttpPut("{id}")]
-        // public IActionResult Update(int id, [FromBody] UpdateProductCommand cmd, 
-        //     [FromServices]IValidator<UpdateProductCommand> validator, [FromServices]ICommandHandler<UpdateProductCommand> handler)
-        // {
-        //     cmd.ProductId = id;
-        //     return HandleCommand<UpdateProductCommand>(handler, validator, cmd);
-        // }
-
-        
-
-        // [HttpGet("{productId}/stocks/calculated")]
-        // public IEnumerable<Stock> GetCalculatedStocks(int productId, [FromServices]IWarehouse warehouse)
-        // {
-        //     var product = productRepository.GetById(productId);
-
-        //     return product != null ? warehouse.CalculateStocks(product.Code)
-        //         : new List<Stock>();
-        // }
     }
 }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wrhs.Common;
 using Wrhs.Core;
-using Wrhs.Core.Exceptions;
 
 namespace Wrhs.WebApp.Controllers.Operations
 {
@@ -16,27 +15,10 @@ namespace Wrhs.WebApp.Controllers.Operations
         } 
 
         [HttpPost("{guid}")]
-        public IActionResult Execute(string guid)
+        public void Execute(string guid)
         {
             var command = new ExecuteOperationCommand { OperationGuid = guid };
-            return HandleCommand(command);
-        }
-
-        protected IActionResult HandleCommand<T>(T command) where T : ICommand
-        {
-            IActionResult result;
-
-            try
-            {          
-                cmdBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result =  BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            cmdBus.Send(command);
         }
     }
 }

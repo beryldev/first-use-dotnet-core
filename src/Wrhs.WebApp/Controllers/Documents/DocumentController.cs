@@ -19,37 +19,36 @@ namespace Wrhs.WebApp.Controllers.Documents
         }
 
         [HttpPost("delivery")]
-        public IActionResult CreateDeliveryDocument([FromBody]CreateDeliveryDocumentCommand command)
+        public void CreateDeliveryDocument([FromBody]CreateDeliveryDocumentCommand command)
         {
-           return HandleRequest<CreateDeliveryDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpPost("relocation")]
-        public IActionResult CreateRelocationDocument([FromBody]CreateRelocationDocumentCommand command)
+        public void CreateRelocationDocument([FromBody]CreateRelocationDocumentCommand command)
         {
-           return HandleRequest<CreateRelocationDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpPost("release")]
-        public IActionResult CreateReleaseDocument([FromBody]CreateReleaseDocumentCommand command)
+        public void CreateReleaseDocument([FromBody]CreateReleaseDocumentCommand command)
         {
-            return HandleRequest<CreateReleaseDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpDelete("delivery/{documentId}")]
         [HttpDelete("relocation/{documentId}")]
         [HttpDelete("release/{documentId}")]
-        public IActionResult RemoveDocument(int documentId)
+        public void RemoveDocument(int documentId)
         {
             var command = new RemoveDocumentCommand { DocumentId = documentId};
-            
-            return HandleRequest<RemoveDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpPut("delivery/{documentId}/state")]
         [HttpPut("relocation/{documentId}/state")]
         [HttpPut("release/{documentId}/state")]
-        public IActionResult ChangeDocState(int documentId, DocumentState state)
+        public void ChangeDocState(int documentId, DocumentState state)
         {
             var command = new ChangeDocStateCommand 
             { 
@@ -57,46 +56,29 @@ namespace Wrhs.WebApp.Controllers.Documents
                 NewState = state
             };
 
-            return HandleRequest<ChangeDocStateCommand>(command);
+            commandBus.Send(command);
         }
 
 
         [HttpPut("delivery/{documentId}")]
-        public IActionResult UpdateDeliveryDocument(int documentId, [FromBody]UpdateDeliveryDocumentCommand command)
+        public void UpdateDeliveryDocument(int documentId, [FromBody]UpdateDeliveryDocumentCommand command)
         {
             command.DocumentId = documentId;
-            return HandleRequest<UpdateDeliveryDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpPut("relocation/{documentId}")]
-        public IActionResult UpdateRelocationDocument(int documentId, [FromBody]UpdateRelocationDocumentCommand command)
+        public void UpdateRelocationDocument(int documentId, [FromBody]UpdateRelocationDocumentCommand command)
         {
             command.DocumentId = documentId;
-            return HandleRequest<UpdateRelocationDocumentCommand>(command);
+            commandBus.Send(command);
         }
 
         [HttpPut("release/{documentId}")]
-        public IActionResult UpdateReleaseDocument(int documentId, [FromBody]UpdateReleaseDocumentCommand command)
+        public void UpdateReleaseDocument(int documentId, [FromBody]UpdateReleaseDocumentCommand command)
         {
             command.DocumentId = documentId;
-            return HandleRequest<UpdateReleaseDocumentCommand>(command);
-        }
-
-        protected IActionResult HandleRequest<T>(T command) where T : ICommand
-        {
-            IActionResult result;
-
-            try
-            {
-                commandBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-
-            return result;
+            commandBus.Send(command);
         }
     }
 }

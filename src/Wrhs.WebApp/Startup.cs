@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Wrhs.WebApp.Modules;
+using Wrhs.WebApp.Filters;
 
 namespace Wrhs.WebApp
 {
@@ -33,7 +34,11 @@ namespace Wrhs.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new CommandValidationFilter());
+            });
+
             services.AddDbContext<IdentityDbContext>(options => 
                 options.UseSqlite("Data Source=users.sqlite", 
             optionsBuilder => optionsBuilder.MigrationsAssembly("Wrhs.WebApp")));

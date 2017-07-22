@@ -16,61 +16,23 @@ namespace Wrhs.WebApp.Controllers
         }
         
         [HttpPost]
-        public IActionResult CreateProduct([FromBody]CreateProductCommand command)
+        public void CreateProduct([FromBody]CreateProductCommand command)
         {
-            IActionResult result;
-
-            try
-            {
-                cmdBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+            cmdBus.Send(command);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateProduct(int id, [FromBody]UpdateProductCommand command)
+        public void UpdateProduct(int id, [FromBody]UpdateProductCommand command)
         {
-            IActionResult result;
-
             command.ProductId = id;
-
-            try
-            {
-                cmdBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+            cmdBus.Send(command);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(int id)
-        {
-            IActionResult result;
-            
+        public void DeleteProduct(int id)
+        {   
             var command = new DeleteProductCommand{ ProductId = id };
-
-            try
-            {
-                cmdBus.Send(command);
-                result = Ok();
-            }
-            catch(CommandValidationException e)
-            {
-                result = BadRequest(e.ValidationResults);
-            }
-            
-            return result;
+            cmdBus.Send(command);
         }
     }
 }
