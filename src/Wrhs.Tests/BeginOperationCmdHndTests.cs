@@ -30,7 +30,6 @@ namespace Wrhs.Tests
             return new BeginOperationCommand
             {
                 DocumentId = 1,
-                OperationGuid = "some-guid",
                 OperationType = OperationType.Delivery
             };
         }

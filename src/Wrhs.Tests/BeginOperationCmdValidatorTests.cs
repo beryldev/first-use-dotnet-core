@@ -31,8 +31,7 @@ namespace Wrhs.Tests
         {
             return new BeginOperationCommand
             {
-                DocumentId = 1,
-                OperationGuid = "some-guid"
+                DocumentId = 1
             };
         }
 
@@ -68,22 +67,6 @@ namespace Wrhs.Tests
 
             results.Should().HaveCount(1);
             results.Select(x=>x.Field).Should().Contain("DocumentId");
-        }
-
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        [InlineData("\n")]
-        public void ShouldReturnValidationErrorWhenInvalidOperationGuid(string guid)
-        {
-            var command = CreateCommand();
-            command.OperationGuid = guid;
-
-            var results = validator.Validate(command);
-
-            results.Should().HaveCount(1);
-            results.Select(x=>x.Field).Should().Contain("OperationGuid");
         }
 
         [Fact]

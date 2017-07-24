@@ -3,12 +3,11 @@ using Wrhs.Core;
 
 namespace Wrhs.Delivery
 {
-    public class UpdateDeliveryDocumentCommandValidator
-        : IValidator<UpdateDeliveryDocumentCommand>
+    public class UpdateDeliveryDocumentCommandValidator : IValidator<UpdateDeliveryDocumentCommand>
     {
-        private readonly CreateDeliveryDocumentCommandValidator validator;
+        private readonly IValidator<CreateDeliveryDocumentCommand> validator;
 
-        public UpdateDeliveryDocumentCommandValidator(CreateDeliveryDocumentCommandValidator validator)
+        public UpdateDeliveryDocumentCommandValidator(IValidator<CreateDeliveryDocumentCommand> validator)
         {
             this.validator = validator;
         }

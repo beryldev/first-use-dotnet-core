@@ -36,17 +36,11 @@ namespace Wrhs.WebApp.Controllers.Operations
         }
 
         protected IActionResult HandleCommand<T>(T command) where T : BeginOperationCommand
-        {
-            command.OperationGuid = GenerateGuid();
+        { 
             cmdBus.Send(command);
             var result = Ok(command.OperationGuid);
 
             return result;
-        }
-
-        protected string GenerateGuid()
-        {
-            return System.Guid.NewGuid().ToString();
         }
     }
 }
